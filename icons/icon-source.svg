@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0b1f33"/>
+  <circle cx="403" cy="105" r="50" fill="#f5c518"/>
+  <path d="M45 357h422v58H45z" fill="#a94f3d"/>
+  <path d="M64 357V235h49v-67h46v189zm108 0V113h57v244zm70 0V205h45v-72h24v-31h21v31h24v224zm127 0V183h70v174z" fill="#f5f1e8"/>
+  <path d="M197 113h8V79h-8zm-13-4h34l-17-31zM393 183h22v-38h-22z" fill="#f5c518"/>
+  <path d="M58 386h396" fill="none" stroke="#f5c518" stroke-width="12" stroke-linecap="round" stroke-dasharray="22 17"/>
+  <text x="256" y="486" text-anchor="middle" fill="#f5f1e8" font-family="Helvetica Neue, Arial, sans-serif" font-size="72" font-weight="900" letter-spacing="8">NYC</text>
+</svg>
