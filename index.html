@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1f33">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NYC 2026">
+  <title>NYC 2026 · Nasz Nowy Jork</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">22–30 sierpnia 2026</p>
+        <h1>Nowy Jork</h1>
+      </div>
+      <button class="icon-button" id="openTripButton" aria-label="Informacje o podróży">NYC</button>
+    </header>
+
+    <main id="app" tabindex="-1"></main>
+
+    <nav class="bottom-nav" aria-label="Główna nawigacja">
+      <button class="nav-item active" data-view="today">
+        <span class="nav-icon">●</span><span>Dzisiaj</span>
+      </button>
+      <button class="nav-item" data-view="plan">
+        <span class="nav-icon">≡</span><span>Plan</span>
+      </button>
+      <button class="nav-item" data-view="places">
+        <span class="nav-icon">◇</span><span>Miejsca</span>
+      </button>
+      <button class="nav-item" data-view="prepare">
+        <span class="nav-icon">▶</span><span>Przed wyjazdem</span>
+      </button>
+      <button class="nav-item" data-view="wallet">
+        <span class="nav-icon">▣</span><span>Portfel</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+  <section class="sheet" id="detailSheet" aria-modal="true" role="dialog" aria-labelledby="sheetTitle" hidden>
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" id="closeSheetButton" aria-label="Zamknij">×</button>
+    <div id="sheetContent"></div>
+  </section>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
