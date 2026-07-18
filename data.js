@@ -60,11 +60,10 @@ const DAYS = [
   {
     id: "2026-08-25", day: 4, date: "25.08", weekday: "wtorek",
     title: "The Met, park i Broadway",
-    subtitle: "Guggenheim z zewnątrz → The Met → Stranger Things",
+    subtitle: "The Met → Central Park → Stranger Things",
     accent: "met", tags: ["muzeum", "Central Park", "Broadway"],
-    story: "Najbogatszy dzień wymaga dyscypliny: Guggenheim w 10 minut, cztery wybrane obszary The Met, uproszczona trasa przez park i obowiązkowy odpoczynek przed teatrem.",
+    story: "Najbogatszy dzień wymaga dyscypliny: cztery wybrane obszary The Met, spokojniejsza trasa przez Central Park i obowiązkowy odpoczynek przed teatrem. Guggenheim jest już pełnym punktem dnia 2.",
     items: [
-      { time: "09:35", title: "Guggenheim z zewnątrz", note: "Krótka obserwacja architektury Franka Lloyda Wrighta.", type: "plan" },
       { time: "10:00", title: "The Met", note: "Dendur i Giacometti, American Wing, malarstwo europejskie i Costume Art.", type: "fixed" },
       { time: "14:00", title: "Lunch na Upper East Side", note: "Godzina na posiłek i odpoczynek po muzeum.", type: "plan" },
       { time: "15:00", title: "Central Park", note: "Bethesda Terrace, The Mall, Bow Bridge i Strawberry Fields.", type: "plan" },
@@ -387,7 +386,7 @@ const DAY_GUIDES = {
   "2026-08-25": {
     kind: "metday",
     checked: "16.07.2026",
-    timelineTargets: ["guggenheim", "museum", "food", "park", "rest", "food", "theatre", "theatre"],
+    timelineTargets: ["museum", "food", "park", "rest", "food", "theatre", "theatre"],
     guggenheim: {
       title: "Guggenheim · dziesięć minut z architekturą",
       text: "Frank Lloyd Wright otrzymał zlecenie w 1943 roku, lecz budynek otwarto dopiero 21 października 1959 — sześć miesięcy po jego śmierci. Zamiast tradycyjnych pięter zaprojektował spiralną rampę oplatającą rotundę. Budynek jest częścią światowego dziedzictwa UNESCO.",
@@ -437,19 +436,17 @@ const DAY_GUIDES = {
       { category: "Bezpiecznie przed teatrem", name: "Los Tacos No. 1", price: "$", address: "229 W 43rd St", note: "Szybko, bez ryzyka przeciągniętej obsługi. Jedzenie na stojąco, więc po odpoczynku w hotelu.", url: "https://www.lostacos1.com/locations/" }
     ],
     variants: [
-      { title: "Wersja pełna", text: "Guggenheim → 4 godziny w The Met → lunch → skrócony park → hotel → kolacja → teatr." },
+      { title: "Wersja pełna", text: "4 godziny w The Met → lunch → spokojny park → hotel → kolacja → teatr." },
       { title: "Muzealne zmęczenie", text: "Trasa The Met 2 godziny → wcześniejszy lunch → Bethesda i Strawberry Fields → dłuższy odpoczynek." },
       { title: "Upał lub ulewa", text: "Pomijamy Bow Bridge i The Mall. Po lunchu Bethesda Terrace albo od razu hotel; rezerwacja teatralna zostaje nietknięta." },
       { title: "Dla Matyldy", text: "W muzeum priorytet: Dendur + Giacometti, Costume Art i jeden obraz. Więcej czasu na zadania obserwacyjne, mniej na podpisy." }
     ],
     links: [
-      { label: "Start · hotel → Guggenheim", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Solomon+R+Guggenheim+Museum,+1071+5th+Ave,+New+York&travelmode=transit" },
-      { label: "Spacer · Guggenheim → The Met", url: "https://www.google.com/maps/dir/?api=1&origin=Solomon+R+Guggenheim+Museum,+1071+5th+Ave,+New+York&destination=The+Metropolitan+Museum+of+Art,+1000+5th+Ave,+New+York&travelmode=walking" },
+      { label: "Start · hotel → The Met", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=The+Metropolitan+Museum+of+Art,+1000+5th+Ave,+New+York&travelmode=transit" },
       { label: "Park · The Met → Bethesda → Bow Bridge → Strawberry Fields", url: "https://www.google.com/maps/dir/?api=1&origin=The+Metropolitan+Museum+of+Art,+1000+5th+Ave,+New+York&destination=Strawberry+Fields,+New+York&waypoints=Bethesda+Terrace,+New+York%7CBow+Bridge,+New+York&travelmode=walking" },
       { label: "The Met · informacje i bilety", url: "https://www.metmuseum.org/plan-your-visit" },
       { label: "Interaktywna mapa The Met", url: "https://maps.metmuseum.org/" },
       { label: "Giacometti przy Dendur", url: "https://www.metmuseum.org/exhibitions/giacometti-in-the-temple-of-dendur" },
-      { label: "Architektura Guggenheima", url: "https://www.guggenheim.org/about-us/architecture/frank-lloyd-wright-and-the-guggenheim" },
       { label: "Stranger Things · oficjalne FAQ", url: "https://broadway.strangerthingsonstage.com/faqs/" },
       { label: "Hotel → Marquis Theatre", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Marquis+Theatre,+210+W+46th+St,+New+York&travelmode=walking" }
     ]

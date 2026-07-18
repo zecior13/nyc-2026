@@ -161,17 +161,19 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .day-map-heading strong { display:block; font-family:Georgia,serif; font-size:18px; }
 .day-map-heading p { margin:4px 0 0; color:var(--muted); font-size:11px; }
 .day-map-heading > button { flex:0 0 auto; padding:8px 9px; border:0; border-radius:10px; color:white; background:var(--navy); font-size:9px; font-weight:850; }
-.day-map-board { position:relative; height:300px; overflow:hidden; border-radius:21px; background:linear-gradient(rgba(255,253,248,.1),rgba(11,31,51,.14)),url("assets/maps/nyc-illustrated-master-v1.png") 51% 31% / 235% auto no-repeat; box-shadow:inset 0 0 0 1px rgba(11,31,51,.14); }
-.arrival-map-board { background-position:55% 54%; background-size:145% auto; }
-.village-adventure-map .day-map-board { background-position:52% 33%; background-size:190% auto; }
+.day-map-board { position:relative; height:300px; overflow:hidden; border-radius:21px; background:#74b6d2; box-shadow:inset 0 0 0 1px rgba(11,31,51,.14); touch-action:none; cursor:grab; }
+.day-map-canvas { position:absolute; inset:0; background:linear-gradient(rgba(255,253,248,.1),rgba(11,31,51,.14)),url("assets/maps/nyc-illustrated-master-v1.png") var(--day-bg-position,51% 31%) / var(--day-bg-size,235% auto) no-repeat; transform:translate(var(--map-x,0),var(--map-y,0)) scale(var(--map-scale,1)); transform-origin:50% 50%; will-change:transform; }
+.arrival-map-board { --day-bg-position:55% 54%; --day-bg-size:145% auto; }
+.village-adventure-map .day-map-board { --day-bg-position:52% 33%; --day-bg-size:190% auto; }
 .day-map-board::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(169,79,61,.14),transparent 55%); pointer-events:none; }
 .day-map-board svg { position:absolute; inset:0; z-index:1; width:100%; height:100%; }
 .day-route-path { fill:none; stroke-width:1.5; stroke-linecap:round; stroke-dasharray:2.5 2; filter:drop-shadow(0 2px 2px rgba(11,31,51,.45)); }
 .day-route-walk { stroke:rgba(245,197,24,.98); }
 .day-route-transit { stroke:#d64b3d; stroke-width:1.8; }
 .day-map-stop { position:absolute; left:var(--left); top:var(--top); z-index:3; display:grid; justify-items:center; padding:0; border:0; background:transparent; transform:translate(-50%,-50%); filter:drop-shadow(0 3px 5px rgba(11,31,51,.3)); }
-.day-map-stop span { display:grid; place-items:center; width:34px; height:34px; border:2px solid white; border-radius:50%; color:var(--navy); background:var(--taxi); font-weight:950; }
-.day-map-stop small { margin-top:2px; padding:3px 6px; border-radius:999px; color:white; background:rgba(11,31,51,.82); font-size:8px; font-weight:850; white-space:nowrap; }
+.day-map-stop span { position:relative; z-index:5; display:grid; place-items:center; width:34px; height:34px; border:2px solid white; border-radius:50%; color:var(--navy); background:var(--taxi); font-weight:950; transform:scale(var(--map-inverse,1)); transform-origin:center bottom; }
+.day-map-stop small { position:relative; z-index:1; margin-top:2px; padding:3px 6px; border-radius:999px; color:white; background:rgba(11,31,51,.82); font-size:8px; font-weight:850; white-space:nowrap; pointer-events:none; transform:scale(var(--map-inverse,1)); transform-origin:center top; }
+.day-map-stop:focus,.day-map-stop:hover,.day-map-stop.selected { z-index:20; }
 .day-map-stop.selected span { color:white; background:var(--brick); box-shadow:0 0 0 5px rgba(245,197,24,.3); }
 .day-map-detail { min-height:83px; margin-top:9px; padding:12px 13px; border:1px solid var(--line); border-radius:15px; background:var(--card); }
 .day-map-detail strong { font-size:14px; }
@@ -187,6 +189,9 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .day-module.active { border-color:var(--navy); color:white; background:var(--navy); }
 .day-module.active b,.day-module-feature b { background:var(--taxi); }
 .day-module-feature { border-color:#c49c12; background:#fff7d5; }
+.route-number-transit { color:white; background:#d64b3d !important; }
+.museum-day-link { display:flex; align-items:center; justify-content:space-between; width:100%; margin:12px 0; padding:12px 14px; border:0; border-radius:13px; color:white; background:var(--navy); font-size:10px; font-weight:900; text-align:left; }
+.museum-day-link span { color:var(--taxi); font-size:18px; }
 .place-story { margin-top:10px; border:1px solid #d9d1c3; border-radius:12px; background:#fffaf0; }
 .place-story summary { padding:10px 12px; color:var(--brick); font-size:10px; font-weight:900; cursor:pointer; }
 .place-story p { margin:0; padding:0 12px 12px; font-size:11px; line-height:1.48; }
@@ -473,13 +478,30 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .museum-primary-action { margin-top:12px; }
 
 .museum-building { display:grid; gap:9px; padding:14px; border-radius:20px; background:linear-gradient(#e9f1f4,#f7f3ea); }
-.museum-floor { display:grid; grid-template-columns:42px 1fr; gap:8px 12px; align-items:center; }
+.museum-floor { display:block; border-bottom:1px solid rgba(11,31,51,.1); }
+.museum-floor summary { display:grid; grid-template-columns:42px 1fr; gap:8px 12px; align-items:center; padding:8px 0; cursor:pointer; list-style:none; }
+.museum-floor summary::-webkit-details-marker { display:none; }
 .floor-number { display:grid; place-items:center; width:42px; height:42px; border-radius:12px; color:white; background:var(--museum); font-weight:900; }
 .floor-shape { width:var(--floor-width); min-width:48%; padding:10px 12px; border:2px solid white; border-radius:7px 18px 18px 7px; color:white; background:color-mix(in srgb,var(--museum) 84%,var(--navy)); box-shadow:0 5px 10px rgba(11,31,51,.1); }
 .floor-shape strong,.floor-shape span { display:block; }
 .floor-shape strong { font-size:12px; }
 .floor-shape span { margin-top:2px; color:rgba(255,255,255,.75); font-size:9px; }
-.museum-floor p { grid-column:2; margin:0 0 7px; color:var(--muted); font-size:11px; line-height:1.4; }
+.museum-floor p { margin:0 0 12px 54px; color:var(--muted); font-size:11px; line-height:1.4; }
+.museum-departments { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.museum-departments button { display:grid; gap:3px; padding:11px; border:1px solid var(--line); border-radius:12px; color:var(--navy); background:var(--card); text-align:left; }
+.museum-departments strong { font-size:10px; }
+.museum-departments span { color:var(--muted); font-size:8px; }
+.museum-artist-groups { display:grid; gap:9px; }
+.museum-artist-group { border:1px solid var(--line); border-radius:15px; background:var(--card); }
+.museum-artist-group > summary { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px; cursor:pointer; list-style:none; }
+.museum-artist-group > summary::-webkit-details-marker { display:none; }
+.museum-artist-group > summary strong { font-size:12px; }
+.museum-artist-group > summary span { color:var(--muted); font-size:9px; }
+.artist-work-links { display:grid; gap:6px; padding:0 9px 9px; }
+.artist-work-links button { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 10px; border:0; border-radius:10px; color:var(--navy); background:#f2eee5; text-align:left; }
+.artist-work-links span { font-size:10px; font-weight:850; }
+.artist-work-links small { color:var(--muted); font-size:8px; text-align:right; }
+.work-image { width:48px; height:48px; object-fit:cover; border-radius:10px; }
 
 .museum-filter-bar { display:grid; grid-template-columns:2fr repeat(3,1fr); gap:8px; padding:12px; border-radius:17px; background:#e9e4d9; }
 .museum-filter-bar label { display:grid; gap:4px; color:var(--muted); font-size:9px; font-weight:850; text-transform:uppercase; }
@@ -508,7 +530,7 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .artist-index span { color:var(--muted); font-size:10px; }
 
 @media (min-width:700px) { .museum-hub-grid,.museum-start-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .museum-start-grid article:last-child { grid-column:1/-1; } }
-@media (max-width:620px) { .museum-filter-bar { grid-template-columns:1fr 1fr; } .museum-search { grid-column:1/-1; } .work-detail { padding-left:14px; } .nav-item { font-size:8.5px; } }
+@media (max-width:620px) { .museum-filter-bar { grid-template-columns:1fr 1fr; } .museum-search { grid-column:1/-1; } .work-detail { padding-left:14px; } .nav-item { font-size:8.5px; } .museum-departments { grid-template-columns:1fr; } }
 
 .sheet-backdrop { position: fixed; z-index: 40; inset: 0; background: rgba(3,13,22,.58); backdrop-filter: blur(3px); }
 .sheet {
