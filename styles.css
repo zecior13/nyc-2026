@@ -161,8 +161,9 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .day-map-heading strong { display:block; font-family:Georgia,serif; font-size:18px; }
 .day-map-heading p { margin:4px 0 0; color:var(--muted); font-size:11px; }
 .day-map-heading > button { flex:0 0 auto; padding:8px 9px; border:0; border-radius:10px; color:white; background:var(--navy); font-size:9px; font-weight:850; }
-.day-map-board { position:relative; height:300px; overflow:hidden; border-radius:21px; background:#74b6d2; box-shadow:inset 0 0 0 1px rgba(11,31,51,.14); touch-action:none; cursor:grab; }
-.day-map-canvas { position:absolute; inset:0; background:linear-gradient(rgba(255,253,248,.1),rgba(11,31,51,.14)),url("assets/maps/nyc-illustrated-master-v1.png") var(--day-bg-position,51% 31%) / var(--day-bg-size,235% auto) no-repeat; transform:translate(var(--map-x,0),var(--map-y,0)) scale(var(--map-scale,1)); transform-origin:50% 50%; will-change:transform; }
+.day-map-board { position:relative; width:100%; overflow:hidden; border-radius:21px; background:#74b6d2; box-shadow:inset 0 0 0 1px rgba(11,31,51,.14); touch-action:none; cursor:grab; }
+.day-map-canvas { position:absolute; inset:0; transform:translate(var(--map-x,0),var(--map-y,0)) scale(var(--map-scale,1)); transform-origin:50% 50%; will-change:transform; }
+.day-map-base { position:absolute; z-index:0; max-width:none; height:auto; pointer-events:none; user-select:none; }
 .arrival-map-board { --day-bg-position:55% 54%; --day-bg-size:145% auto; }
 .village-adventure-map .day-map-board { --day-bg-position:52% 33%; --day-bg-size:190% auto; }
 .day-map-board::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(169,79,61,.14),transparent 55%); pointer-events:none; }
@@ -174,6 +175,8 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .day-map-stop span { position:relative; z-index:5; display:grid; place-items:center; width:34px; height:34px; border:2px solid white; border-radius:50%; color:var(--navy); background:var(--taxi); font-weight:950; transform:scale(var(--map-inverse,1)); transform-origin:center bottom; }
 .day-map-stop small { position:relative; z-index:1; margin-top:2px; padding:3px 6px; border-radius:999px; color:white; background:rgba(11,31,51,.82); font-size:8px; font-weight:850; white-space:nowrap; pointer-events:none; transform:scale(var(--map-inverse,1)); transform-origin:center top; }
 .day-map-stop:focus,.day-map-stop:hover,.day-map-stop.selected { z-index:20; }
+.day-map-stop-offmap span { color:white; background:#d64b3d; }
+.day-map-stop-offmap small { background:rgba(114,42,33,.9); }
 .day-map-stop.selected span { color:white; background:var(--brick); box-shadow:0 0 0 5px rgba(245,197,24,.3); }
 .day-map-detail { min-height:83px; margin-top:9px; padding:12px 13px; border:1px solid var(--line); border-radius:15px; background:var(--card); }
 .day-map-detail strong { font-size:14px; }
