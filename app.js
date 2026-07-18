@@ -702,6 +702,39 @@ function daySchematic(day) {
   return `<section class="day-at-glance"><div class="day-glance-head"><span class="mini-kicker">Dzień na jednej planszy</span><strong>${schematic.note}</strong></div><div class="day-route-diagram">${schematic.nodes.map((node, index) => `${index ? `<div class="day-leg"><span>${schematic.legs[index - 1]}</span><i>→</i></div>` : ""}<button class="day-node node-${node[1]}" type="button" data-overview-panel="${node[3]}"><b>${node[2]}</b><span>${node[0]}</span></button>`).join("")}</div><p>Naciśnij punkt, aby przejść do właściwej części przewodnika.</p></section>`;
 }
 
+const DAY_VISUALS = {
+  "2026-08-22": { area:"JFK → Midtown", icon:"✈", event:"Pierwszy wieczór", color:"#d9a900" },
+  "2026-08-23": { area:"Greenwich Village", icon:"♪", event:"Hiromi · Blue Note", color:"#a94f3d" },
+  "2026-08-24": { area:"Midtown", icon:"▣", event:"MoMA · Bryant Park", color:"#bd694e" },
+  "2026-08-25": { area:"Museum Mile", icon:"★", event:"The Met · Broadway", color:"#796393" },
+  "2026-08-26": { area:"Queens", icon:"◎", event:"US Open", color:"#4f8f75" },
+  "2026-08-27": { area:"Downtown → West Side", icon:"↗", event:"Statua · Whitney", color:"#4f91b6" },
+  "2026-08-28": { area:"SoHo → Bronx", icon:"⚾", event:"Yankees–Red Sox", color:"#365c7f" },
+  "2026-08-29": { area:"Brooklyn → Harlem", icon:"♫", event:"Bargemusic · Parker", color:"#8d5577" },
+  "2026-08-30": { area:"Midtown → JFK", icon:"⌘", event:"Ostatni spacer", color:"#687787" }
+};
+
+const VILLAGE_MAP_STOPS = [
+  { panel:"overview", title:"Hotel", note:"Start i przejazd do Village", left:75, top:10, icon:"⌂" },
+  { panel:"route", title:"Washington Square", note:"Łuk, park i początek spaceru", left:55, top:31, icon:"1" },
+  { panel:"food", title:"Brunch", note:"Wybrane miejsce w zwartej okolicy", left:42, top:43, icon:"2" },
+  { panel:"stories", title:"Village", note:"Bohema, Stonewall i miejskie historie", left:29, top:59, icon:"3" },
+  { panel:"screen", title:"Seriale", note:"Friends i Sex and the City", left:45, top:72, icon:"4" },
+  { panel:"bluenote", title:"Blue Note", note:"Hiromi · wejście i koncert", left:64, top:86, icon:"♪" }
+];
+
+function dayAdventureMap(day) {
+  if (day.id !== "2026-08-23") return daySchematic(day);
+  return `<section class="day-adventure-map village-adventure-map">
+    <div class="day-map-heading"><span class="mini-kicker">Dzień na mapie</span><strong>Greenwich Village · od łuku do Blue Note</strong><p>Dotknij punktu, aby najpierw zobaczyć krótki opis.</p></div>
+    <div class="day-map-board">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path" d="M75 10 C68 19 62 25 55 31 S47 39 42 43 S33 51 29 59 S37 68 45 72 S57 78 64 86"/></svg>
+      ${VILLAGE_MAP_STOPS.map(stop => `<button type="button" class="day-map-stop" style="--left:${stop.left}%;--top:${stop.top}%" data-day-map-panel="${stop.panel}" data-day-map-title="${stop.title}" data-day-map-note="${stop.note}"><span>${stop.icon}</span><small>${stop.title}</small></button>`).join("")}
+    </div>
+    <div class="day-map-detail" id="dayMapDetail"><strong>Wybierz punkt trasy</strong><p>Zobaczysz jego rolę w dniu, a dopiero potem zdecydujesz, czy otworzyć pełny opis.</p></div>
+  </section>`;
+}
+
 function tripMapMarkup() {
   const landmarks = [
     { id:"liberty", icon:"★", label:"Statua", left:13, top:80 },
@@ -869,18 +902,14 @@ function bindGestureMap(map) {
 
 function renderPlan() {
   app.innerHTML = `
-    <div class="view-heading"><h2>Dni podróży</h2><p>Dziewięć wypraw. Każda otwiera własną planszę, kolejność punktów i powiązane historie.</p></div>
-    <div class="section-title"><h3>Wszystkie dni</h3><span>9 wypraw</span></div>
-    <div class="card-list">${DAYS.map(day => `
-      <article class="day-card" data-open-day="${day.id}" tabindex="0" role="button">
-        <div class="day-date"><strong>${day.date.slice(0,2)}</strong><span>sierpnia</span></div>
-        <div class="day-copy">
-          <h3>Dzień ${day.day} · ${day.title}</h3>
-          <p>${day.subtitle}</p>
-          <div class="tag-row">${day.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
-        </div>
-        <div class="day-arrow">›</div>
-      </article>`).join("")}</div>`;
+    <div class="journeys-heading"><span>22–30 sierpnia 2026</span><h2>Dziewięć miejskich wypraw</h2><p>Każdy dzień ma własny rejon, rytm i główny nowojorski moment.</p></div>
+    <div class="journey-grid">${DAYS.map(day => { const visual=DAY_VISUALS[day.id]; return `
+      <article class="journey-card" style="--journey:${visual.color}" data-open-day="${day.id}" tabindex="0" role="button">
+        <div class="journey-top"><span class="journey-number">${String(day.day).padStart(2,"0")}</span><span class="journey-date">${day.date}<br>${day.weekday}</span><b>${visual.icon}</b></div>
+        <div class="journey-map-line"><i></i><i></i><i></i><i></i></div>
+        <span class="journey-area">${visual.area}</span><h3>${day.title}</h3><p>${day.subtitle}</p>
+        <div class="journey-footer"><strong>${visual.event}</strong><span>Otwórz wyprawę ›</span></div>
+      </article>`; }).join("")}</div>`;
   bindDynamicActions();
 }
 
@@ -1092,7 +1121,7 @@ function openDay(id, options = {}) {
     <p class="sheet-kicker">Dzień ${day.day} · ${day.date} · ${day.weekday}</p>
     <h2 id="sheetTitle">${day.title}</h2>
     <p class="lead">${day.story}</p>
-    ${daySchematic(day)}
+    ${dayAdventureMap(day)}
     <div class="reader" aria-label="Odtwarzanie głosowe">
       <button class="reader-play" id="readerPlayButton" type="button">▶ Odsłuchaj dzień</button>
       <button class="reader-stop" id="readerStopButton" type="button" disabled>■ Zatrzymaj</button>
@@ -1111,6 +1140,13 @@ function openDay(id, options = {}) {
   document.getElementById("voiceSelect")?.addEventListener("change", event => localStorage.setItem("nyc-preferred-voice", event.target.value));
   document.getElementById("voicePreviewButton")?.addEventListener("click", event => playSnippet("Witajcie w Nowym Jorku. Za chwilę ruszamy na spacer przez Greenwich Village.", event.currentTarget));
   document.getElementById("dayContextBack")?.addEventListener("click", returnToPreviousDayContext);
+  sheetContent.querySelectorAll("[data-day-map-panel]").forEach(button => button.addEventListener("click", () => {
+    sheetContent.querySelectorAll("[data-day-map-panel]").forEach(item => item.classList.toggle("selected", item === button));
+    const detail = document.getElementById("dayMapDetail");
+    if (!detail) return;
+    detail.innerHTML = `<strong>${button.dataset.dayMapTitle}</strong><p>${button.dataset.dayMapNote}</p><button type="button">Otwórz tę część dnia <span>›</span></button>`;
+    detail.querySelector("button")?.addEventListener("click", () => showDayPanel(button.dataset.dayMapPanel, "", { remember:true, originLabel:`Mapa dnia · ${button.dataset.dayMapTitle}` }));
+  }));
   if (guide) {
     sheetContent.querySelectorAll("[data-overview-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.overviewPanel, "", { remember: true, originLabel: `Plansza dnia · ${button.querySelector("span")?.textContent || "punkt"}` })));
     sheetContent.querySelectorAll("[data-day-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.dayPanel, "", { remember: false })));

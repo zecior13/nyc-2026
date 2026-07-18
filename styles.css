@@ -135,6 +135,47 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .view-heading h2 { margin: 0; font-family: Georgia, serif; font-size: 28px; letter-spacing: -.025em; }
 .view-heading p { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
 
+.journeys-heading { margin: 8px 2px 18px; }
+.journeys-heading > span { color: var(--brick); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.journeys-heading h2 { margin: 6px 0 5px; font-family: Georgia,serif; font-size: 30px; line-height: 1.04; }
+.journeys-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+.journey-grid { display: grid; gap: 13px; }
+.journey-card { position: relative; min-height: 230px; padding: 17px; overflow: hidden; border: 0; border-radius: 24px; color: white; background: linear-gradient(145deg,color-mix(in srgb,var(--journey) 76%,#0b1f33),#0b1f33 88%); box-shadow: 0 12px 30px rgba(11,31,51,.16); cursor: pointer; }
+.journey-card::after { content:""; position:absolute; right:-55px; bottom:-72px; width:180px; height:180px; border:22px solid color-mix(in srgb,var(--journey) 38%,transparent); border-radius:50%; }
+.journey-top { position:relative; z-index:1; display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; }
+.journey-number { color:var(--taxi); font-family:Georgia,serif; font-size:29px; font-weight:900; }
+.journey-date { color:rgba(255,255,255,.68); font-size:9px; font-weight:800; line-height:1.3; text-transform:uppercase; }
+.journey-top b { display:grid; place-items:center; width:39px; height:39px; border:1px solid rgba(255,255,255,.3); border-radius:13px; background:rgba(255,255,255,.1); font-size:18px; }
+.journey-map-line { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; width:62%; margin:17px 0 12px; }
+.journey-map-line::before { content:""; position:absolute; right:5px; left:5px; height:2px; background:linear-gradient(90deg,var(--taxi),rgba(255,255,255,.45)); }
+.journey-map-line i { z-index:1; width:8px; height:8px; border:2px solid white; border-radius:50%; background:var(--journey); }
+.journey-area { position:relative; z-index:1; color:var(--taxi); font-size:9px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+.journey-card h3 { position:relative; z-index:1; max-width:82%; margin:5px 0 4px; font-family:Georgia,serif; font-size:21px; line-height:1.08; }
+.journey-card > p { position:relative; z-index:1; max-width:85%; margin:0; color:rgba(255,255,255,.7); font-size:11px; line-height:1.4; }
+.journey-footer { position:relative; z-index:1; display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-top:15px; }
+.journey-footer strong { font-size:10px; }
+.journey-footer span { color:var(--taxi); font-size:10px; font-weight:900; }
+
+.day-adventure-map { margin:16px 0 12px; }
+.day-map-heading { margin-bottom:10px; }
+.day-map-heading strong { display:block; font-family:Georgia,serif; font-size:18px; }
+.day-map-heading p { margin:4px 0 0; color:var(--muted); font-size:11px; }
+.day-map-board { position:relative; height:300px; overflow:hidden; border-radius:21px; background:linear-gradient(rgba(255,253,248,.1),rgba(11,31,51,.14)),url("assets/maps/nyc-illustrated-master-v1.png") 43% 58% / 410% auto no-repeat; box-shadow:inset 0 0 0 1px rgba(11,31,51,.14); }
+.day-map-board::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(169,79,61,.14),transparent 55%); pointer-events:none; }
+.day-map-board svg { position:absolute; inset:0; z-index:1; width:100%; height:100%; }
+.day-route-path { fill:none; stroke:rgba(245,197,24,.95); stroke-width:1.4; stroke-linecap:round; stroke-dasharray:2.5 2; filter:drop-shadow(0 2px 2px rgba(11,31,51,.45)); }
+.day-map-stop { position:absolute; left:var(--left); top:var(--top); z-index:3; display:grid; justify-items:center; padding:0; border:0; background:transparent; transform:translate(-50%,-50%); filter:drop-shadow(0 3px 5px rgba(11,31,51,.3)); }
+.day-map-stop span { display:grid; place-items:center; width:34px; height:34px; border:2px solid white; border-radius:50%; color:var(--navy); background:var(--taxi); font-weight:950; }
+.day-map-stop small { margin-top:2px; padding:3px 6px; border-radius:999px; color:white; background:rgba(11,31,51,.82); font-size:8px; font-weight:850; white-space:nowrap; }
+.day-map-stop.selected span { color:white; background:var(--brick); box-shadow:0 0 0 5px rgba(245,197,24,.3); }
+.day-map-detail { min-height:83px; margin-top:9px; padding:12px 13px; border:1px solid var(--line); border-radius:15px; background:var(--card); }
+.day-map-detail strong { font-size:14px; }
+.day-map-detail p { margin:4px 0 0; color:var(--muted); font-size:11px; line-height:1.4; }
+.day-map-detail button { display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:8px; padding:8px 10px; border:0; border-radius:10px; color:white; background:var(--navy); font-size:10px; font-weight:850; }
+.day-map-detail button span { color:var(--taxi); font-size:16px; }
+
+@media (min-width:620px) { .journey-grid { grid-template-columns:1fr 1fr; } }
+
 .hero-card {
   position: relative;
   overflow: hidden;
