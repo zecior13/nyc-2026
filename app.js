@@ -9,6 +9,10 @@ let currentReadingText = "";
 let reading = false;
 let activeSnippetButton = null;
 let countdownTimer = null;
+let activeDayId = null;
+let currentDayPanel = "overview";
+let dayPanelHistory = [];
+const savedDayStates = new Map();
 
 // Tekst widoczny w aplikacji pozostaje oryginalny. Ten słownik służy wyłącznie
 // polskiemu lektorowi i będzie rozwijany wraz z kolejnymi dniami podróży.
@@ -429,7 +433,7 @@ function renderDayGuide(day) {
     </section>
     <section class="day-panel" data-panel="evening" hidden>
       <h3>Pierwszy wieczór</h3>
-      <div class="guide-grid">${guide.evening.map(item => `<article class="guide-card"><span class="mini-kicker">${item.time}</span><h4>${item.title}</h4><p>${item.text}</p></article>`).join("")}</div>
+      <div class="guide-grid">${guide.evening.map(item => `<article class="guide-card"><span class="mini-kicker">${item.time}</span><h4>${item.title}</h4><p>${item.text}</p>${item.related?.length ? `<div class="related-row">${item.related.map(link => `<button type="button" data-related-panel="${link.panel}" ${link.key ? `data-related-key="${link.key}"` : ""} data-return-label="Wieczór · ${item.title}">${link.label} ›</button>`).join("")}</div>` : ""}</article>`).join("")}</div>
     </section>
     <section class="day-panel" data-panel="stories" hidden>
       <h3>Historie, które warto znać</h3>
@@ -571,8 +575,38 @@ function timeline(items, panelTargets = []) {
     </article>`).join("")}</div>`;
 }
 
-function showDayPanel(panelName, focusKey = "") {
+function dayPanelLabel(panelName) {
+  return sheetContent.querySelector(`[data-day-panel="${panelName}"]`)?.textContent?.trim() || "poprzedniej sekcji";
+}
+
+function updateContextBackButton() {
+  const button = document.getElementById("dayContextBack");
+  if (!button) return;
+  const previous = dayPanelHistory.at(-1);
+  button.hidden = !previous;
+  if (previous) button.textContent = `← Wróć: ${previous.label}`;
+}
+
+function saveCurrentDayState() {
+  if (!activeDayId || sheet.hidden) return;
+  savedDayStates.set(activeDayId, {
+    panel: currentDayPanel,
+    scrollTop: sheet.scrollTop,
+    history: dayPanelHistory.map(item => ({ ...item }))
+  });
+}
+
+function showDayPanel(panelName, focusKey = "", options = {}) {
+  const { remember = false, restoreScroll = null, originLabel = "" } = options;
   stopReading();
+  if (remember && currentDayPanel && (currentDayPanel !== panelName || focusKey)) {
+    dayPanelHistory.push({
+      panel: currentDayPanel,
+      scrollTop: sheet.scrollTop,
+      label: originLabel || dayPanelLabel(currentDayPanel)
+    });
+  }
+  currentDayPanel = panelName;
   sheetContent.querySelectorAll(".day-panel").forEach(panel => {
     const active = panel.dataset.panel === panelName;
     panel.hidden = !active;
@@ -584,7 +618,11 @@ function showDayPanel(panelName, focusKey = "") {
     tab.setAttribute("aria-selected", String(active));
   });
   const tabs = sheetContent.querySelector(".day-tabs");
-  if (tabs) sheet.scrollTo({ top: tabs.offsetTop - 12, behavior: "smooth" });
+  if (restoreScroll !== null) {
+    requestAnimationFrame(() => sheet.scrollTo({ top: restoreScroll, behavior: "instant" }));
+  } else if (tabs) {
+    sheet.scrollTo({ top: tabs.offsetTop - 12, behavior: "smooth" });
+  }
   if (focusKey) {
     const target = sheetContent.querySelector(`[data-content-key="${focusKey}"]`);
     if (target) {
@@ -593,6 +631,13 @@ function showDayPanel(panelName, focusKey = "") {
       setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "center" }), 220);
     }
   }
+  updateContextBackButton();
+}
+
+function returnToPreviousDayContext() {
+  const previous = dayPanelHistory.pop();
+  if (!previous) return;
+  showDayPanel(previous.panel, "", { remember: false, restoreScroll: previous.scrollTop });
 }
 
 function updateBlueNoteCountdown(target) {
@@ -627,9 +672,116 @@ function renderToday() {
   bindDynamicActions();
 }
 
+const TRIP_REGIONS = [
+  { id: "midtown", name: "Midtown", color: "#f5c518", text: "Wasza baza i najbardziej intensywny obraz Manhattanu: Times Square, Broadway, Bryant Park, Rockefeller Center i Grand Central.", days: ["2026-08-22", "2026-08-24", "2026-08-25", "2026-08-30"] },
+  { id: "village", name: "Village i SoHo", color: "#a94f3d", text: "Niższa zabudowa, kręte ulice, bohema, prawa obywatelskie, serialowe adresy, jazz i współczesne zakupy.", days: ["2026-08-23", "2026-08-28"] },
+  { id: "museum", name: "Museum Mile i Central Park", color: "#8974a8", text: "Wielkie kolekcje, rezydencjonalny Upper East Side i park zaprojektowany jako demokratyczna przestrzeń odpoczynku.", days: ["2026-08-25", "2026-08-30"] },
+  { id: "west", name: "Chelsea i West Side", color: "#4f91b6", text: "Dawny przemysł, galerie, High Line, Whitney i nowa architektura skierowana ku Hudsonowi.", days: ["2026-08-27"] },
+  { id: "downtown", name: "Lower Manhattan i port", color: "#d37845", text: "Najstarszy Nowy Jork, finanse, pamięć o 11 września oraz widoki na port i Statuę Wolności.", days: ["2026-08-27"] },
+  { id: "queens", name: "Queens", color: "#4f8f75", text: "Przemysłowe nabrzeże, migracyjny i kulinarny Nowy Jork, dziedzictwo wystaw światowych oraz US Open.", days: ["2026-08-26"] },
+  { id: "bronx", name: "Bronx", color: "#6f8298", text: "Tego dnia przede wszystkim baseball: Yankee Stadium i rytuał jednej z największych rywalizacji sportowych USA.", days: ["2026-08-28"] },
+  { id: "brooklyn", name: "Brooklyn Waterfront", color: "#547b9b", text: "Mosty, port, poprzemysłowa panorama DUMBO i muzyka kameralna przy Brooklyn Bridge Park.", days: ["2026-08-29"] },
+  { id: "harlem", name: "Harlem", color: "#b46a8c", text: "Apollo, afroamerykańska historia sceny, bebop i finał podróży śladami Charliego Parkera.", days: ["2026-08-29"] }
+];
+
+const DAY_SCHEMATICS = {
+  "2026-08-22": { note: "Najdłuższy odcinek to dojazd z lotniska. Wieczór odbywa się pieszo wokół hotelu.", nodes: [["JFK", "brama", "✈", "arrival"], ["Hotel", "midtown", "⌂", "transport"], ["Times Square", "midtown", "●", "evening"], ["Bryant Park", "midtown", "◆", "evening"]], legs: ["samochód 60–100 min lub kolej 60–75 min", "pieszo ok. 10 min", "pieszo ok. 12 min · opcja"] },
+  "2026-08-23": { note: "Po dojeździe do Village cały zasadniczy dzień mieści się w jednej, zwartej dzielnicy.", nodes: [["Hotel", "midtown", "⌂", "overview"], ["Washington Sq.", "village", "●", "route"], ["West Village", "village", "◆", "route"], ["Blue Note", "village", "♪", "bluenote"]], legs: ["metro ok. 20 min", "spacer z przystankami", "spacer 10–20 min"] },
+  "2026-08-24": { note: "Dzień Midtown: większość punktów jest blisko siebie, a hotel służy jako praktyczna baza przed filmem.", nodes: [["Hotel", "midtown", "⌂", "overview"], ["MoMA", "midtown", "▣", "museum"], ["Rockefeller", "midtown", "◆", "shopping"], ["Hotel", "midtown", "⌂", "overview"], ["Bryant Park", "midtown", "▶", "movie"]], legs: ["metro/pieszo 20–25 min", "pieszo 5–10 min", "pieszo ok. 20 min", "pieszo ok. 12 min"] },
+  "2026-08-25": { note: "Najpierw jedziecie na północ, potem schodzicie przez park i wracacie do teatralnego Midtown.", nodes: [["Guggenheim", "museum", "◎", "guggenheim"], ["The Met", "museum", "▣", "museum"], ["Central Park", "park", "♧", "park"], ["Hotel", "midtown", "⌂", "rest"], ["Broadway", "midtown", "★", "theatre"]], legs: ["pieszo ok. 10 min", "spacer przez park", "metro/taxi 20–30 min", "pieszo 10–15 min"] },
+  "2026-08-26": { note: "To wyprawa równoleżnikowa przez Queens: nabrzeże, centrum Flushing i kompleks sportowy.", nodes: [["Hotel", "midtown", "⌂", "overview"], ["Long Island City", "queens", "◫", "route"], ["Flushing", "queens", "♨", "food"], ["Unisphere", "queens", "◎", "route"], ["US Open", "queens", "●", "tennis"]], legs: ["metro ok. 25 min", "metro 25–35 min", "spacer/metro", "pieszo ok. 15 min"] },
+  "2026-08-27": { note: "Dwie duże części dnia: port i Downtown rano, a następnie sztuka oraz spacer po West Side.", nodes: [["Pier 79", "west", "≈", "ferry"], ["St. George", "port", "◁", "photos"], ["Downtown", "downtown", "◆", "downtown"], ["Whitney", "west", "▣", "museum"], ["High Line", "west", "━", "route"], ["Hudson Yards", "west", "◇", "evening"]], legs: ["prom", "darmowy prom", "metro/pieszo", "pieszo", "spacer liniowy"] },
+  "2026-08-28": { note: "Dwa odrębne światy: zakupy i żeliwne fasady Downtown, potem sportowy wieczór w Bronksie.", nodes: [["Hotel", "midtown", "⌂", "overview"], ["SoHo", "village", "◆", "route"], ["Hotel", "midtown", "⌂", "rest"], ["Yankee Stadium", "bronx", "⚾", "stadium"]], legs: ["metro ok. 20 min", "powrót i reset", "metro ok. 35 min"] },
+  "2026-08-29": { note: "Największy skok między dzielnicami: Brooklyn rano i Harlem po koncercie kameralnym.", nodes: [["Hotel", "midtown", "⌂", "overview"], ["DUMBO", "brooklyn", "▱", "brooklyn"], ["Pier 5", "brooklyn", "♪", "bargemusic"], ["Apollo", "harlem", "★", "apollo"], ["Marcus Garvey Park", "harlem", "♫", "festival"]], legs: ["metro ok. 30 min", "spacer nabrzeżem", "metro 45–60 min", "pieszo ok. 10 min"] },
+  "2026-08-30": { note: "Ostatni spacer pozostaje blisko hotelu; po odbiorze bagaży zaczyna się osobna wyprawa na JFK.", nodes: [["Diner", "midtown", "☕", "diner"], ["Hotel", "midtown", "⌂", "hotel"], ["42nd Street", "midtown", "━", "walk"], ["Hotel", "midtown", "⌂", "transport"], ["JFK", "brama", "✈", "airport"]], legs: ["pieszo", "pieszo i zwiedzanie", "powrót po bagaże", "kolej ok. 60 min lub samochód"] }
+};
+
+function daySchematic(day) {
+  const schematic = DAY_SCHEMATICS[day.id];
+  if (!schematic) return "";
+  return `<section class="day-at-glance"><div class="day-glance-head"><span class="mini-kicker">Dzień na jednej planszy</span><strong>${schematic.note}</strong></div><div class="day-route-diagram">${schematic.nodes.map((node, index) => `${index ? `<div class="day-leg"><span>${schematic.legs[index - 1]}</span><i>→</i></div>` : ""}<button class="day-node node-${node[1]}" type="button" data-overview-panel="${node[3]}"><b>${node[2]}</b><span>${node[0]}</span></button>`).join("")}</div><p>Naciśnij punkt, aby przejść do właściwej części przewodnika.</p></section>`;
+}
+
+function tripMapMarkup() {
+  const routeLines = [
+    ["1", "#f5c518", "M386 460 L203 322", 360, 440],
+    ["2", "#a94f3d", "M203 322 L184 438", 184, 438],
+    ["3", "#d05763", "M203 322 L216 294 L205 342", 216, 294],
+    ["4", "#8974a8", "M203 322 L224 202 L196 250 L203 322", 224, 202],
+    ["5", "#4f8f75", "M203 322 L294 318 L365 266", 365, 266],
+    ["6", "#4f91b6", "M203 322 L190 520 L176 400 L245 382", 190, 520],
+    ["7", "#6f8298", "M203 322 L184 460 L222 86", 222, 86],
+    ["8", "#b46a8c", "M203 322 L286 470 L194 142", 286, 470],
+    ["9", "#d37845", "M203 322 L215 292 M203 322 L386 460", 386, 460]
+  ];
+  return `<section class="trip-map-card">
+    <div class="map-card-head"><div><span class="mini-kicker">Wasza plansza Nowego Jorku</span><h3>Najpierw zobaczcie, gdzie jesteście</h3></div><div class="map-mode" role="tablist"><button class="active" data-map-mode="regions">Regiony</button><button data-map-mode="days">Dni</button></div></div>
+    <div class="strategic-map" data-map-view="regions">
+      <svg viewBox="0 0 420 610" role="img" aria-label="Uproszczona mapa regionów odwiedzanych podczas podróży">
+        <path class="water-shape" d="M0 0h420v610H0z"/>
+        <path class="borough-base" d="M183 52l48 9 21 116-12 140-19 147-28 111-44-12 22-122 7-146-7-130z"/>
+        <path class="borough-base" d="M253 190l155 20-4 190-112 67-50-82 8-120z"/>
+        <path class="borough-base" d="M260 405l113 82-63 99-130-21 17-83z"/>
+        <path class="borough-base" d="M179 48l75-34 50 73-54 106-39-50z"/>
+        <path class="borough-base" d="M40 498l79-27 42 65-69 58-61-34z"/>
+
+        <g class="region-layer">
+          <path data-region="bronx" class="region region-bronx" d="M179 48l75-34 50 73-54 106-39-50z"/>
+          <path data-region="harlem" class="region region-harlem" d="M171 112l64 12 12 62-79 2z"/>
+          <path data-region="museum" class="region region-museum" d="M168 188l79-2 3 83-77 24z"/>
+          <path data-region="midtown" class="region region-midtown" d="M173 293l77-24-8 93-75 20z"/>
+          <path data-region="west" class="region region-west" d="M167 382l75-20-10 82-75 22z"/>
+          <path data-region="village" class="region region-village" d="M157 466l75-22-11 58-73 19z"/>
+          <path data-region="downtown" class="region region-downtown" d="M148 521l73-19-28 73-44-12z"/>
+          <path data-region="queens" class="region region-queens" d="M253 190l155 20-4 190-112 67-50-82 8-120z"/>
+          <path data-region="brooklyn" class="region region-brooklyn" d="M260 405l113 82-63 99-130-21 17-83z"/>
+          <text x="218" y="335">MIDTOWN</text><text x="195" y="484">VILLAGE</text><text x="196" y="548">DOWNTOWN</text><text x="209" y="231">MUSEUM MILE</text><text x="193" y="424">WEST SIDE</text><text x="205" y="151">HARLEM</text><text x="241" y="86">BRONX</text><text x="330" y="302">QUEENS</text><text x="286" y="517">BROOKLYN</text>
+        </g>
+
+        <g class="route-layer">
+          ${routeLines.map(([day, color, path, x, y]) => `<g class="day-route" data-map-day="${day}" style="--route:${color}" tabindex="0" role="button" aria-label="Pokaż dzień ${day}"><path d="${path}"/><circle cx="${x}" cy="${y}" r="13"/><text x="${x}" y="${y + 5}">${day}</text></g>`).join("")}
+          <circle class="hotel-dot" cx="203" cy="322" r="7"/><text class="hotel-label" x="214" y="315">HOTEL</text>
+        </g>
+      </svg>
+      <div class="map-compass"><span>↑</span> północ</div>
+    </div>
+    <div class="map-detail" id="mapDetail"><strong>Wybierz kolor na mapie</strong><p>Zobaczysz charakter regionu oraz dni, podczas których będziecie go poznawać.</p></div>
+    <p class="map-disclaimer">Schemat służy do zrozumienia kierunków i relacji między dzielnicami — nie zastępuje mapy nawigacyjnej i nie zachowuje dokładnej skali.</p>
+  </section>`;
+}
+
+function showMapRegion(regionId) {
+  const region = TRIP_REGIONS.find(item => item.id === regionId);
+  const detail = document.getElementById("mapDetail");
+  if (!region || !detail) return;
+  document.querySelectorAll("[data-region]").forEach(area => area.classList.toggle("selected", area.dataset.region === regionId));
+  detail.innerHTML = `<span class="region-swatch" style="background:${region.color}"></span><strong>${region.name}</strong><p>${region.text}</p><div class="map-day-links">${region.days.map(id => { const day = DAYS.find(item => item.id === id); return `<button data-open-day="${id}">Dzień ${day.day} · ${day.title}</button>`; }).join("")}</div>`;
+  bindDynamicActions();
+}
+
+function bindTripMap() {
+  document.querySelectorAll("[data-map-mode]").forEach(button => button.addEventListener("click", () => {
+    document.querySelectorAll("[data-map-mode]").forEach(item => item.classList.toggle("active", item === button));
+    document.querySelector("[data-map-view]")?.setAttribute("data-map-view", button.dataset.mapMode);
+    const detail = document.getElementById("mapDetail");
+    if (detail && button.dataset.mapMode === "days") detail.innerHTML = `<strong>Wybierz numer dnia</strong><p>Kolorowa linia pokazuje główne przemieszczenia. Hotel pozostaje wspólną bazą większości wypraw.</p>`;
+  }));
+  document.querySelectorAll("[data-region]").forEach(area => {
+    const open = () => showMapRegion(area.dataset.region);
+    area.addEventListener("click", open);
+  });
+  document.querySelectorAll("[data-map-day]").forEach(route => {
+    const open = () => openDay(DAYS[Number(route.dataset.mapDay) - 1].id);
+    route.addEventListener("click", open);
+    route.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") open(); });
+  });
+}
+
 function renderPlan() {
   app.innerHTML = `
     <div class="view-heading"><h2>Plan podróży</h2><p>Stałe rezerwacje są chronione, a pozostałe punkty można skracać lub zamieniać bez burzenia dnia.</p></div>
+    ${tripMapMarkup()}
+    <div class="section-title"><h3>Wszystkie dni</h3><span>9 wypraw</span></div>
     <div class="card-list">${DAYS.map(day => `
       <article class="day-card" data-open-day="${day.id}" tabindex="0" role="button">
         <div class="day-date"><strong>${day.date.slice(0,2)}</strong><span>sierpnia</span></div>
@@ -641,6 +793,7 @@ function renderPlan() {
         <div class="day-arrow">›</div>
       </article>`).join("")}</div>`;
   bindDynamicActions();
+  bindTripMap();
 }
 
 function renderCards(title, intro, items) {
@@ -651,8 +804,8 @@ function renderCards(title, intro, items) {
 }
 
 function openLinkedDay(dayId, panel, key = "") {
-  openDay(dayId);
-  if (panel) showDayPanel(panel, key);
+  openDay(dayId, { restore: false });
+  if (panel) showDayPanel(panel, key, { remember: false });
 }
 
 function bindLinkedDayActions() {
@@ -691,6 +844,74 @@ function renderPlaces() {
     document.querySelectorAll("[data-place-category]").forEach(card=>card.hidden=button.dataset.placeFilter!=="wszystkie"&&card.dataset.placeCategory!==button.dataset.placeFilter);
   }));
   bindLinkedDayActions();
+}
+
+function museumWorkStatus(status) {
+  if (status === "on") return ["Na ekspozycji", "work-on"];
+  if (status === "off") return ["Niewystawiane", "work-off"];
+  return ["Sprawdź przed wizytą", "work-check"];
+}
+
+function renderMuseumHub() {
+  app.innerHTML = `<div class="view-heading"><h2>Muzea</h2><p>Osobisty przewodnik Gosi: orientacja w budynku, szeroki wybór dzieł i własna lista bez ryzyka, że aplikacja wybierze wszystko za Was.</p></div>
+    <div class="notice">„W kolekcji” nie znaczy automatycznie „na ścianie”. Przy każdym dziele pokazujemy osobno status ekspozycji, a listę aktualizujemy przed podróżą.</div>
+    <div class="museum-hub-grid">${MUSEUMS.map(museum => `<article class="museum-hub-card" style="--museum:${museum.accent}"><div class="museum-monogram">${museum.name.slice(0,2).toUpperCase()}</div><span class="mini-kicker">${museum.time}</span><h3>${museum.name}</h3><p>${museum.intro}</p><div class="museum-card-stats"><span>${museum.floors.length} poziomów/obszarów</span><span>${museum.works.length} dzieł w katalogu</span></div><button type="button" data-open-museum="${museum.id}">Otwórz przewodnik ›</button></article>`).join("")}</div>
+    <div class="simple-card museum-method"><h3>Jak będziemy uzupełniać katalog?</h3><p>Dla znanych artystów lista ma być szeroka. Przed wyjazdem porównamy ją z oficjalnym filtrem „on view”, dzięki czemu Gosia zobaczy zarówno wszystkie interesujące prace w kolekcji, jak i realnie dostępny zestaw na dzień wizyty.</p></div>`;
+  document.querySelectorAll("[data-open-museum]").forEach(button => button.addEventListener("click", () => renderMuseumDetail(button.dataset.openMuseum)));
+}
+
+function museumFloorPlan(museum) {
+  return `<div class="museum-building" style="--museum:${museum.accent}">${museum.floors.map(floor => `<article class="museum-floor"><div class="floor-number">${floor.level}</div><div class="floor-shape" style="--floor-width:${floor.scale}%"><strong>${floor.title}</strong><span>${floor.rooms}</span></div><p>${floor.text}</p></article>`).join("")}</div>`;
+}
+
+function museumWorkCard(work, museum) {
+  const [statusLabel, statusClass] = museumWorkStatus(work.status);
+  return `<details class="museum-work-card" data-work-search="${`${work.artist} ${work.title} ${work.section}`.toLocaleLowerCase("pl")}" data-work-priority="${work.priority}" data-work-status="${work.status}" data-work-artist="${work.artist}">
+    <summary><div class="work-visual" style="--museum:${museum.accent}"><span>${work.artist.split(" ").map(x=>x[0]).slice(0,2).join("")}</span></div><div class="work-summary"><span class="mini-kicker">${work.artist} · ${work.year}</span><h4>${work.title}</h4><div class="work-badges"><span class="${work.priority === "must" ? "work-must" : "work-good"}">${work.priority === "must" ? "Must see" : "Warto zobaczyć"}</span><span class="${statusClass}">${statusLabel}</span><span>piętro ${work.floor}</span></div></div><span class="work-open">＋</span></summary>
+    <div class="work-detail"><p><strong>Dlaczego jest ważne?</strong><br>${work.why}</p><div class="look-box"><strong>Na co patrzeć:</strong> ${work.look}</div><div class="work-actions"><label><input type="checkbox" data-save-check="museum-want-${work.id}"> chcę zobaczyć</label><label><input type="checkbox" data-save-check="museum-seen-${work.id}"> widziane</label><button class="audio-chip" type="button" data-museum-audio="${work.id}">▶ Posłuchaj przy dziele</button></div></div>
+  </details>`;
+}
+
+function showMuseumPanel(panel) {
+  document.querySelectorAll("[data-museum-panel]").forEach(button => button.classList.toggle("active", button.dataset.museumPanel === panel));
+  document.querySelectorAll("[data-museum-content]").forEach(section => section.hidden = section.dataset.museumContent !== panel);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function filterMuseumWorks() {
+  const query = (document.getElementById("museumSearch")?.value || "").trim().toLocaleLowerCase("pl");
+  const priority = document.getElementById("museumPriority")?.value || "all";
+  const status = document.getElementById("museumStatus")?.value || "all";
+  const artist = document.getElementById("museumArtist")?.value || "all";
+  let visible = 0;
+  document.querySelectorAll("[data-work-search]").forEach(card => {
+    const matches = (!query || card.dataset.workSearch.includes(query)) && (priority === "all" || card.dataset.workPriority === priority) && (status === "all" || card.dataset.workStatus === status) && (artist === "all" || card.dataset.workArtist === artist);
+    card.hidden = !matches;
+    if (matches) visible += 1;
+  });
+  const counter = document.getElementById("museumFilterCount");
+  if (counter) counter.textContent = `${visible} dzieł`;
+}
+
+function renderMuseumDetail(id) {
+  const museum = MUSEUMS.find(item => item.id === id);
+  if (!museum) return;
+  const artists = [...new Set(museum.works.map(work => work.artist))].sort((a,b)=>a.localeCompare(b,"pl"));
+  app.innerHTML = `<button class="view-back" type="button" id="museumHubBack">← Wszystkie muzea</button>
+    <section class="museum-hero" style="--museum:${museum.accent}"><span class="mini-kicker">${museum.time} · ${museum.works.length} dzieł do wyboru</span><h2>${museum.fullName}</h2><p>${museum.intro}</p><div class="hero-actions"><button class="button" data-linked-day="${museum.dayId}" data-linked-panel="${museum.dayPanel}">Otwórz w planie dnia</button><span data-progress-for="museum-seen-"></span></div></section>
+    <nav class="museum-tabs" aria-label="Sekcje muzeum"><button class="active" data-museum-panel="overview">Start</button><button data-museum-panel="floors">Piętra</button><button data-museum-panel="works">Dzieła</button><button data-museum-panel="artists">Artyści</button></nav>
+    <section data-museum-content="overview"><div class="notice">${museum.statusNote}</div><div class="museum-start-grid"><article class="simple-card"><h3>60 minut</h3><p>Tylko zaznaczone Must see. Po pięciu dziełach oceńcie energię i nie próbujcie nadrabiać biegiem.</p></article><article class="simple-card"><h3>90–120 minut</h3><p>Must see oraz wybrani wcześniej artyści. To podstawowy wariant dla Whitney i Guggenheimu.</p></article><article class="simple-card"><h3>Pełny czas</h3><p>Własna lista Gosi, przerwa w połowie i najwyżej jedno spontaniczne odejście od trasy na piętro.</p></article></div><button class="button museum-primary-action" data-museum-jump="works">Wybierz dzieła przed wyjazdem</button></section>
+    <section data-museum-content="floors" hidden><div class="view-heading compact"><h2>Jak duże jest muzeum?</h2><p>Uproszczony schemat pokazuje względną skalę i podział funkcjonalny. Nie zastępuje oficjalnego planu sal.</p></div>${museumFloorPlan(museum)}</section>
+    <section data-museum-content="works" hidden><div class="museum-filter-bar"><label class="museum-search">Szukaj<input id="museumSearch" type="search" placeholder="artysta, dzieło lub dział"></label><label>Priorytet<select id="museumPriority"><option value="all">Wszystkie</option><option value="must">Must see</option><option value="good">Warto zobaczyć</option></select></label><label>Status<select id="museumStatus"><option value="all">Każdy status</option><option value="on">Na ekspozycji</option><option value="check">Do sprawdzenia</option><option value="off">Niewystawiane</option></select></label><label>Artysta<select id="museumArtist"><option value="all">Wszyscy artyści</option>${artists.map(artist=>`<option value="${artist}">${artist}</option>`).join("")}</select></label></div><div class="section-title"><h3>Katalog do własnego wyboru</h3><span id="museumFilterCount">${museum.works.length} dzieł</span></div><div class="museum-work-list">${museum.works.map(work=>museumWorkCard(work,museum)).join("")}</div></section>
+    <section data-museum-content="artists" hidden><div class="view-heading compact"><h2>Artyści w katalogu</h2><p>Wybór artysty przenosi do wszystkich jego zapisanych prac — nie tylko do jednego najbardziej znanego obrazu.</p></div><div class="artist-index">${artists.map(artist=>{const count=museum.works.filter(work=>work.artist===artist).length;return `<button data-artist-jump="${artist}"><strong>${artist}</strong><span>${count} ${count===1?"dzieło":"dzieła"}</span></button>`}).join("")}</div></section>`;
+  document.getElementById("museumHubBack")?.addEventListener("click", renderMuseumHub);
+  document.querySelectorAll("[data-museum-panel]").forEach(button=>button.addEventListener("click",()=>showMuseumPanel(button.dataset.museumPanel)));
+  document.querySelectorAll("[data-museum-jump]").forEach(button=>button.addEventListener("click",()=>showMuseumPanel(button.dataset.museumJump)));
+  ["museumSearch","museumPriority","museumStatus","museumArtist"].forEach(control=>document.getElementById(control)?.addEventListener(control === "museumSearch" ? "input" : "change",filterMuseumWorks));
+  document.querySelectorAll("[data-artist-jump]").forEach(button=>button.addEventListener("click",()=>{showMuseumPanel("works"); const select=document.getElementById("museumArtist"); if(select){select.value=button.dataset.artistJump;filterMuseumWorks();}}));
+  document.querySelectorAll("[data-museum-audio]").forEach(button=>button.addEventListener("click",event=>{event.preventDefault(); const work=museum.works.find(item=>item.id===button.dataset.museumAudio); if(work)playSnippet(`${work.artist}. ${work.title}. ${work.why} Na co patrzeć. ${work.look}`,button);}));
+  bindLinkedDayActions();
+  bindSavedChecks();
 }
 
 function showPreparePanel(panel) {
@@ -754,22 +975,29 @@ function renderWallet() {
   bindLinkedDayActions();
 }
 
-function openDay(id) {
+function openDay(id, options = {}) {
+  const { restore = true } = options;
   const day = DAYS.find(item => item.id === id);
   if (!day) return;
+  saveCurrentDayState();
   stopReading();
+  activeDayId = id;
+  currentDayPanel = "overview";
+  dayPanelHistory = [];
   currentReadingText = dayReadingText(day);
   const guide = typeof DAY_GUIDES !== "undefined" ? DAY_GUIDES[day.id] : null;
   sheetContent.innerHTML = `
     <p class="sheet-kicker">Dzień ${day.day} · ${day.date} · ${day.weekday}</p>
     <h2 id="sheetTitle">${day.title}</h2>
     <p class="lead">${day.story}</p>
+    ${daySchematic(day)}
     <div class="reader" aria-label="Odtwarzanie głosowe">
       <button class="reader-play" id="readerPlayButton" type="button">▶ Odsłuchaj dzień</button>
       <button class="reader-stop" id="readerStopButton" type="button" disabled>■ Zatrzymaj</button>
       <span class="reader-status" id="readerStatus" aria-live="polite"></span>
       <details class="voice-settings"><summary>Zmień głos lektora</summary><div><select id="voiceSelect" aria-label="Wybierz polski głos"></select><button type="button" id="voicePreviewButton">Odtwórz próbkę</button></div><p>Naturalniejsze głosy „rozszerzone” lub „premium” pobiera się w ustawieniach dostępności urządzenia.</p></details>
     </div>
+    <button class="context-back" id="dayContextBack" type="button" hidden>← Wróć</button>
     ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}`;
   sheet.hidden = false;
   sheetBackdrop.hidden = false;
@@ -780,14 +1008,16 @@ function openDay(id) {
   populateVoiceSelect();
   document.getElementById("voiceSelect")?.addEventListener("change", event => localStorage.setItem("nyc-preferred-voice", event.target.value));
   document.getElementById("voicePreviewButton")?.addEventListener("click", event => playSnippet("Witajcie w Nowym Jorku. Za chwilę ruszamy na spacer przez Greenwich Village.", event.currentTarget));
+  document.getElementById("dayContextBack")?.addEventListener("click", returnToPreviousDayContext);
   if (guide) {
-    sheetContent.querySelectorAll("[data-day-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.dayPanel)));
+    sheetContent.querySelectorAll("[data-overview-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.overviewPanel, "", { remember: true, originLabel: `Plansza dnia · ${button.querySelector("span")?.textContent || "punkt"}` })));
+    sheetContent.querySelectorAll("[data-day-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.dayPanel, "", { remember: false })));
     sheetContent.querySelectorAll("[data-panel-jump]").forEach(card => {
-      const open = () => showDayPanel(card.dataset.panelJump);
+      const open = () => showDayPanel(card.dataset.panelJump, "", { remember: true, originLabel: `Plan · ${card.querySelector("h4")?.textContent || "punkt dnia"}` });
       card.addEventListener("click", open);
       card.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") open(); });
     });
-    sheetContent.querySelectorAll("[data-related-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.relatedPanel, button.dataset.relatedKey || "")));
+    sheetContent.querySelectorAll("[data-related-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.relatedPanel, button.dataset.relatedKey || "", { remember: true, originLabel: button.dataset.returnLabel || dayPanelLabel(currentDayPanel) })));
     sheetContent.querySelectorAll("[data-next-stop]").forEach(button => button.addEventListener("click", () => {
       const target = sheetContent.querySelectorAll(".route-stop")[Number(button.dataset.nextStop)];
       target?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -841,12 +1071,20 @@ function openDay(id) {
       clearInterval(countdownTimer);
       countdownTimer = setInterval(() => updateBlueNoteCountdown(guide.bluenote.countdown), 60000);
     }
+    const saved = restore ? savedDayStates.get(id) : null;
+    if (saved) {
+      dayPanelHistory = saved.history || [];
+      showDayPanel(saved.panel || "overview", "", { remember: false, restoreScroll: saved.scrollTop || 0 });
+    } else {
+      updateContextBackButton();
+    }
   }
 }
 
 if ("speechSynthesis" in window) speechSynthesis.addEventListener?.("voiceschanged", populateVoiceSelect);
 
 function closeSheet() {
+  saveCurrentDayState();
   stopReading();
   clearInterval(countdownTimer);
   sheet.hidden = true;
@@ -884,6 +1122,7 @@ function setView(view) {
   if (view === "today") renderToday();
   if (view === "plan") renderPlan();
   if (view === "places") renderPlaces();
+  if (view === "museums") renderMuseumHub();
   if (view === "prepare") renderPrepare();
   if (view === "wallet") renderWallet();
   window.scrollTo({ top: 0, behavior: "instant" });

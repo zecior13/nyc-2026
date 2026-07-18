@@ -209,9 +209,9 @@ const DAY_GUIDES = {
       text: "Recepcja działa na miejscu; standardowy check-in jest od 15:00. Hotel leży przy 8th Avenue, między West 38th i West 39th Street — około 8 minut pieszo od Penn Station i około 10 minut od Times Square."
     },
     evening: [
-      { time: "po zameldowaniu", title: "Najpierw oceńcie energię", text: "Prysznic, woda i krótki odpoczynek. Pierwszego wieczoru niczego nie trzeba zaliczyć." },
-      { time: "wariant krótki · 45–60 min", title: "Kolacja i pierwsze Times Square", text: "Idźcie 8th Avenue do West 42nd Street, następnie w stronę Broadwayu. Zatrzymajcie się na czerwonych schodach TKTS i wróćcie do hotelu." },
-      { time: "wariant pełny · 90 min", title: "Times Square i Bryant Park", text: "Po Times Square przejdźcie West 42nd Street na wschód do Bryant Parku. Powrót do hotelu prowadzi West 40th Street. Wybierzcie ten wariant tylko wtedy, gdy naprawdę macie siłę." }
+      { time: "po zameldowaniu", title: "Najpierw oceńcie energię", text: "Prysznic, woda i krótki odpoczynek. Pierwszego wieczoru niczego nie trzeba zaliczyć.", related: [{ panel: "food", label: "Jedzenie blisko hotelu" }] },
+      { time: "wariant krótki · 45–60 min", title: "Kolacja i pierwsze Times Square", text: "Idźcie 8th Avenue do West 42nd Street, następnie w stronę Broadwayu. Zatrzymajcie się na czerwonych schodach TKTS i wróćcie do hotelu.", related: [{ panel: "food", label: "Wybierz kolację" }, { panel: "stories", key: "story-0", label: "Dlaczego to nie jest kwadrat?" }, { panel: "stories", key: "story-1", label: "Skąd nazwa Times Square?" }] },
+      { time: "wariant pełny · 90 min", title: "Times Square i Bryant Park", text: "Po Times Square przejdźcie West 42nd Street na wschód do Bryant Parku. Powrót do hotelu prowadzi West 40th Street. Wybierzcie ten wariant tylko wtedy, gdy naprawdę macie siłę.", related: [{ panel: "food", label: "Kolacja po drodze" }, { panel: "stories", key: "story-2", label: "Historia Bryant Parku" }] }
     ],
     stories: [
       { title: "Dlaczego Times Square nie jest kwadratem?", text: "Broadway przecina regularną siatkę Manhattanu po skosie. Na wysokości Seventh Avenue tworzy dwa trójkąty, razem nazywane Bowtie — muszką. Times Square jest północną częścią tej przestrzeni." },

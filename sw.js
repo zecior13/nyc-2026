@@ -1,9 +1,10 @@
-const CACHE = "nyc-2026-v27";
+const CACHE = "nyc-2026-v29";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./data.js",
+  "./museum-data.js",
   "./app.js",
   "./manifest.json",
   "./icons/icon-192.png",
