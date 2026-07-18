@@ -765,8 +765,19 @@ function showMapRegion(regionId) {
   const detail = document.getElementById("mapDetail");
   if (!region || !detail) return;
   document.querySelectorAll("[data-region]").forEach(area => area.classList.toggle("selected", area.dataset.region === regionId));
+  document.querySelectorAll("[data-map-place]").forEach(button => button.classList.remove("selected"));
   detail.innerHTML = `<span class="region-swatch" style="background:${region.color}"></span><strong>${region.name}</strong><p>${region.text}</p><div class="map-day-links">${region.days.map(id => { const day = DAYS.find(item => item.id === id); return `<button data-open-day="${id}">Dzień ${day.day} · ${day.title}</button>`; }).join("")}</div>`;
   bindDynamicActions();
+}
+
+function showMapPlace(placeId) {
+  const place = PLACES.find(item => item.id === placeId);
+  const detail = document.getElementById("mapDetail");
+  if (!place || !detail) return;
+  document.querySelectorAll("[data-region]").forEach(area => area.classList.remove("selected"));
+  document.querySelectorAll("[data-map-place]").forEach(button => button.classList.toggle("selected", button.dataset.mapPlace === placeId));
+  detail.innerHTML = `<span class="place-detail-icon">${place.icon}</span><strong>${place.title}</strong><p>${place.text}</p><div class="place-detail-meta">${place.meta}${place.status ? ` · ${place.status}` : ""}</div><button class="map-place-open" type="button">Otwórz pełny przewodnik po miejscu <span>›</span></button>`;
+  detail.querySelector(".map-place-open")?.addEventListener("click", () => openLinkedDay(place.dayId, place.panel));
 }
 
 function bindTripMap() {
@@ -774,9 +785,9 @@ function bindTripMap() {
     const open = () => showMapRegion(area.dataset.region);
     area.addEventListener("click", open);
   });
-  document.querySelectorAll("[data-map-place]").forEach(button => button.addEventListener("click", () => {
-    const place = PLACES.find(item => item.id === button.dataset.mapPlace);
-    if (place) openLinkedDay(place.dayId, place.panel);
+  document.querySelectorAll("[data-map-place]").forEach(button => button.addEventListener("click", event => {
+    event.stopPropagation();
+    showMapPlace(button.dataset.mapPlace);
   }));
   bindGestureMap(document.querySelector("[data-gesture-map]"));
 }
