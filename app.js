@@ -700,21 +700,22 @@ function updateBlueNoteCountdown(target) {
 function renderToday() {
   const day = getTripDay();
   const beforeTrip = new Date() < new Date("2026-08-22T00:00:00");
+  const timed = day.items.map(item => ({ item, match:item.time?.match(/(\d{1,2}):(\d{2})/) })).filter(x=>x.match);
+  const now = new Date();
+  const minutes = now.getHours()*60+now.getMinutes();
+  const next = beforeTrip ? day.items[0] : (timed.find(x=>Number(x.match[1])*60+Number(x.match[2])>=minutes)?.item || day.items.at(-1));
+  const stats = journeyStats();
   app.innerHTML = `
-    ${beforeTrip ? `<div class="notice">Tryb przygotowań: pokazujemy pierwszy dzień jako podgląd. Podczas wyjazdu aplikacja automatycznie otworzy właściwy dzień.</div>` : ""}
-    <section class="hero-card" style="margin-top:${beforeTrip ? "14px" : "0"}">
+    <section class="today-command" style="--today:${DAY_VISUALS[day.id]?.color || "#f5c518"}">
       <div class="hero-date">Dzień ${day.day} · ${day.date} · ${day.weekday}</div>
       <h2>${day.title}</h2>
       <p>${day.subtitle}</p>
-      <div class="hero-actions">
-        <button class="button" data-open-day="${day.id}">Otwórz cały dzień</button>
-        <button class="button secondary" data-view-jump="plan">Wszystkie dni</button>
-      </div>
+      ${beforeTrip ? `<span class="today-preview">Podgląd · 22 sierpnia widok przełączy się automatycznie</span>` : ""}
+      <article class="today-next"><small>${beforeTrip?"Pierwszy punkt":"Teraz / następnie"}</small><strong>${next?.time || "Start"} · ${next?.title || day.title}</strong></article>
+      <div class="today-actions"><button data-open-day="${day.id}">Otwórz dzień</button><button data-view-jump="wallet">Bilety</button><button data-view-jump="plan">Wszystkie dni</button></div>
     </section>
-    <div class="section-title"><h3>Po kolei</h3><span>${day.items.length} punktów</span></div>
-    ${timeline(day.items)}
-    <div class="section-title"><h3>Pamiętaj</h3></div>
-    <div class="simple-card"><p>${day.essentials.join(" · ")}</p></div>`;
+    <section class="journey-progress"><div><strong>${stats.places}</strong><span>miejsc odwiedzonych</span></div><div><strong>${stats.works}</strong><span>dzieł zobaczonych</span></div><div><strong>${stats.days}/9</strong><span>dni zapisanych</span></div></section>
+    <div class="section-title"><h3>Po kolei</h3><span>${day.items.length} punktów</span></div>${timeline(day.items)}`;
   bindDynamicActions();
 }
 
@@ -729,6 +730,31 @@ const TRIP_REGIONS = [
   { id: "brooklyn", name: "Brooklyn Waterfront", color: "#547b9b", text: "Mosty, port, poprzemysłowa panorama DUMBO i muzyka kameralna przy Brooklyn Bridge Park.", days: ["2026-08-29"] },
   { id: "harlem", name: "Harlem", color: "#b46a8c", text: "Apollo, afroamerykańska historia sceny, bebop i finał podróży śladami Charliego Parkera.", days: ["2026-08-29"] }
 ];
+
+const PLACE_EXTRAS = {
+  "times-square":{region:"midtown",status:"w planie",why:"To świadomy pierwszy kontakt z miastem — blisko hotelu i bez ambitnego zwiedzania po locie.",curiosity:"Plac nazywał się Longacre Square. Dzisiejszą nazwę dostał po przeprowadzce redakcji The New York Times w 1904 roku.",photoTip:"Stańcie na czerwonych schodach TKTS; drugi kadr zróbcie nisko, z ekranami ponad głowami.",nearby:["bryant-park","grandcentral"]},
+  "bryant-park":{region:"midtown",status:"w planie",why:"Łączy trzy dni i pokazuje, jak nowojorczycy używają centrum jak wspólnego salonu.",curiosity:"Pod trawnikiem mieszczą się magazyny New York Public Library.",photoTip:"Najlepszy kadr: trawnik i fasada NYPL albo Empire State Building między drzewami.",nearby:["times-square","grandcentral","rockefeller-shopping"]},
+  village:{region:"village",status:"w planie",why:"Najbardziej spacerowa część podróży: historia, seriale, jazz i ulice, które nie podporządkowały się siatce Manhattanu.",curiosity:"Układ ulic jest starszy od Commissioners’ Plan z 1811 roku, dlatego Village potrafi dezorientować nawet mieszkańców.",photoTip:"Pod łukiem Washington Square zostawcie w kadrze ludzi i muzyków — to ma wyglądać jak żywa dzielnica.",nearby:["bluenote","soho"]},
+  bluenote:{region:"village",status:"w planie",why:"Hiromi w małym, legendarnym klubie to dokładnie doświadczenie „tylko w Nowym Jorku”.",curiosity:"Klub działa od 1981 roku, a bliskość sceny jest częścią doświadczenia — to nie sala koncertowa.",photoTip:"Zróbcie zdjęcie szyldu przed wejściem; w środku nie używajcie lampy i podporządkujcie się zasadom klubu.",nearby:["village","soho"]},
+  moma:{region:"midtown",status:"w planie",why:"Najmocniejszy przekrój sztuki nowoczesnej przy rozsądnym czasie zwiedzania.",curiosity:"MoMA od początku łączyło malarstwo z fotografią, filmem, architekturą i wzornictwem.",photoTip:"Po muzeum sfotografujcie ogród rzeźb z bryłą budynku w tle.",nearby:["rockefeller-shopping","times-square"]},
+  "rockefeller-shopping":{region:"midtown",status:"w planie",why:"To część dnia także dla Matyldy: współczesne marki spotykają się tu z art déco i historią kompleksu.",curiosity:"Kompleks powstał w czasie Wielkiego Kryzysu jako jeden z największych prywatnych projektów budowlanych epoki.",photoTip:"Na Channel Gardens ustawcie aparat osiowo w stronę 30 Rockefeller Plaza.",nearby:["moma","bryant-park","summit"]},
+  met:{region:"museum",status:"w planie",why:"Jedyna szansa, by w jednym miejscu wybrać między tysiącami lat sztuki — według własnej listy, nie obowiązkowej trasy.",curiosity:"Budynek widoczny od Fifth Avenue jest tylko fragmentem ogromnego, wielokrotnie rozbudowywanego kompleksu.",photoTip:"Na schodach zostawcie szeroki kadr z kolumnadą; wewnątrz fotografujcie bez lampy.",nearby:["guggenheim","central-park"]},
+  guggenheim:{region:"museum",status:"w planie",why:"Dwie godziny rano dają Gosi czas na kolekcję, a Wam obojgu — na przeżycie architektury Wrighta od środka.",curiosity:"Frank Lloyd Wright projektował spiralę przez kilkanaście lat; muzeum otwarto pół roku po jego śmierci.",photoTip:"Z chodnika fotografujcie budynek lekko z ukosa; w rotundzie skierujcie obiektyw pionowo ku świetlikowi.",nearby:["met","central-park"]},
+  "central-park":{region:"museum",status:"w planie",why:"Po The Met daje zmianę tempa i pokazuje miejski krajobraz jako równie przemyślany projekt jak muzeum.",curiosity:"Olmsted i Vaux zaprojektowali park jako sekwencję krajobrazów, choć wiele z nich wygląda dziś całkowicie naturalnie.",photoTip:"Bow Bridge fotografujcie z brzegu; przy Bethesda Terrace użyjcie arkad jako ramy dla fontanny.",nearby:["met","guggenheim"]},
+  queens:{region:"queens",status:"w planie",why:"Dzień wyprowadza Was poza pocztówkowy Manhattan: nabrzeże, migracyjne jedzenie i dziedzictwo World’s Fair.",curiosity:"Linia 7 bywa nazywana International Express, bo przebiega przez jedne z najbardziej różnorodnych dzielnic miasta.",photoTip:"W Gantry Plaza ustawcie Manhattan po drugiej stronie East River, a przy Unisphere zostawcie dużo nieba.",nearby:["us-open"]},
+  "us-open":{region:"queens",status:"w planie",why:"Kupiony półfinał miksta jest sportowym rdzeniem wyprawy do Queens.",curiosity:"Kompleks nosi imię Billie Jean King, pionierki równości w sporcie.",photoTip:"Zróbcie zdjęcie przy Unisphere przed wejściem, zanim tłum skieruje się na korty.",nearby:["queens"]},
+  liberty:{region:"downtown",status:"na zdjęcie",why:"Prom tworzy ruchome, filmowe spotkanie ze Statuą bez przeznaczania pół dnia na Liberty Island.",curiosity:"Statua była darem Francji, ale jej cokół sfinansowano częściowo dzięki publicznej zbiórce prowadzonej przez Josepha Pulitzera.",photoTip:"Na promie wybierzcie prawą burtę przy rejsie ku Staten Island; użyjcie trybu seryjnego i zostawcie miejsce przed kierunkiem ruchu.",nearby:["downtown"]},
+  downtown:{region:"downtown",status:"w planie",why:"Krótka trasa łączy początki finansowego miasta z pamięcią po 11 września, bez przeciążenia muzeum.",curiosity:"Kręte ulice poniżej Wall Street zachowują ślad kolonialnego miasta sprzed regularnej siatki ulic.",photoTip:"Przy Charging Bull fotografujcie szybko z boku; przy memoriale odłóżcie pozowanie i skupcie się na detalach nazw.",nearby:["liberty","westside"]},
+  westside:{region:"west",status:"w planie",why:"Whitney, High Line i Hudson pokazują przemianę przemysłowego brzegu w dzielnicę sztuki i spaceru.",curiosity:"High Line była towarową linią kolejową wprowadzoną bezpośrednio do fabryk i magazynów.",photoTip:"Na tarasach Whitney połączcie sztukę z panoramą; na High Line szukajcie osi ulic kończących się Hudsonem.",nearby:["summit","downtown"]},
+  summit:{region:"midtown",status:"opcjonalne",why:"To rezerwowy finał dnia tylko przy czystym niebie i zachowanej energii.",curiosity:"Lustrzane instalacje celowo mieszają widok miasta z odbiciami widzów.",photoTip:"W ciemnym ubraniu sylwetka lepiej odcina się od jasnych luster; sprawdźcie pogodę tuż przed zakupem.",nearby:["grandcentral","rockefeller-shopping"]},
+  soho:{region:"village",status:"w planie",why:"Daje Matyldzie współczesny, zakupowy Nowy Jork, a dorosłym — żeliwną architekturę i historię loftów.",curiosity:"Wielkie witryny i cienkie kolumny były możliwe dzięki prefabrykowanym fasadom z żeliwa.",photoTip:"Na Greene Street fotografujcie fasady pod kątem, aby pokazać rytm schodów pożarowych.",nearby:["village","bluenote"]},
+  yankees:{region:"bronx",status:"w planie",why:"Yankees–Red Sox to sport, rytuał i jedna z najbardziej rozpoznawalnych rywalizacji w USA.",curiosity:"Obecny stadion otwarto w 2009 roku naprzeciw miejsca oryginalnego Yankee Stadium.",photoTip:"Przed meczem zróbcie szeroki kadr fasady przy 161st Street; wewnątrz — boisko jeszcze przed zapełnieniem trybun.",nearby:[]},
+  dumbo:{region:"brooklyn",status:"w planie",why:"Najbardziej filmowy widok Brooklynu łączy się tu z portową historią i spacerem nad East River.",curiosity:"Nazwa DUMBO oznacza Down Under the Manhattan Bridge Overpass.",photoTip:"Na Washington Street ustawcie Empire State Building dokładnie w prześwicie pod Manhattan Bridge.",nearby:["bargemusic"]},
+  bargemusic:{region:"brooklyn",status:"w planie",why:"Muzyka kameralna na barce z widokiem na most jest doświadczeniem niemożliwym do skopiowania w zwykłej sali.",curiosity:"Barka została przekształcona w salę koncertową w latach 70. i delikatnie porusza się na wodzie.",photoTip:"Przed koncertem sfotografujcie barkę z mostem i panoramą; podczas występu respektujcie zasady fotografowania.",nearby:["dumbo"]},
+  harlem:{region:"harlem",status:"w planie",why:"Apollo porządkuje historię muzycznego Harlemu przed festiwalem poświęconym Parkerowi.",curiosity:"Słynne Amateur Night pomagały rozpoczynać kariery artystów, a publiczność była bezlitosnym sędzią.",photoTip:"Sfotografujcie pionowy szyld Apollo z chodnika po przeciwnej stronie 125th Street.",nearby:["charlie-parker"]},
+  "charlie-parker":{region:"harlem",status:"w planie",why:"Parker, Apollo i żywy festiwal spinają historię bebopu ze współczesną miejską publicznością.",curiosity:"Parker miał przydomek Bird; jego harmoniczne rewolucje są jednym z fundamentów nowoczesnego jazzu.",photoTip:"Zamiast samej sceny pokażcie park, publiczność i charakter sąsiedztwa.",nearby:["harlem"]},
+  grandcentral:{region:"midtown",status:"w planie",why:"Ostatni spacer kończy podróż w jednym z najbardziej teatralnych wnętrz komunikacyjnych świata.",curiosity:"Konstelacje na suficie Main Concourse są pokazane jakby z perspektywy poza sferą niebieską — dlatego wydają się odwrócone.",photoTip:"Wejdźcie na balkon, aby objąć halę i ludzi; w Whispering Gallery aparat nie jest najważniejszy — sprawdźcie akustykę.",nearby:["bryant-park","summit"]}
+};
 
 const DAY_SCHEMATICS = {
   "2026-08-22": { note: "Najdłuższy odcinek to dojazd z lotniska. Wieczór odbywa się pieszo wokół hotelu.", nodes: [["JFK", "brama", "✈", "arrival"], ["Hotel", "midtown", "⌂", "transport"], ["Times Square", "midtown", "●", "evening"], ["Bryant Park", "midtown", "◆", "evening"]], legs: ["samochód 60–100 min lub kolej 60–75 min", "pieszo ok. 10 min", "pieszo ok. 12 min · opcja"] },
@@ -1060,16 +1086,55 @@ function updateProgressCounters() {
   });
 }
 
+function journeyStats() {
+  const keys=Object.keys(localStorage);
+  return {
+    places:keys.filter(key=>key.startsWith("nyc-check-place-visited-")&&localStorage.getItem(key)==="1").length,
+    works:keys.filter(key=>key.startsWith("nyc-check-museum-seen-")&&localStorage.getItem(key)==="1").length,
+    days:keys.filter(key=>key.startsWith("nyc-check-event-")&&localStorage.getItem(key)==="1").length
+  };
+}
+
+function placeRegion(place) {
+  return PLACE_EXTRAS[place.id]?.region || "midtown";
+}
+
+function placeCard(place) {
+  const extra=PLACE_EXTRAS[place.id]||{};
+  return `<button class="atlas-place-card" type="button" data-open-place="${place.id}">${place.image?`<img src="${place.image}" alt="${place.title}">`:`<span class="atlas-place-visual">${place.icon}</span>`}<span class="atlas-place-copy"><small>${extra.status||"w planie"} · ${place.meta}</small><strong>${place.title}</strong><em>${place.text}</em></span><b>›</b></button>`;
+}
+
+function bindPlaceCards() {
+  document.querySelectorAll("[data-open-place]").forEach(button=>button.addEventListener("click",()=>renderPlaceDetail(button.dataset.openPlace)));
+}
+
 function renderPlaces() {
-  const categories = ["wszystkie", ...new Set(PLACES.map(x => x.category))];
-  app.innerHTML = `<div class="view-heading"><h2>Miejsca</h2><p>Indeks historii i tras. Każda karta prowadzi dokładnie do właściwego modułu dnia.</p></div>
-    <div class="place-filters">${categories.map((x,i)=>`<button class="place-filter ${i===0?"active":""}" data-place-filter="${x}">${x}</button>`).join("")}</div>
-    <div class="place-grid">${PLACES.map(x=>`<article class="place-card" data-place-category="${x.category}">${x.image?`<img src="${x.image}" alt="${x.title}">`:`<div class="place-visual place-${x.category.replaceAll(" ","-")}"><span>${x.icon}</span></div>`}<div class="place-card-body"><span class="mini-kicker">${x.category} · ${x.meta}</span>${x.status?`<span class="place-status">${x.status}</span>`:""}<h3>${x.title}</h3><p>${x.text}</p><div class="place-actions"><button data-linked-day="${x.dayId}" data-linked-panel="${x.panel}">Otwórz w dniu ›</button><a href="${x.map}" target="_blank" rel="noopener">Mapa ↗</a></div></div></article>`).join("")}</div>`;
-  document.querySelectorAll("[data-place-filter]").forEach(button=>button.addEventListener("click",()=>{
-    document.querySelectorAll("[data-place-filter]").forEach(x=>x.classList.toggle("active",x===button));
-    document.querySelectorAll("[data-place-category]").forEach(card=>card.hidden=button.dataset.placeFilter!=="wszystkie"&&card.dataset.placeCategory!==button.dataset.placeFilter);
-  }));
-  bindLinkedDayActions();
+  const stats=journeyStats();
+  app.innerHTML = `<section class="places-atlas-hero"><span>ATLAS WASZEGO NOWEGO JORKU</span><h2>Dziewięć różnych miast<br>w jednym mieście</h2><p>Najpierw wybierz rejon. Dopiero potem miejsce — z historią, wskazówką fotograficzną i połączeniem z właściwym dniem.</p><div class="atlas-stats"><b>${PLACES.length}<small>miejsc</small></b><b>${TRIP_REGIONS.length}<small>rejonów</small></b><b>${stats.places}<small>odwiedzonych</small></b></div></section>
+    <div class="atlas-region-grid">${TRIP_REGIONS.map(region=>{const count=PLACES.filter(place=>placeRegion(place)===region.id).length;return `<button type="button" style="--region:${region.color}" data-place-region="${region.id}"><span>${String(count).padStart(2,"0")}</span><strong>${region.name}</strong><small>${region.days.map(id=>`D${DAYS.find(d=>d.id===id)?.day}`).join(" · ")}</small></button>`}).join("")}</div>
+    <div class="section-title"><h3>Wszystkie miejsca</h3><span>dotknij, aby poznać szczegóły</span></div><div class="atlas-place-list">${PLACES.map(placeCard).join("")}</div>`;
+  document.querySelectorAll("[data-place-region]").forEach(button=>button.addEventListener("click",()=>renderPlaceRegion(button.dataset.placeRegion)));
+  bindPlaceCards();
+}
+
+function renderPlaceRegion(regionId) {
+  const region=TRIP_REGIONS.find(item=>item.id===regionId);
+  if(!region) return renderPlaces();
+  const places=PLACES.filter(place=>placeRegion(place)===region.id);
+  app.innerHTML=`<button class="view-back" type="button" id="placesBack">← Atlas miejsc</button><section class="region-hero" style="--region:${region.color}"><span>${places.length} ${places.length===1?"miejsce":"miejsc"} · ${region.days.map(id=>`dzień ${DAYS.find(d=>d.id===id)?.day}`).join(" · ")}</span><h2>${region.name}</h2><p>${region.text}</p></section><div class="atlas-place-list region-list">${places.map(placeCard).join("")}</div>`;
+  document.getElementById("placesBack")?.addEventListener("click",renderPlaces);
+  bindPlaceCards();
+}
+
+function renderPlaceDetail(id) {
+  const place=PLACES.find(item=>item.id===id);
+  if(!place) return renderPlaces();
+  const extra=PLACE_EXTRAS[id]||{};
+  const region=TRIP_REGIONS.find(item=>item.id===placeRegion(place));
+  const nearby=(extra.nearby||[]).map(nearId=>PLACES.find(item=>item.id===nearId)).filter(Boolean);
+  app.innerHTML=`<button class="view-back" type="button" id="placeRegionBack">← ${region?.name||"Miejsca"}</button><article class="place-detail-hero" style="--region:${region?.color||"#f5c518"}">${place.image?`<img src="${place.image}" alt="${place.title}">`:`<div class="place-detail-symbol">${place.icon}</div>`}<div><span>${extra.status||"w planie"} · ${place.category}</span><h2>${place.title}</h2><p>${place.meta}</p></div></article><section class="place-detail-grid"><article><small>DLACZEGO TU JESTEŚMY</small><p>${extra.why||place.text}</p></article><article><small>HISTORIA / CIEKAWOSTKA</small><p>${extra.curiosity||place.text}</p></article><article class="photo-advice"><small>JAK ZROBIĆ DOBRE ZDJĘCIE</small><p>${extra.photoTip||"Zatrzymajcie się na chwilę, znajdźcie czytelne tło i pokażcie miejsce wraz z jego miejskim otoczeniem."}</p></article></section><div class="place-detail-actions"><button data-linked-day="${place.dayId}" data-linked-panel="${place.panel}">Otwórz w dniu</button><a href="${place.map}" target="_blank" rel="noopener">Prowadź w Mapach ↗</a></div><label class="place-visited checkable-card"><input type="checkbox" data-save-check="place-visited-${place.id}"><span><strong>Byliśmy tutaj</strong><small>Zapisz jako odwiedzone w „Naszym NY”</small></span></label>${nearby.length?`<div class="section-title"><h3>W pobliżu</h3><span>warto połączyć</span></div><div class="atlas-place-list compact">${nearby.map(placeCard).join("")}</div>`:""}`;
+  document.getElementById("placeRegionBack")?.addEventListener("click",()=>renderPlaceRegion(placeRegion(place)));
+  bindPlaceCards(); bindLinkedDayActions(); bindSavedChecks();
 }
 
 function museumWorkStatus(status) {
@@ -1206,6 +1271,17 @@ function renderWallet() {
   bindLinkedDayActions();
 }
 
+function dayMemoryMarkup(day) {
+  return `<section class="day-memory"><div><span class="mini-kicker">Wspomnienie z dnia ${day.day}</span><h3>Co zostaje z nami?</h3><p>Krótka notatka zostaje tylko na tym urządzeniu.</p></div><label><span>Ulubione miejsce</span><input id="dayMemoryFavorite" type="text" placeholder="np. koncert w Blue Note"></label><label><span>Jedno zdanie z tego dnia</span><textarea id="dayMemoryNote" rows="3" placeholder="Co było najbardziej nowojorskie?"></textarea></label><label class="memory-done"><input type="checkbox" data-save-check="event-${day.id}"><span>Dzień zapisany we wspomnieniach</span></label></section>`;
+}
+
+function bindDayMemory(dayId) {
+  const favorite=document.getElementById("dayMemoryFavorite");
+  const note=document.getElementById("dayMemoryNote");
+  if(favorite){favorite.value=localStorage.getItem(`nyc-memory-favorite-${dayId}`)||"";favorite.addEventListener("input",()=>localStorage.setItem(`nyc-memory-favorite-${dayId}`,favorite.value));}
+  if(note){note.value=localStorage.getItem(`nyc-memory-note-${dayId}`)||"";note.addEventListener("input",()=>localStorage.setItem(`nyc-memory-note-${dayId}`,note.value));}
+}
+
 function openDay(id, options = {}) {
   const { restore = true } = options;
   const day = DAYS.find(item => item.id === id);
@@ -1223,11 +1299,14 @@ function openDay(id, options = {}) {
     <p class="lead">${day.story}</p>
     ${dayAdventureMap(day)}
     <button class="context-back" id="dayContextBack" type="button" hidden>← Wróć</button>
-    ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}`;
+    ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}
+    ${dayMemoryMarkup(day)}`;
   sheet.hidden = false;
   sheetBackdrop.hidden = false;
   document.body.style.overflow = "hidden";
   sheet.scrollTop = 0;
+  bindDayMemory(day.id);
+  bindSavedChecks();
   document.getElementById("dayContextBack")?.addEventListener("click", returnToPreviousDayContext);
   sheetContent.querySelectorAll("[data-day-map-direct]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.dayMapDirect, "", { remember:true, originLabel:"Mapa dnia" })));
   sheetContent.querySelectorAll("[data-day-map-panel]").forEach(button => button.addEventListener("click", () => {
