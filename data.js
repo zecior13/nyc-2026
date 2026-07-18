@@ -26,18 +26,20 @@ const DAYS = [
   },
   {
     id: "2026-08-23", day: 2, date: "23.08", weekday: "niedziela",
-    title: "Greenwich Village i Hiromi",
-    subtitle: "Historia dzielnicy, seriale i Blue Note",
-    accent: "brick", tags: ["Village", "jazz", "seriale"],
-    story: "Village ma być spacerem przez kilka warstw miasta: bohemę, prawa obywatelskie, muzykę, architekturę i popkulturę — nie tylko zbiorem fasad do fotografowania.",
+    title: "Guggenheim, Village i Hiromi",
+    subtitle: "Sztuka → lokalny Manhattan → Blue Note",
+    accent: "brick", tags: ["Guggenheim", "Village", "jazz"],
+    story: "Dzień Radka i Gosi łączy dwugodzinne Guggenheim z krótszym spacerem przez najważniejsze warstwy Village oraz wieczorem z Hiromi. Matylda może spędzić tę część dnia ze znajomymi.",
     items: [
-      { time: "10:30", title: "Spokojny start", note: "Przejazd z hotelu do Washington Square Arch.", type: "plan" },
-      { time: "11:30", title: "Brunch w Village", note: "90 minut na wybrane miejsce — od pełnego brunchu po szybki falafel.", type: "plan" },
-      { time: "13:00", title: "Spacer po Greenwich Village", note: "Washington Square, NYU, MacDougal, Jefferson Market, Commerce, seriale i Stonewall.", type: "plan" },
+      { time: "09:00", title: "Śniadanie i wyjazd na Upper East Side", note: "Lekki posiłek przed muzeum; pod Guggenheim docieramy około 10:15.", type: "plan" },
+      { time: "10:30", title: "Guggenheim", note: "Dwie godziny: architektura Wrighta, Pop, europejski modernizm i Thannhauser.", type: "fixed" },
+      { time: "12:30", title: "Guggenheim → Greenwich Village", note: "Metro lub taxi/Uber zależnie od czasu i energii; zakładamy 35–45 minut.", type: "plan" },
+      { time: "13:15", title: "Szybki lunch w Village", note: "Bez pełnego brunchu — falafel, tartine albo lekki posiłek bez długiej kolejki.", type: "plan" },
+      { time: "13:45", title: "Skrócony spacer po Greenwich Village", note: "Washington Square, MacDougal, Jefferson/Commerce i Stonewall; seriale są opcjonalne.", type: "plan" },
       { time: "17:45", title: "Kolejka do Blue Note", note: "Cała grupa przychodzi razem; miejsca przy stolikach nie są numerowane.", type: "fixed" },
       { time: "20:00", title: "Hiromi · The Piano Quintet", note: "Table seating, minimum konsumpcyjne 20 USD na osobę.", type: "fixed" }
     ],
-    essentials: ["Kupić 3 bilety Table Seating", "Bar jest 21+", "Bilety mogą przyjść e-mailem 48 godzin wcześniej"]
+    essentials: ["Bilet Guggenheim na 10:30 i twarde wyjście 12:30", "Potwierdzić, czy Blue Note kupujemy dla 2 czy 3 osób", "Bar jest 21+, Table Seating jest dostępne dla Matyldy"]
   },
   {
     id: "2026-08-24", day: 3, date: "24.08", weekday: "poniedziałek",
@@ -235,15 +237,13 @@ const DAY_GUIDES = {
   "2026-08-23": {
     kind: "village",
     checked: "16.07.2026",
-    timelineTargets: ["route", "food", "route", "bluenote", "bluenote"],
+    timelineTargets: ["guggenheim", "guggenheim", "route", "food", "route", "bluenote", "bluenote"],
     route: [
-      { time: "10:30", title: "Start i przejazd do Village", text: "Spokojny początek po podróży. Dojedźcie metrem w okolice West 4th Street i zacznijcie przy Washington Square Arch.", look: "Łuk jest najłatwiejszym punktem orientacyjnym i początkiem całej opowieści.", pause: "Usiądźcie na 15 minut. Nie szukajcie następnego punktu — obserwujcie muzyków, szachistów, studentów NYU, występy uliczne i życie wokół fontanny.", image: { src: "assets/places/washington-square.jpg", alt: "Washington Square Arch widziany od strony parku", credit: "Marco Almbauer · Wikimedia Commons · CC0" }, related: [{ panel: "stories", key: "story-0", label: "Historia placu" }, { panel: "stories", key: "story-1", label: "Moses i Jane Jacobs" }] },
-      { time: "11:30–13:00", title: "Brunch w Village", text: "Pełne półtorej godziny zgodnie z planem. W module Jedzenie można wybrać stolik, lżejszy brunch albo szybki lokal bez rezerwacji.", look: "Nie ustawiajcie się w bardzo długiej kolejce — zachowajcie energię na spacer.", related: [{ panel: "food", label: "Wybierz brunch" }] },
-      { time: "13:00", title: "Washington Square, NYU i MacDougal", text: "Plac, kampus wpisany w miasto oraz dawna scena folkowa i komediowa. To pierwsza warstwa Village: studenci, artyści i życie uliczne.", look: "Łuk, fontanna, One Fifth Avenue, schody klubów na MacDougal Street.", related: [{ panel: "stories", key: "story-4", label: "Historia muzyczna" }] },
-      { time: "14:00", title: "Jefferson Market i Commerce Street", text: "Dawny gmach sądu z charakterystyczną wieżą, niewielki ogród oraz kręte ulice zachodniej części Village. Zwróćcie uwagę na brownstones, dawne stajnie i mews — niską, mieszkalną skalę całkiem inną niż Midtown.", look: "Czerwona cegła i wieża Jefferson Market Library oraz nietypowy łuk Commerce Street.", image: { src: "assets/places/jefferson-market.jpg", alt: "Ceglana wieża Jefferson Market Library", credit: "Kidfly182 · Wikimedia Commons · CC BY-SA" }, related: [{ panel: "stories", key: "story-3", label: "Dlaczego ulice się plączą?" }] },
-      { time: "14:40", title: "Perry, Magnolia i Friends", text: "Opcjonalny moduł popkulturowy: schody Carrie, Magnolia Bakery i fasada budynku z Przyjaciół. Wszystkie adresy są prywatną lub normalnie użytkowaną przestrzenią.", look: "66 Perry Street, 401 Bleecker Street oraz narożnik Bedford i Grove. Porównajcie szerokość prawdziwej kamienicy z ogromem serialowych mieszkań.", related: [{ panel: "screen", key: "screen-1", label: "Carrie" }, { panel: "screen", key: "screen-0", label: "Friends" }] },
-      { time: "15:35", title: "Christopher Park i Stonewall", text: "Najważniejszy historyczny przystanek: park, rzeźby Gay Liberation, nadal działający Stonewall Inn oraz Visitor Center. To żywe miejsce, nie muzealna rekonstrukcja.", look: "Białe figury George’a Segala w parku oraz mała skala miejsca w porównaniu z jego globalnym znaczeniem.", image: { src: "assets/places/stonewall.jpg", alt: "Fasada Stonewall Inn przy Christopher Street", credit: "Beyond My Ken · Wikimedia Commons · CC BY-SA" }, related: [{ panel: "stories", key: "story-2", label: "Historia Stonewall" }] },
-      { time: "16:15–17:30", title: "Kawa, deser i odpoczynek", text: "Minimum godzina rezerwy przed klubem. Jeśli nogi są zmęczone, kończymy spacer wcześniej.", look: "Sprawdźcie bilety, baterię telefonu i dodatkową warstwę ubrania.", related: [{ panel: "food", label: "Kawa i deser" }] }
+      { time: "13:45", title: "Washington Square, NYU i MacDougal", text: "Łuk, park, kampus wpisany w miasto oraz dawna scena folkowa i komediowa. To pierwsza warstwa Village: studenci, artyści i życie uliczne.", look: "Łuk, fontanna, One Fifth Avenue i schody klubów na MacDougal Street.", pause: "Usiądźcie na 10–15 minut i obserwujcie muzyków, szachistów, studentów NYU oraz życie wokół fontanny.", image: { src: "assets/places/washington-square.jpg", alt: "Washington Square Arch widziany od strony parku", credit: "Marco Almbauer · Wikimedia Commons · CC0" }, related: [{ panel: "stories", key: "story-0", label: "Historia placu" }, { panel: "stories", key: "story-1", label: "Moses i Jane Jacobs" }, { panel: "stories", key: "story-4", label: "Historia muzyczna" }] },
+      { time: "14:35", title: "Jefferson Market i Commerce Street", text: "Dawny gmach sądu z charakterystyczną wieżą, niewielki ogród oraz kręte ulice zachodniej części Village.", look: "Czerwona cegła, wieża Jefferson Market Library, brownstones i nietypowy łuk Commerce Street.", image: { src: "assets/places/jefferson-market.jpg", alt: "Ceglana wieża Jefferson Market Library", credit: "Kidfly182 · Wikimedia Commons · CC BY-SA" }, related: [{ panel: "stories", key: "story-3", label: "Dlaczego ulice się plączą?" }] },
+      { time: "15:05", title: "Perry, Magnolia i Friends · opcjonalnie", text: "Moduł popkulturowy wykonujemy tylko przy dobrej energii: schody Carrie, Magnolia Bakery i fasada budynku z Przyjaciół.", look: "66 Perry Street, 401 Bleecker Street oraz narożnik Bedford i Grove.", related: [{ panel: "screen", key: "screen-1", label: "Carrie" }, { panel: "screen", key: "screen-0", label: "Friends" }] },
+      { time: "15:45", title: "Christopher Park i Stonewall", text: "Najważniejszy historyczny przystanek: park, rzeźby Gay Liberation, nadal działający Stonewall Inn oraz Visitor Center.", look: "Białe figury George’a Segala i mała skala miejsca w porównaniu z jego globalnym znaczeniem.", image: { src: "assets/places/stonewall.jpg", alt: "Fasada Stonewall Inn przy Christopher Street", credit: "Beyond My Ken · Wikimedia Commons · CC BY-SA" }, related: [{ panel: "stories", key: "story-2", label: "Historia Stonewall" }] },
+      { time: "16:20–17:20", title: "Kawa, deser i odpoczynek", text: "Rezerwa przed klubem. Przy zmęczeniu kończymy spacer wcześniej i siadamy blisko Blue Note.", look: "Sprawdźcie bilety, baterię telefonu i dodatkową warstwę ubrania.", related: [{ panel: "food", label: "Kawa i deser" }] }
     ],
     stories: [
       { title: "Plac, który był cmentarzem", text: "Washington Square długo nie był eleganckim salonem. Pod częścią parku znajdowało się pole garncarskie, czyli publiczne miejsce pochówku osób ubogich i nieznanych. Później teren służył paradom wojskowym, a dopiero z czasem stał się sercem artystycznego Village." },
@@ -300,12 +300,14 @@ const DAY_GUIDES = {
     after: "Po koncercie: jeśli macie energię, krótki spacer przez Washington Square Park. W przeciwnym razie metro z West 4th Street do 42nd Street–Port Authority i pieszo do hotelu.",
     returnUrl: "https://www.google.com/maps/dir/?api=1&origin=Blue+Note+Jazz+Club,+131+W+3rd+St,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave&travelmode=transit",
     links: [
+      { label: "Hotel → Guggenheim", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Solomon+R.+Guggenheim+Museum,+1071+5th+Ave,+New+York&travelmode=transit" },
+      { label: "Guggenheim → Washington Square", url: "https://www.google.com/maps/dir/?api=1&origin=Solomon+R.+Guggenheim+Museum,+1071+5th+Ave,+New+York&destination=Washington+Square+Arch,+New+York&travelmode=transit" },
       { label: "Cały spacer w Mapach", url: "https://www.google.com/maps/dir/?api=1&origin=Washington+Square+Arch,+New+York&destination=Blue+Note+Jazz+Club,+131+W+3rd+St,+New+York&waypoints=MacDougal+Street,+New+York%7CStonewall+National+Monument,+New+York%7C90+Bedford+Street,+New+York%7C66+Perry+Street,+New+York&travelmode=walking" },
       { label: "Blue Note w Mapach", url: "https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+131+West+3rd+Street+New+York" },
       { label: "Hiromi · oficjalny koncert", url: "https://www.bluenotejazz.com/nyc/shows/?search=Hiromi" },
       { label: "Zasady Blue Note", url: "https://www.bluenotejazz.com/nyc/faqs/" },
       { label: "Stonewall Visitor Center", url: "https://stonewallvisitorcenter.org/visit/" },
-      { label: "Hotel → Washington Square", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave&destination=Washington+Square+Arch,+New+York&travelmode=transit" }
+      { label: "Guggenheim · bilety", url: "https://www.guggenheim.org/buy-tickets" }
     ]
   },
   "2026-08-24": {
@@ -830,7 +832,6 @@ const DAY_GUIDES = {
     },
     variants: [
       { title: "Plan spokojny · rekomendowany", text: "Diner → check-out → Bryant Park → NYPL z zewnątrz → Grand Central → lunch → hotel → LIRR 14:30." },
-      { title: "Guggenheim dla Gosi", text: "Śniadanie o 08:00 → check-out 09:15 → Guggenheim 10:30–12:00 → szybki lunch → hotel 13:45. Zastępuje Grand Central i pełny spacer 42nd Street." },
       { title: "Zmęczenie", text: "Diner → check-out → tylko Grand Central → lunch blisko hotelu. Nie dokładamy Central Parku ani ostatnich zakupów." },
       { title: "Deszcz", text: "Po wymeldowaniu jedziecie bezpośrednio do Grand Central, zostajecie pod dachem i wracacie po bagaże około 13:15." },
       { title: "Problemy LIRR lub AirTrain", text: "Nie czekamy na rozwiązanie dłużej niż 10–15 minut. Zamawiamy UberXL lub bierzemy yellow cab i jedziemy na JFK." }
@@ -839,13 +840,10 @@ const DAY_GUIDES = {
       { label: "Śniadanie · hotel → Westway Diner", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Westway+Diner,+614+9th+Ave,+New+York&travelmode=walking" },
       { label: "Spacer · hotel → Bryant Park → NYPL → Grand Central", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Grand+Central+Terminal,+New+York&waypoints=Bryant+Park,+New+York%7CNew+York+Public+Library,+476+5th+Ave,+New+York&travelmode=walking" },
       { label: "Grand Central → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=Grand+Central+Terminal,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
-      { label: "Wariant · hotel → Guggenheim", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Solomon+R.+Guggenheim+Museum,+1071+5th+Ave,+New+York&travelmode=transit" },
-      { label: "Wariant · Guggenheim → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=Solomon+R.+Guggenheim+Museum,+1071+5th+Ave,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
       { label: "Hotel → Moynihan Train Hall", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Moynihan+Train+Hall,+New+York&travelmode=walking" },
       { label: "Hotel → JFK · transport publiczny", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=John+F.+Kennedy+International+Airport,+Queens,+NY&travelmode=transit" },
       { label: "NYPL · godziny", url: "https://www.nypl.org/locations/schwarzman/" },
       { label: "Grand Central · oficjalna strona", url: "https://grandcentralterminal.com/" },
-      { label: "Guggenheim · godziny i bilety", url: "https://www.guggenheim.org/plan-your-visit" },
       { label: "MTA TrainTime", url: "https://new.mta.info/traintime" },
       { label: "Taxi NYC · oficjalne taryfy", url: "https://www.nyc.gov/site/tlc/passengers/taxi-fare.page" },
       { label: "JFK · status lotów i terminale", url: "https://www.jfkairport.com/flight-tracker" }
@@ -891,14 +889,14 @@ const TRAVEL_APPS = [
 ];
 
 const TO_BUY = [
-  { title: "Hiromi · Blue Note", status: "Pilne", kind: "urgent", when: "23.08 · 20:00", text: "Kupić 3 × Table Seating. Cała trójka powinna przyjść razem; obowiązuje minimum konsumpcyjne.", action: "Kup bilety", url: "https://www.bluenotejazz.com/nyc/shows/?search=Hiromi" },
+  { title: "Hiromi · Blue Note", status: "Pilne", kind: "urgent", when: "23.08 · 20:00", text: "Potwierdzić udział Matyldy i kupić 2 albo 3 × Table Seating. Osoby korzystające z Table Seating powinny wejść razem; obowiązuje minimum konsumpcyjne.", action: "Kup bilety", url: "https://www.bluenotejazz.com/nyc/shows/?search=Hiromi" },
   { title: "MoMA", status: "Do kupienia", kind: "todo", when: "24.08 · 10:30", text: "Bilety na ustaloną godzinę. Przed zakupem potwierdzić aktualne wystawy i dostępność.", action: "Bilety MoMA", url: "https://visit.moma.org/select" },
   { title: "The Met", status: "Do zaplanowania", kind: "todo", when: "25.08 · 10:00", text: "Kupić bilety online, gdy plan Gosi będzie zaakceptowany. Bilet wstępu i nasza krótka trasa wystarczą.", action: "Wizyta i bilety", url: "https://www.metmuseum.org/plan-your-visit" },
   { title: "Whitney Museum", status: "Do rezerwacji", kind: "todo", when: "27.08 · 13:30", text: "Wybrać wejście czasowe po zatwierdzeniu dnia. Dla Matyldy również dodać właściwy bilet, nawet jeśli będzie bezpłatny.", action: "Bilety Whitney", url: "https://whitney.org/tickets" },
   { title: "NYC Ferry · Pier 79 → St. George", status: "W dniu rejsu", kind: "dayof", when: "27.08 · rano", text: "Nie kupować wiele miesięcy wcześniej. Kupić i aktywować w aplikacji tuż przed wejściem. Staten Island Ferry w drodze powrotnej jest bezpłatny.", action: "Rozkład i bilety", url: "https://www.ferry.nyc/routes-and-schedules/st-george/" },
   { title: "Bargemusic", status: "Po publikacji programu", kind: "later", when: "29.08", text: "Sprawdzić dokładny koncert i zasady rezerwacji, gdy organizator opublikuje pełny kalendarz na sierpień.", action: "Sprawdź program", url: "https://www.bargemusic.org/" },
   { title: "SUMMIT One Vanderbilt", status: "Tylko dobra pogoda", kind: "dayof", when: "wariant 27.08", text: "Nie rezerwować teraz. To elastyczny wieczorny wariant kupowany tego samego dnia po sprawdzeniu widoczności.", action: "Oficjalna strona", url: "https://summitov.com/" }
-  ,{ title: "Guggenheim", status: "Po decyzji Gosi", kind: "later", when: "wariant 30.08 · 10:30", text: "Kupujemy tylko jeśli Gosia wybierze muzeum zamiast Grand Central. Rezerwacja na pierwsze wejście i twarde wyjście o 12:00.", action: "Godziny i bilety", url: "https://www.guggenheim.org/plan-your-visit" }
+  ,{ title: "Guggenheim", status: "Do kupienia", kind: "todo", when: "23.08 · 10:30", text: "Plan główny dla Radka i Gosi. Rezerwacja na pierwsze wejście i twarde wyjście o 12:30.", action: "Godziny i bilety", url: "https://www.guggenheim.org/buy-tickets" }
 ];
 
 const PLACES = [
@@ -917,13 +915,13 @@ const PLACES = [
   { id:"dumbo", title:"DUMBO i Brooklyn Bridge Park", icon:"▱", category:"zdjęcia", text:"Manhattan Bridge, portowe magazyny, panorama i Bargemusic.", meta:"29.08 · rano", dayId:"2026-08-29", panel:"brooklyn", map:"https://www.google.com/maps/search/?api=1&query=Washington+Street+DUMBO" },
   { id:"harlem", title:"Harlem i Apollo", icon:"♫", category:"muzyka", text:"Great Migration, Harlem Renaissance, Apollo i Charlie Parker.", meta:"29.08 · popołudnie", dayId:"2026-08-29", panel:"apollo", map:"https://www.google.com/maps/search/?api=1&query=Apollo+Theater+New+York" },
   { id:"grandcentral", title:"Grand Central i NYPL", icon:"⌘", category:"historia", text:"Patience i Fortitude, odwrócone niebo oraz Whispering Gallery.", meta:"30.08 · wariant główny", dayId:"2026-08-30", panel:"walk", map:"https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal" },
-  { id:"guggenheim", title:"Guggenheim od środka", icon:"◌", category:"sztuka", text:"Rotunda Wrighta i 90-minutowa trasa jako opcja dla Gosi.", meta:"30.08 · wariant", dayId:"2026-08-30", panel:"guggenheim", map:"https://www.google.com/maps/search/?api=1&query=Solomon+R+Guggenheim+Museum" }
+  { id:"guggenheim", title:"Guggenheim od środka", icon:"◌", category:"sztuka", text:"Rotunda Wrighta i dwugodzinna trasa Radka i Gosi przed Village.", meta:"23.08 · 10:30", dayId:"2026-08-23", panel:"guggenheim", map:"https://www.google.com/maps/search/?api=1&query=Solomon+R+Guggenheim+Museum" }
 ];
 
 const WALLET_ITEMS = [
   { id:"hotel", type:"hotel", title:TRIP.hotel.name, date:"22–30.08 · 8 nocy", place:TRIP.hotel.address, status:"Potwierdzić numer rezerwacji", dayId:"2026-08-22", panel:"transport", map:"https://www.google.com/maps/search/?api=1&query=Holiday+Inn+New+York+City+Times+Square+585+8th+Avenue" },
   { id:"flightout", type:"flight", title:"Lot do Nowego Jorku", date:"22.08 · Berlin 11:20 → JFK 16:59", place:"przez Londyn", status:"Dodać numery lotów i terminale", dayId:"2026-08-22", panel:"arrival" },
-  { id:"blue", type:"music", title:"Hiromi · Blue Note", date:"23.08 · 20:00", place:"131 W 3rd St", status:"Do kupienia · 3 × Table Seating", dayId:"2026-08-23", panel:"bluenote", map:"https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+NYC" },
+  { id:"blue", type:"music", title:"Hiromi · Blue Note", date:"23.08 · 20:00", place:"131 W 3rd St", status:"Do kupienia · 2 lub 3 × Table Seating", dayId:"2026-08-23", panel:"bluenote", map:"https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+NYC" },
   { id:"broadway", type:"ticket", title:"Stranger Things", date:"25.08 · 19:00", place:"Marquis Theatre", status:"Kupione", dayId:"2026-08-25", panel:"theatre", map:"https://www.google.com/maps/search/?api=1&query=Marquis+Theatre+New+York" },
   { id:"usopen", type:"ticket", title:"US Open Mixed Doubles", date:"26.08 · 19:00", place:"USTA Billie Jean King National Tennis Center", status:"Kupione · aplikacja US Open", dayId:"2026-08-26", panel:"tennis", map:"https://www.google.com/maps/search/?api=1&query=USTA+Billie+Jean+King+National+Tennis+Center" },
   { id:"yankees", type:"ticket", title:"Yankees–Red Sox", date:"28.08 · 19:05", place:"Yankee Stadium", status:"Kupione · MLB Ballpark", dayId:"2026-08-28", panel:"stadium", map:"https://www.google.com/maps/search/?api=1&query=Yankee+Stadium" },

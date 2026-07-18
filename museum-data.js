@@ -71,7 +71,7 @@ const MUSEUMS = [
     ]
   },
   {
-    id:"guggenheim",name:"Guggenheim",fullName:"Solomon R. Guggenheim Museum",dayId:"2026-08-30",dayPanel:"guggenheim",accent:"#d37845",time:"wariant 90 min",
+    id:"guggenheim",name:"Guggenheim",fullName:"Solomon R. Guggenheim Museum",dayId:"2026-08-23",dayPanel:"guggenheim",accent:"#d37845",time:"23.08 · 10:30–12:30",
     intro:"W Guggenheimie sam budynek jest pierwszym dziełem. Kolekcję poznaje się po spirali i w bocznych galeriach, ale dostępność konkretnych prac szczególnie zależy od programu wystaw.",
     statusNote:"Pełna kolekcja fundacji obejmuje także Wenecję i Bilbao. W aplikacji rozróżniamy własność fundacji od statusu „On view in New York”.",
     floors:[

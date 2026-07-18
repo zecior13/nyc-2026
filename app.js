@@ -165,7 +165,8 @@ function guideCard(item, audioKey = "", audioLabel = "Posłuchaj historii", cont
 
 function renderVillageFoodPanel(guide) {
   const groups = [
-    { title:"Brunch · główny posiłek", note:"Wybierzcie jedno miejsce zależnie od kolejki, apetytu i budżetu.", items:guide.food.filter(item=>!/deser|kawa/i.test(item.category)) },
+    { title:"Szybki lunch po muzeum · plan główny", note:"Mamoun’s albo Tartinery: lekko, bez długiej kolejki; pełna kolacja będzie w Blue Note.", items:guide.food.filter(item=>/Lżej|Tanio/i.test(item.category)) },
+    { title:"Spokojniejszy lunch · tylko przy zapasie czasu", note:"Joseph Leonard lub Buvette wybieramy wyłącznie bez kolejki i po wyjściu z muzeum zgodnie z planem.", items:guide.food.filter(item=>/Spokojny|Francuski/i.test(item.category)) },
     { title:"Kawa, deser i odpoczynek", note:"Ten przystanek przypada po spacerze i przed Blue Note.", items:guide.food.filter(item=>/deser|kawa/i.test(item.category)) }
   ];
   return `<section class="day-panel" data-panel="food" hidden><h3>Jedzenie według momentu dnia</h3><p class="panel-intro">Nie jest to jedna lista restauracji — każda grupa odpowiada konkretnemu etapowi planu.</p>${groups.map(group=>`<section class="food-moment"><div class="food-moment-head"><span>${group.title}</span><p>${group.note}</p></div><div class="food-list">${group.items.map(place=>`<article class="food-card">${place.image?`<figure class="orientation-photo"><img src="${place.image.src}" alt="${place.image.alt}"><figcaption>Punkt orientacyjny · ${place.image.credit}</figcaption></figure>`:""}<div><span class="mini-kicker">${place.category} · ${place.price}</span><h4>${place.name}</h4><p>${place.address}</p><p>${place.note}</p></div><a href="${place.url}" target="_blank" rel="noopener">Menu / informacje ↗</a></article>`).join("")}</div></section>`).join("")}</section>`;
@@ -181,11 +182,14 @@ function renderFoodPanel(guide) {
 }
 
 function renderVillageGuide(day, guide) {
+  const routeLabels = ["2", "3", "4", "5", "6"];
+  const guggenheim = DAY_GUIDES["2026-08-30"].guggenheim;
   return `
     <nav class="day-module-nav" aria-label="Sekcje dnia">
       <button class="day-module active" type="button" data-day-panel="overview"><b>01</b><span>Plan</span><small>godziny i kolejność</small></button>
+      <button class="day-module" type="button" data-day-panel="guggenheim"><b>◌</b><span>Guggenheim</span><small>2 godziny ze sztuką</small></button>
       <button class="day-module" type="button" data-day-panel="route"><b>◇</b><span>Miejsca spaceru</span><small>punkty i ich historie</small></button>
-      <button class="day-module" type="button" data-day-panel="food"><b>☕</b><span>Jedzenie</span><small>brunch, kawa i deser</small></button>
+      <button class="day-module" type="button" data-day-panel="food"><b>☕</b><span>Jedzenie</span><small>lunch, kawa i deser</small></button>
       <button class="day-module" type="button" data-day-panel="screen"><b>▣</b><span>Serialowe Village</span><small>Friends i Carrie</small></button>
       <button class="day-module day-module-feature" type="button" data-day-panel="bluenote"><b>♪</b><span>Blue Note</span><small>Hiromi i wieczór</small></button>
       <button class="day-module" type="button" data-day-panel="links"><b>↗</b><span>Mapy</span><small>Google Maps i powrót</small></button>
@@ -194,13 +198,14 @@ function renderVillageGuide(day, guide) {
       <div class="sheet-section"><h3>Plan dnia · wybierz punkt</h3>${timeline(day.items, guide.timelineTargets)}</div>
       <div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>
     </section>
+    <section class="day-panel" data-panel="guggenheim" hidden><span class="event-status">Plan główny · 10:30–12:30</span><h3>Guggenheim · dwie godziny bez pośpiechu</h3><p class="panel-intro">${guggenheim.address}</p><div class="notice">Bilet na 10:30. Wychodzimy o 12:30 i jedziemy bezpośrednio do Village.</div><article class="event-card"><h4>Praktycznie</h4><ul>${guggenheim.practical.filter(item=>!item.includes("90 minut")&&!item.includes("Grand Central")&&!item.includes("Audioprzewodnik")).map(item=>`<li>${item}</li>`).join("")}</ul></article><h3 class="subsection-title">Cztery przystanki</h3><div class="route-list">${guggenheim.route.map((item,index)=>`<article class="route-stop"><div class="route-number">${index+1}</div><div><h4>${item.title}</h4><p>${item.text}</p><div class="look-box"><strong>Na co patrzeć:</strong> ${item.look}</div></div></article>`).join("")}</div><div class="link-grid compact-links"><a href="https://www.guggenheim.org/buy-tickets" target="_blank" rel="noopener">Godziny i bilety <span>↗</span></a><a href="https://www.google.com/maps/dir/?api=1&origin=Solomon+R+Guggenheim+Museum,+1071+5th+Ave,+New+York&destination=Washington+Square+Arch,+New+York&travelmode=transit" target="_blank" rel="noopener">Guggenheim → Village <span>↗</span></a></div></section>
     <section class="day-panel" data-panel="route" hidden>
       <div class="section-heading-row"><h3>Miejsca spaceru</h3><span>sprawdzono ${guide.checked}</span></div>
       <p class="panel-intro">Każda historia znajduje się przy miejscu, którego dotyczy. To kolejność, nie sztywny rozkład jazdy.</p>
       <div class="route-list">${guide.route.map((stop, index) => `
-        <article class="route-stop">
-          <div class="route-number">${index + 1}</div>
-          <div>${stop.image ? `<figure class="orientation-photo"><img src="${stop.image.src}" alt="${stop.image.alt}"><figcaption>Punkt orientacyjny · ${stop.image.credit}</figcaption></figure>` : ""}<span class="mini-kicker">${stop.time}</span><h4>${stop.title}</h4><p>${stop.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${stop.look}</div>${stop.pause ? `<div class="pause-prompt">${stop.pause}</div>` : ""}${stop.related?.filter(item=>item.panel==="stories").map(item=>{const story=guide.stories[Number(item.key?.split("-")[1])];return story?`<details class="place-story"><summary>${story.title}</summary><p>${story.text}</p></details>`:"";}).join("")||""}${stop.related?.filter(item=>item.panel!=="stories").length ? `<div class="related-row">${stop.related.filter(item=>item.panel!=="stories").map(item => `<button type="button" data-related-panel="${item.panel}">${item.label} ›</button>`).join("")}</div>` : ""}${index < guide.route.length - 1 ? `<button class="next-stop" type="button" data-next-stop="${index + 1}">Następny punkt →</button>` : ""}</div>
+        <article class="route-stop" data-content-key="village-stop-${index}">
+          <div class="route-number">${routeLabels[index]}</div>
+          <div>${stop.image ? `<figure class="orientation-photo"><img src="${stop.image.src}" alt="${stop.image.alt}"><figcaption>Punkt orientacyjny · ${stop.image.credit}</figcaption></figure>` : ""}<span class="mini-kicker">${stop.time}</span><h4>${stop.title}</h4><p>${stop.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${stop.look}</div>${stop.pause ? `<div class="pause-prompt">${stop.pause}</div>` : ""}${stop.related?.filter(item=>item.panel==="stories").map(item=>{const story=guide.stories[Number(item.key?.split("-")[1])];return story?`<details class="place-story"><summary>${story.title}</summary><p>${story.text}</p></details>`:"";}).join("")||""}${stop.related?.filter(item=>item.panel!=="stories").length ? `<div class="related-row">${stop.related.filter(item=>item.panel!=="stories").map(item => `<button type="button" data-related-panel="${item.panel}">${item.label} ›</button>`).join("")}</div>` : ""}</div>
         </article>`).join("")}</div>
     </section>
     <section class="day-panel" data-panel="screen" hidden>
@@ -374,12 +379,11 @@ function renderBrooklynJazzGuide(day, guide) {
 }
 
 function renderDepartureGuide(day, guide) {
-  return `<nav class="day-tabs" aria-label="Sekcje dnia"><button class="day-tab active" data-day-panel="overview">Plan</button><button class="day-tab" data-day-panel="diner">Diner</button><button class="day-tab" data-day-panel="hotel">Hotel</button><button class="day-tab" data-day-panel="walk">Spacer</button><button class="day-tab" data-day-panel="guggenheim">Guggenheim</button><button class="day-tab" data-day-panel="stories">Historie</button><button class="day-tab" data-day-panel="food">Jedzenie</button><button class="day-tab" data-day-panel="transport">JFK</button><button class="day-tab" data-day-panel="airport">Lotnisko</button><button class="day-tab" data-day-panel="variants">Warianty</button><button class="day-tab" data-day-panel="links">Mapy</button></nav>
-  <section class="day-panel active" data-panel="overview"><div class="sheet-section"><h3>Plan dnia · wybierz punkt</h3>${timeline(day.items,guide.timelineTargets)}</div><div class="quick-filters"><button data-related-panel="diner">Śniadanie</button><button data-related-panel="walk">Ostatni spacer</button><button data-related-panel="guggenheim">Opcja dla Gosi</button><button data-related-panel="transport">Walizki i JFK</button><button data-related-panel="airport">Lista przed lotem</button></div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div></section>
+  return `<nav class="day-tabs" aria-label="Sekcje dnia"><button class="day-tab active" data-day-panel="overview">Plan</button><button class="day-tab" data-day-panel="diner">Diner</button><button class="day-tab" data-day-panel="hotel">Hotel</button><button class="day-tab" data-day-panel="walk">Spacer</button><button class="day-tab" data-day-panel="stories">Historie</button><button class="day-tab" data-day-panel="food">Jedzenie</button><button class="day-tab" data-day-panel="transport">JFK</button><button class="day-tab" data-day-panel="airport">Lotnisko</button><button class="day-tab" data-day-panel="variants">Warianty</button><button class="day-tab" data-day-panel="links">Mapy</button></nav>
+  <section class="day-panel active" data-panel="overview"><div class="sheet-section"><h3>Plan dnia · wybierz punkt</h3>${timeline(day.items,guide.timelineTargets)}</div><div class="quick-filters"><button data-related-panel="diner">Śniadanie</button><button data-related-panel="walk">Ostatni spacer</button><button data-related-panel="transport">Walizki i JFK</button><button data-related-panel="airport">Lista przed lotem</button></div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div></section>
   <section class="day-panel" data-panel="diner" hidden><h3>Nowojorski diner · ostatni rytuał</h3><p class="panel-intro">${guide.diner.intro}</p><div class="guide-grid">${guide.diner.basics.map((x,i)=>guideCard(x,`depdiner-${i}`,"Posłuchaj przy stole")).join("")}</div></section>
   <section class="day-panel" data-panel="hotel" hidden><h3>Wymeldowanie i odbiór bagaży</h3><div class="notice">Check-out nie jest drobnym punktem administracyjnym. Robimy go przed spacerem, żeby o 13:45 pozostał już tylko odbiór walizek.</div><article class="event-card"><ul>${guide.hotel.steps.map(x=>`<li>${x}</li>`).join("")}</ul></article></section>
   <section class="day-panel" data-panel="walk" hidden><div class="section-heading-row"><h3>42nd Street · ostatnie spojrzenie</h3><span>sprawdzono ${guide.checked}</span></div><div class="route-list">${guide.walk.map((x,i)=>`<article class="route-stop"><div class="route-number">${i+1}</div><div><span class="mini-kicker">${x.time}</span><h4>${x.title}</h4><p>${x.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${x.look}</div><button class="audio-chip" data-audio-key="depwalk-${i}">▶ Posłuchaj na miejscu</button>${x.related?.length?`<div class="related-row">${x.related.map(r=>`<button data-related-panel="stories" data-related-key="${r.key}">${r.label} ›</button>`).join("")}</div>`:""}${i<guide.walk.length-1?`<button class="next-stop" data-next-stop="${i+1}">Następny punkt →</button>`:""}</div></article>`).join("")}</div></section>
-  <section class="day-panel" data-panel="guggenheim" hidden><span class="event-status">${guide.guggenheim.status}</span><h3>Guggenheim od środka · trasa 90 minut</h3><p class="panel-intro">${guide.guggenheim.address}</p><div class="notice">Ten wariant zastępuje Grand Central. O 12:00 wychodzicie niezależnie od tego, gdzie jesteście na spirali.</div><div class="event-grid"><article class="event-card"><h4>Harmonogram</h4><ul>${guide.guggenheim.schedule.map(x=>`<li>${x}</li>`).join("")}</ul></article><article class="event-card"><h4>Praktycznie</h4><ul>${guide.guggenheim.practical.map(x=>`<li>${x}</li>`).join("")}</ul></article></div><h3 class="subsection-title">Cztery przystanki</h3><div class="route-list">${guide.guggenheim.route.map((x,i)=>`<article class="route-stop"><div class="route-number">${i+1}</div><div><h4>${x.title}</h4><p>${x.text}</p><div class="look-box"><strong>Na co patrzeć:</strong> ${x.look}</div><button class="audio-chip" data-audio-key="depgugg-${i}">▶ Posłuchaj w muzeum</button></div></article>`).join("")}</div></section>
   <section class="day-panel" data-panel="stories" hidden><h3>Historie ostatniego spaceru</h3><div class="guide-grid">${guide.stories.map((x,i)=>guideCard(x,`depstory-${i}`,"Posłuchaj historii",`depstory-${i}`)).join("")}</div></section>
   ${renderFoodPanel(guide)}
   <section class="day-panel" data-panel="transport" hidden><h3>Hotel → JFK · wybór o 13:45</h3><article class="transport-card transport-recommended"><div class="transport-head"><div><span class="transport-badge">Rekomendowane</span><h4>${guide.transport.recommended.title}</h4></div></div><div class="transport-time">${guide.transport.recommended.time}</div><p>${guide.transport.recommended.text}</p></article><h3 class="subsection-title">LIRR + AirTrain krok po kroku</h3><article class="event-card"><ul>${guide.transport.lirrSteps.map(x=>`<li>${x}</li>`).join("")}</ul></article><h3 class="subsection-title">Alternatywy</h3><div class="guide-grid">${guide.transport.alternatives.map(x=>guideCard(x)).join("")}</div></section>
@@ -674,7 +678,7 @@ function renderToday() {
 const TRIP_REGIONS = [
   { id: "midtown", name: "Midtown", color: "#f5c518", text: "Wasza baza i najbardziej intensywny obraz Manhattanu: Times Square, Broadway, Bryant Park, Rockefeller Center i Grand Central.", days: ["2026-08-22", "2026-08-24", "2026-08-25", "2026-08-30"] },
   { id: "village", name: "Village i SoHo", color: "#a94f3d", text: "Niższa zabudowa, kręte ulice, bohema, prawa obywatelskie, serialowe adresy, jazz i współczesne zakupy.", days: ["2026-08-23", "2026-08-28"] },
-  { id: "museum", name: "Museum Mile i Central Park", color: "#8974a8", text: "Wielkie kolekcje, rezydencjonalny Upper East Side i park zaprojektowany jako demokratyczna przestrzeń odpoczynku.", days: ["2026-08-25", "2026-08-30"] },
+  { id: "museum", name: "Museum Mile i Central Park", color: "#8974a8", text: "Wielkie kolekcje, rezydencjonalny Upper East Side i park zaprojektowany jako demokratyczna przestrzeń odpoczynku.", days: ["2026-08-23", "2026-08-25"] },
   { id: "west", name: "Chelsea i West Side", color: "#4f91b6", text: "Dawny przemysł, galerie, High Line, Whitney i nowa architektura skierowana ku Hudsonowi.", days: ["2026-08-27"] },
   { id: "downtown", name: "Lower Manhattan i port", color: "#d37845", text: "Najstarszy Nowy Jork, finanse, pamięć o 11 września oraz widoki na port i Statuę Wolności.", days: ["2026-08-27"] },
   { id: "queens", name: "Queens", color: "#4f8f75", text: "Przemysłowe nabrzeże, migracyjny i kulinarny Nowy Jork, dziedzictwo wystaw światowych oraz US Open.", days: ["2026-08-26"] },
@@ -703,7 +707,7 @@ function daySchematic(day) {
 
 const DAY_VISUALS = {
   "2026-08-22": { area:"JFK → Midtown", icon:"✈", event:"Pierwszy wieczór", color:"#d9a900" },
-  "2026-08-23": { area:"Greenwich Village", icon:"♪", event:"Hiromi · Blue Note", color:"#a94f3d" },
+  "2026-08-23": { area:"Museum Mile → Village", icon:"♪", event:"Guggenheim · Hiromi", color:"#a94f3d" },
   "2026-08-24": { area:"Midtown", icon:"▣", event:"MoMA · Bryant Park", color:"#bd694e" },
   "2026-08-25": { area:"Museum Mile", icon:"★", event:"The Met · Broadway", color:"#796393" },
   "2026-08-26": { area:"Queens", icon:"◎", event:"US Open", color:"#4f8f75" },
@@ -714,21 +718,23 @@ const DAY_VISUALS = {
 };
 
 const VILLAGE_MAP_STOPS = [
-  { panel:"overview", title:"Hotel", note:"Start i przejazd do Village", left:75, top:10, icon:"⌂" },
-  { panel:"route", title:"Washington Square", note:"Łuk, park i początek spaceru", left:55, top:31, icon:"1" },
-  { panel:"food", title:"Brunch", note:"Wybrane miejsce w zwartej okolicy", left:42, top:43, icon:"2" },
-  { panel:"stories", title:"Village", note:"Bohema, Stonewall i miejskie historie", left:29, top:59, icon:"3" },
-  { panel:"screen", title:"Seriale", note:"Friends i Sex and the City", left:45, top:72, icon:"4" },
-  { panel:"bluenote", title:"Blue Note", note:"Hiromi · wejście i koncert", left:64, top:86, icon:"♪" }
+  { panel:"guggenheim", title:"Guggenheim", note:"10:30–12:30 · architektura i cztery wybrane obszary", left:76, top:8, icon:"◌" },
+  { panel:"food", title:"Szybki lunch", note:"13:15 · lekki posiłek bez długiej kolejki", left:46, top:31, icon:"1" },
+  { panel:"route", key:"village-stop-0", title:"Washington Sq. i MacDougal", note:"13:45 · łuk, NYU, scena uliczna i folk", left:34, top:43, icon:"2" },
+  { panel:"route", key:"village-stop-1", title:"Jefferson i Commerce", note:"Wieża dawnego sądu oraz kręte ulice Village", left:27, top:56, icon:"3" },
+  { panel:"route", key:"village-stop-2", title:"Perry i Friends", note:"Opcjonalny moduł serialowy na trasie", left:40, top:67, icon:"4" },
+  { panel:"route", key:"village-stop-3", title:"Stonewall", note:"Najważniejszy historyczny przystanek spaceru", left:55, top:76, icon:"5" },
+  { panel:"route", key:"village-stop-4", title:"Kawa i odpoczynek", note:"Rezerwa przed klubem, deser i sprawdzenie biletów", left:67, top:84, icon:"6" },
+  { panel:"bluenote", title:"Blue Note", note:"Hiromi · wejście i koncert", left:76, top:92, icon:"♪" }
 ];
 
 function dayAdventureMap(day) {
   if (day.id !== "2026-08-23") return daySchematic(day);
   return `<section class="day-adventure-map village-adventure-map">
-    <div class="day-map-heading"><div><span class="mini-kicker">Dzień na mapie</span><strong>Greenwich Village · od łuku do Blue Note</strong><p>Dotknij punktu, aby najpierw zobaczyć krótki opis.</p></div><button type="button" data-day-map-direct="links">↗ Mapy i trasy</button></div>
+    <div class="day-map-heading"><div><span class="mini-kicker">Dzień na mapie</span><strong>Guggenheim → Village → Blue Note</strong><p>Czerwona linia oznacza przejazd; żółta — spacer.</p></div><button type="button" data-day-map-direct="links">↗ Mapy i trasy</button></div>
     <div class="day-map-board">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path day-route-transit" d="M75 10 C68 19 62 25 55 31"/><path class="day-route-path day-route-walk" d="M55 31 C49 37 46 40 42 43 S33 51 29 59 S37 68 45 72 S57 78 64 86"/></svg>
-      ${VILLAGE_MAP_STOPS.map(stop => `<button type="button" class="day-map-stop" style="--left:${stop.left}%;--top:${stop.top}%" data-day-map-panel="${stop.panel}" data-day-map-title="${stop.title}" data-day-map-note="${stop.note}"><span>${stop.icon}</span><small>${stop.title}</small></button>`).join("")}
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path day-route-transit" d="M76 8 C67 16 56 24 46 31"/><path class="day-route-path day-route-walk" d="M46 31 C41 36 37 39 34 43 S29 51 27 56 S34 64 40 67 S49 73 55 76 S63 81 67 84 S73 89 76 92"/></svg>
+      ${VILLAGE_MAP_STOPS.map(stop => `<button type="button" class="day-map-stop" style="--left:${stop.left}%;--top:${stop.top}%" data-day-map-panel="${stop.panel}" ${stop.key?`data-day-map-key="${stop.key}"`:""} data-day-map-title="${stop.title}" data-day-map-note="${stop.note}"><span>${stop.icon}</span><small>${stop.title}</small></button>`).join("")}
     </div>
     <div class="day-map-detail" id="dayMapDetail"><strong>Wybierz punkt trasy</strong><p>Zobaczysz jego rolę w dniu, a dopiero potem zdecydujesz, czy otworzyć pełny opis.</p></div>
   </section>`;
@@ -1072,7 +1078,7 @@ function renderPrepare() {
       <div class="media-tabs"><button class="media-tab active" data-media-panel="films">Filmy i seriale</button><button class="media-tab" data-media-panel="music">Muzyka</button><button class="media-tab" data-media-panel="museums">Muzea</button></div>
       <section data-media-content="films"><div class="section-title"><h3>Przed seansem w Nowym Jorku</h3><span data-progress-for="film-"></span></div><div class="media-grid">${FILMS.map(x=>`<article class="media-card checkable-card"><div class="media-top"><span>${x.year} · ${x.audience}</span><label><input type="checkbox" data-save-check="film-${x.id}"> obejrzane</label></div><h3>${x.title}</h3><strong>${x.place}</strong><p>${x.why}</p><small>${x.note}</small><div class="media-actions"><a href="${x.url}" target="_blank" rel="noopener">Zwiastun ↗</a><button data-linked-day="${x.dayId}" data-linked-panel="${x.panel}">Powiązany dzień ›</button></div></article>`).join("")}</div></section>
       <section data-media-content="music" hidden><div class="section-title"><h3>Posłuchaj przed podróżą</h3><span data-progress-for="music-"></span></div><div class="media-grid">${MUSIC.map(x=>`<article class="media-card checkable-card"><div class="media-top"><span>${x.subtitle}</span><label><input type="checkbox" data-save-check="music-${x.id}"> poznane</label></div><h3>${x.title}</h3><strong>${x.forWhom}</strong><p>${x.text}</p><div class="media-actions"><a href="${x.spotify}" target="_blank" rel="noopener">Spotify ↗</a><a href="${x.apple}" target="_blank" rel="noopener">Apple Music ↗</a><button data-linked-day="${x.dayId}" data-linked-panel="${x.panel}">W planie ›</button></div></article>`).join("")}</div></section>
-      <section data-media-content="museums" hidden><div class="notice">Bloomberg Connects obsługuje MoMA, The Met, Whitney i Guggenheim. Pobierzcie treści oraz sprawdźcie słuchawki jeszcze w Polsce.</div><div class="card-list">${PREPARE.slice(2).map(x=>`<article class="simple-card"><h3>${x.title}</h3><p>${x.text}</p><div class="card-meta">${x.meta}</div></article>`).join("")}<article class="simple-card"><h3>Nasze trasy muzealne</h3><p>MoMA 3 godziny lub skrót · The Met cztery obszary · Whitney 90–120 minut · Guggenheim 90 minut jako wariant.</p><div class="place-actions"><button data-linked-day="2026-08-24" data-linked-panel="museum">MoMA</button><button data-linked-day="2026-08-25" data-linked-panel="museum">The Met</button><button data-linked-day="2026-08-27" data-linked-panel="museum">Whitney</button><button data-linked-day="2026-08-30" data-linked-panel="guggenheim">Guggenheim</button></div></article></div></section>
+      <section data-media-content="museums" hidden><div class="notice">Bloomberg Connects obsługuje MoMA, The Met, Whitney i Guggenheim. Pobierzcie treści oraz sprawdźcie słuchawki jeszcze w Polsce.</div><div class="card-list">${PREPARE.slice(2).map(x=>`<article class="simple-card"><h3>${x.title}</h3><p>${x.text}</p><div class="card-meta">${x.meta}</div></article>`).join("")}<article class="simple-card"><h3>Nasze trasy muzealne</h3><p>Guggenheim 2 godziny · MoMA 3 godziny lub skrót · The Met cztery obszary · Whitney 90–120 minut.</p><div class="place-actions"><button data-linked-day="2026-08-23" data-linked-panel="guggenheim">Guggenheim</button><button data-linked-day="2026-08-24" data-linked-panel="museum">MoMA</button><button data-linked-day="2026-08-25" data-linked-panel="museum">The Met</button><button data-linked-day="2026-08-27" data-linked-panel="museum">Whitney</button></div></article></div></section>
     </section>
     <section class="prepare-panel" data-prepare-content="apps" hidden>
       <div class="notice">Pobierzcie aplikacje i zalogujcie się jeszcze w Polsce. Do muzeów weźcie własne słuchawki.</div>
@@ -1134,7 +1140,7 @@ function openDay(id, options = {}) {
     const detail = document.getElementById("dayMapDetail");
     if (!detail) return;
     detail.innerHTML = `<strong>${button.dataset.dayMapTitle}</strong><p>${button.dataset.dayMapNote}</p><button type="button">Otwórz tę część dnia <span>›</span></button>`;
-    detail.querySelector("button")?.addEventListener("click", () => showDayPanel(button.dataset.dayMapPanel, "", { remember:true, originLabel:`Mapa dnia · ${button.dataset.dayMapTitle}` }));
+    detail.querySelector("button")?.addEventListener("click", () => showDayPanel(button.dataset.dayMapPanel, button.dataset.dayMapKey || "", { remember:true, originLabel:`Mapa dnia · ${button.dataset.dayMapTitle}` }));
   }));
   if (guide) {
     sheetContent.querySelectorAll("[data-overview-panel]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.overviewPanel, "", { remember: true, originLabel: `Plansza dnia · ${button.querySelector("span")?.textContent || "punkt"}` })));
