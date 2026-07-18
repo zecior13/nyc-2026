@@ -4,7 +4,7 @@ const sheet = document.getElementById("detailSheet");
 const sheetBackdrop = document.getElementById("sheetBackdrop");
 const sheetContent = document.getElementById("sheetContent");
 
-let currentView = "today";
+let currentView = "plan";
 let currentReadingText = "";
 let reading = false;
 let activeSnippetButton = null;
@@ -703,50 +703,55 @@ function daySchematic(day) {
 }
 
 function tripMapMarkup() {
-  const routeLines = [
-    ["1", "#f5c518", "M386 460 L203 322", 360, 440],
-    ["2", "#a94f3d", "M203 322 L184 438", 184, 438],
-    ["3", "#d05763", "M203 322 L216 294 L205 342", 216, 294],
-    ["4", "#8974a8", "M203 322 L224 202 L196 250 L203 322", 224, 202],
-    ["5", "#4f8f75", "M203 322 L294 318 L365 266", 365, 266],
-    ["6", "#4f91b6", "M203 322 L190 520 L176 400 L245 382", 190, 520],
-    ["7", "#6f8298", "M203 322 L184 460 L222 86", 222, 86],
-    ["8", "#b46a8c", "M203 322 L286 470 L194 142", 286, 470],
-    ["9", "#d37845", "M203 322 L215 292 M203 322 L386 460", 386, 460]
+  const landmarks = [
+    { id:"liberty", icon:"★", label:"Statua", left:13, top:80 },
+    { id:"downtown", icon:"$", label:"Downtown", left:40, top:67 },
+    { id:"dumbo", icon:"▱", label:"DUMBO", left:61, top:70 },
+    { id:"village", icon:"♟", label:"Village", left:42, top:57 },
+    { id:"westside", icon:"↗", label:"High Line", left:40, top:49 },
+    { id:"moma", icon:"▣", label:"MoMA", left:47, top:39 },
+    { id:"met", icon:"◉", label:"The Met", left:52, top:27 },
+    { id:"harlem", icon:"♫", label:"Harlem", left:54, top:12 },
+    { id:"yankees", icon:"⚾", label:"Yankees", left:76, top:13 },
+    { id:"queens", icon:"◎", label:"Queens", left:83, top:42 }
   ];
   return `<section class="trip-map-card">
-    <div class="map-card-head"><div><span class="mini-kicker">Wasza plansza Nowego Jorku</span><h3>Najpierw zobaczcie, gdzie jesteście</h3></div><div class="map-mode" role="tablist"><button class="active" data-map-mode="regions">Regiony</button><button data-map-mode="days">Dni</button></div></div>
-    <div class="strategic-map" data-map-view="regions">
-      <svg viewBox="0 0 420 610" role="img" aria-label="Uproszczona mapa regionów odwiedzanych podczas podróży">
-        <path class="water-shape" d="M0 0h420v610H0z"/>
-        <path class="borough-base" d="M183 52l48 9 21 116-12 140-19 147-28 111-44-12 22-122 7-146-7-130z"/>
-        <path class="borough-base" d="M253 190l155 20-4 190-112 67-50-82 8-120z"/>
-        <path class="borough-base" d="M260 405l113 82-63 99-130-21 17-83z"/>
-        <path class="borough-base" d="M179 48l75-34 50 73-54 106-39-50z"/>
-        <path class="borough-base" d="M40 498l79-27 42 65-69 58-61-34z"/>
-
-        <g class="region-layer">
-          <path data-region="bronx" class="region region-bronx" d="M179 48l75-34 50 73-54 106-39-50z"/>
-          <path data-region="harlem" class="region region-harlem" d="M171 112l64 12 12 62-79 2z"/>
-          <path data-region="museum" class="region region-museum" d="M168 188l79-2 3 83-77 24z"/>
-          <path data-region="midtown" class="region region-midtown" d="M173 293l77-24-8 93-75 20z"/>
-          <path data-region="west" class="region region-west" d="M167 382l75-20-10 82-75 22z"/>
-          <path data-region="village" class="region region-village" d="M157 466l75-22-11 58-73 19z"/>
-          <path data-region="downtown" class="region region-downtown" d="M148 521l73-19-28 73-44-12z"/>
-          <path data-region="queens" class="region region-queens" d="M253 190l155 20-4 190-112 67-50-82 8-120z"/>
-          <path data-region="brooklyn" class="region region-brooklyn" d="M260 405l113 82-63 99-130-21 17-83z"/>
-          <text x="218" y="335">MIDTOWN</text><text x="195" y="484">VILLAGE</text><text x="196" y="548">DOWNTOWN</text><text x="209" y="231">MUSEUM MILE</text><text x="193" y="424">WEST SIDE</text><text x="205" y="151">HARLEM</text><text x="241" y="86">BRONX</text><text x="330" y="302">QUEENS</text><text x="286" y="517">BROOKLYN</text>
-        </g>
-
-        <g class="route-layer">
-          ${routeLines.map(([day, color, path, x, y]) => `<g class="day-route" data-map-day="${day}" style="--route:${color}" tabindex="0" role="button" aria-label="Pokaż dzień ${day}"><path d="${path}"/><circle cx="${x}" cy="${y}" r="13"/><text x="${x}" y="${y + 5}">${day}</text></g>`).join("")}
-          <circle class="hotel-dot" cx="203" cy="322" r="7"/><text class="hotel-label" x="214" y="315">HOTEL</text>
-        </g>
-      </svg>
+    <div class="map-card-head"><div><span class="mini-kicker">Wasza ilustrowana plansza</span><h3>Nowy Jork jako dziewięć wypraw</h3></div><button class="map-expand" type="button" data-map-expand aria-pressed="false">Powiększ</button></div>
+    <div class="strategic-map illustrated-map" data-map-expanded="false">
+      <div class="illustrated-map-canvas">
+        <img src="assets/maps/nyc-illustrated-master-v1.png" alt="Ilustrowana mapa Manhattanu, portu, Brooklynu, Queens, Bronksu i nabrzeża New Jersey">
+        <svg class="interactive-region-layer" viewBox="0 0 862 1824" role="img" aria-label="Aktywne obszary planu podróży">
+          <g class="soft-regions">
+            <path data-region="harlem" class="soft-region region-harlem" d="M430 38 C505 12 570 48 594 142 C607 210 588 275 552 321 C500 338 448 323 415 285 C398 205 401 112 430 38 Z"/>
+            <path data-region="museum" class="soft-region region-museum" d="M414 287 C456 317 513 334 559 315 C584 352 579 438 555 526 C504 557 445 552 399 517 C391 425 394 348 414 287 Z"/>
+            <path data-region="midtown" class="soft-region region-midtown" d="M398 505 C442 546 506 561 557 526 C558 607 539 701 507 774 C462 792 409 783 369 747 C370 659 378 574 398 505 Z"/>
+            <path data-region="west" class="soft-region region-west" d="M367 721 C401 769 455 792 507 774 C490 842 468 913 439 976 C394 985 355 962 326 927 C329 854 343 782 367 721 Z"/>
+            <path data-region="village" class="soft-region region-village" d="M326 910 C354 959 397 986 440 972 C428 1039 411 1105 385 1164 C340 1172 305 1146 279 1112 C285 1037 299 969 326 910 Z"/>
+            <path data-region="downtown" class="soft-region region-downtown" d="M278 1097 C307 1144 342 1174 385 1157 C379 1232 352 1305 307 1367 C262 1347 228 1309 214 1263 C230 1201 250 1144 278 1097 Z"/>
+            <path data-region="bronx" class="soft-region region-bronx" d="M588 20 C718 0 820 52 852 185 C823 248 748 283 655 269 C601 214 572 117 588 20 Z"/>
+            <path data-region="queens" class="soft-region region-queens" d="M584 310 C746 248 854 351 860 581 C838 739 762 875 630 954 C577 898 548 814 552 711 C591 594 605 458 584 310 Z"/>
+            <path data-region="brooklyn" class="soft-region region-brooklyn" d="M497 1000 C630 898 795 905 861 1014 L862 1519 C781 1608 659 1628 535 1569 C456 1479 424 1321 448 1178 C457 1113 473 1054 497 1000 Z"/>
+          </g>
+          <g class="map-region-labels" aria-hidden="true">
+            <text x="492" y="184">HARLEM<tspan x="492" dy="28">DZIEŃ 8</tspan></text>
+            <text x="481" y="416">MUSEUM MILE<tspan x="481" dy="28">DNI 4 + 9</tspan></text>
+            <text x="454" y="645">MIDTOWN<tspan x="454" dy="28">DNI 1 + 3 + 4 + 9</tspan></text>
+            <text x="367" y="868">WEST SIDE<tspan x="367" dy="28">DZIEŃ 6</tspan></text>
+            <text x="342" y="1051">VILLAGE + SOHO<tspan x="342" dy="28">DNI 2 + 7</tspan></text>
+            <text x="292" y="1249">DOWNTOWN<tspan x="292" dy="28">DZIEŃ 6</tspan></text>
+            <text x="707" y="155">BRONX<tspan x="707" dy="28">DZIEŃ 7</tspan></text>
+            <text x="719" y="603">QUEENS<tspan x="719" dy="28">DZIEŃ 5</tspan></text>
+            <text x="666" y="1275">BROOKLYN<tspan x="666" dy="28">DZIEŃ 8</tspan></text>
+          </g>
+        </svg>
+        <div class="map-landmarks" aria-label="Interaktywne miejsca na mapie">
+          ${landmarks.map(place => `<button type="button" class="map-landmark" style="--left:${place.left}%;--top:${place.top}%" data-map-place="${place.id}" aria-label="Otwórz ${place.label}"><span>${place.icon}</span><small>${place.label}</small></button>`).join("")}
+        </div>
+      </div>
       <div class="map-compass"><span>↑</span> północ</div>
     </div>
-    <div class="map-detail" id="mapDetail"><strong>Wybierz kolor na mapie</strong><p>Zobaczysz charakter regionu oraz dni, podczas których będziecie go poznawać.</p></div>
-    <p class="map-disclaimer">Schemat służy do zrozumienia kierunków i relacji między dzielnicami — nie zastępuje mapy nawigacyjnej i nie zachowuje dokładnej skali.</p>
+    <div class="map-detail" id="mapDetail"><strong>Dotknij obszaru albo symbolu miejsca</strong><p>Kolorowe obszary prowadzą do dni, a symbole bezpośrednio do odpowiednich części przewodnika.</p></div>
+    <p class="map-disclaimer">To ilustrowana plansza orientacyjna. Dokładne dojścia i przejazdy pozostają dostępne przy konkretnych punktach dnia.</p>
   </section>`;
 }
 
@@ -760,20 +765,21 @@ function showMapRegion(regionId) {
 }
 
 function bindTripMap() {
-  document.querySelectorAll("[data-map-mode]").forEach(button => button.addEventListener("click", () => {
-    document.querySelectorAll("[data-map-mode]").forEach(item => item.classList.toggle("active", item === button));
-    document.querySelector("[data-map-view]")?.setAttribute("data-map-view", button.dataset.mapMode);
-    const detail = document.getElementById("mapDetail");
-    if (detail && button.dataset.mapMode === "days") detail.innerHTML = `<strong>Wybierz numer dnia</strong><p>Kolorowa linia pokazuje główne przemieszczenia. Hotel pozostaje wspólną bazą większości wypraw.</p>`;
-  }));
   document.querySelectorAll("[data-region]").forEach(area => {
     const open = () => showMapRegion(area.dataset.region);
     area.addEventListener("click", open);
   });
-  document.querySelectorAll("[data-map-day]").forEach(route => {
-    const open = () => openDay(DAYS[Number(route.dataset.mapDay) - 1].id);
-    route.addEventListener("click", open);
-    route.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") open(); });
+  document.querySelectorAll("[data-map-place]").forEach(button => button.addEventListener("click", () => {
+    const place = PLACES.find(item => item.id === button.dataset.mapPlace);
+    if (place) openLinkedDay(place.dayId, place.panel);
+  }));
+  document.querySelector("[data-map-expand]")?.addEventListener("click", event => {
+    const map = document.querySelector("[data-map-expanded]");
+    if (!map) return;
+    const expanded = map.dataset.mapExpanded !== "true";
+    map.dataset.mapExpanded = String(expanded);
+    event.currentTarget.setAttribute("aria-pressed", String(expanded));
+    event.currentTarget.textContent = expanded ? "Pomniejsz" : "Powiększ";
   });
 }
 

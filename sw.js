@@ -1,4 +1,4 @@
-const CACHE = "nyc-2026-v29";
+const CACHE = "nyc-2026-v31";
 const ASSETS = [
   "./",
   "./index.html",
@@ -11,6 +11,7 @@ const ASSETS = [
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png",
   "./icons/favicon-32.png"
+  ,"./assets/maps/nyc-illustrated-master-v1.png"
   ,"./assets/places/washington-square.jpg"
   ,"./assets/places/stonewall.jpg"
   ,"./assets/places/blue-note.jpg"

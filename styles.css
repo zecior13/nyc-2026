@@ -176,38 +176,44 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 28px; }
 
 .map-card-head h3 { margin: 4px 0 0; font-family: Georgia, serif; font-size: 20px; }
 
-.map-mode { display: flex; padding: 3px; border-radius: 12px; background: #e9e4d9; }
-.map-mode button { padding: 7px 9px; border: 0; border-radius: 9px; background: transparent; font-size: 11px; font-weight: 800; }
-.map-mode button.active { color: white; background: var(--navy); }
+.map-expand { flex: 0 0 auto; padding: 8px 11px; border: 1px solid var(--line); border-radius: 11px; color: var(--navy); background: var(--paper); font-size: 11px; font-weight: 850; }
 
-.strategic-map { position: relative; margin: 0 12px; overflow: hidden; border-radius: 18px; background: #dcebf1; }
-.strategic-map svg { display: block; width: 100%; max-height: 510px; }
-.water-shape { fill: #dcebf1; }
-.borough-base { fill: #ece7dc; stroke: white; stroke-width: 4; }
-.region { stroke: white; stroke-width: 3; cursor: pointer; transition: opacity .2s, filter .2s; }
-.region:hover, .region.selected { filter: brightness(1.08); stroke: var(--navy); stroke-width: 5; }
-.region-midtown { fill: #f5c518; }
-.region-village { fill: #a94f3d; }
-.region-museum { fill: #8974a8; }
-.region-west { fill: #4f91b6; }
-.region-downtown { fill: #d37845; }
-.region-queens { fill: #4f8f75; }
-.region-bronx { fill: #6f8298; }
-.region-brooklyn { fill: #547b9b; }
-.region-harlem { fill: #b46a8c; }
-.region-layer text { pointer-events: none; fill: white; font-size: 9px; font-weight: 900; letter-spacing: .07em; text-anchor: middle; paint-order: stroke; stroke: rgba(11,31,51,.35); stroke-width: 2px; }
+.strategic-map { position: relative; margin: 0 12px; overflow: hidden; border-radius: 20px; background: #74b6d2; box-shadow: inset 0 0 0 1px rgba(11,31,51,.12); }
+.illustrated-map-canvas { position: relative; width: 100%; transform-origin: 50% 48%; transition: transform .35s ease; }
+.illustrated-map img { display: block; width: 100%; height: auto; }
+.illustrated-map[data-map-expanded="true"] { overflow: auto; max-height: min(78dvh, 850px); overscroll-behavior: contain; }
+.illustrated-map[data-map-expanded="true"] .illustrated-map-canvas { width: 145%; }
 
-.route-layer { display: none; }
-[data-map-view="days"] .region-layer { opacity: .22; }
-[data-map-view="days"] .region-layer .region { pointer-events: none; }
-[data-map-view="days"] .route-layer { display: block; }
-.day-route { cursor: pointer; }
-.day-route path { fill: none; stroke: var(--route); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; opacity: .82; }
-.day-route circle { fill: var(--route); stroke: white; stroke-width: 3; }
-.day-route text { fill: var(--navy); font-size: 13px; font-weight: 900; text-anchor: middle; }
-.day-route:hover path, .day-route:focus path { stroke-width: 12; opacity: 1; }
-.hotel-dot { fill: var(--navy); stroke: white; stroke-width: 2; }
-.hotel-label { fill: var(--navy); font-size: 10px; font-weight: 900; }
+.interactive-region-layer { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.soft-region {
+  cursor: pointer;
+  stroke: rgba(255,255,255,.88);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .33;
+  filter: drop-shadow(0 4px 8px rgba(11,31,51,.08));
+  transition: opacity .18s ease, stroke-width .18s ease, filter .18s ease;
+}
+.soft-region:hover, .soft-region.selected { opacity: .58; stroke-width: 10; filter: drop-shadow(0 8px 13px rgba(11,31,51,.2)); }
+.soft-region.region-midtown { fill: #f5c518; }
+.soft-region.region-village { fill: #a94f3d; }
+.soft-region.region-museum { fill: #8974a8; }
+.soft-region.region-west { fill: #4f91b6; }
+.soft-region.region-downtown { fill: #d37845; }
+.soft-region.region-queens { fill: #4f8f75; }
+.soft-region.region-bronx { fill: #6f8298; }
+.soft-region.region-brooklyn { fill: #547b9b; }
+.soft-region.region-harlem { fill: #b46a8c; }
+
+.map-region-labels { pointer-events: none; }
+.map-region-labels text { fill: white; font-size: 20px; font-weight: 900; letter-spacing: .07em; text-anchor: middle; paint-order: stroke; stroke: rgba(11,31,51,.58); stroke-width: 5px; }
+.map-region-labels tspan { font-size: 17px; letter-spacing: .04em; }
+
+.map-landmark { position: absolute; left: var(--left); top: var(--top); z-index: 3; display: grid; justify-items: center; gap: 2px; min-width: 48px; padding: 0; border: 0; color: var(--navy); background: transparent; transform: translate(-50%,-50%); filter: drop-shadow(0 3px 5px rgba(11,31,51,.24)); }
+.map-landmark span { display: grid; place-items: center; width: 36px; height: 36px; border: 2px solid rgba(255,255,255,.92); border-radius: 50%; background: var(--taxi); font-size: 17px; transition: transform .18s ease, background .18s ease; }
+.map-landmark small { padding: 3px 6px; border-radius: 999px; color: white; background: rgba(11,31,51,.78); font-size: 9px; font-weight: 850; white-space: nowrap; backdrop-filter: blur(5px); }
+.map-landmark:hover span, .map-landmark:focus-visible span { color: white; background: var(--brick); transform: scale(1.14); }
 .map-compass { position: absolute; top: 12px; left: 12px; display: flex; gap: 4px; align-items: center; padding: 6px 8px; border-radius: 10px; color: var(--navy); background: rgba(255,255,255,.82); font-size: 10px; font-weight: 800; }
 .map-compass span { color: var(--brick); font-size: 16px; }
 
@@ -221,9 +227,13 @@ main { max-width: 760px; margin: 0 auto; padding: 18px 16px 28px; }
 
 @media (max-width: 480px) {
   .map-card-head { display: block; }
-  .map-mode { width: max-content; margin-top: 12px; }
+  .map-expand { margin-top: 12px; }
   .strategic-map { margin: 0 8px; }
-  .region-layer text { font-size: 8px; }
+  .map-region-labels text { font-size: 22px; }
+  .map-region-labels tspan { font-size: 18px; }
+  .map-landmark { min-width: 42px; }
+  .map-landmark span { width: 32px; height: 32px; font-size: 15px; }
+  .map-landmark small { font-size: 8px; }
 }
 
 .hero-date { color: var(--taxi); font-size: 12px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
