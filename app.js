@@ -372,7 +372,7 @@ function renderMetDayGuide(day, guide) {
 function renderQueensGuide(day, guide) {
   return `<nav class="day-tabs" aria-label="Sekcje dnia"><button class="day-tab active" data-day-panel="overview">Plan</button><button class="day-tab" data-day-panel="morning">Midtown</button><button class="day-tab" data-day-panel="route">Queens</button><button class="day-tab" data-day-panel="food">Jedzenie</button><button class="day-tab" data-day-panel="tennis">US Open</button><button class="day-tab" data-day-panel="basics">Tenis 101</button><button class="day-tab" data-day-panel="variants">Warianty</button><button class="day-tab" data-day-panel="links">Mapy</button></nav>
   <section class="day-panel active" data-panel="overview"><div class="sheet-section"><h3>Plan dnia · wybierz punkt</h3>${timeline(day.items,guide.timelineTargets)}</div><div class="quick-filters"><button data-related-panel="morning">Midtown i SUMMIT</button><button data-related-panel="route">Miejsca Queens</button><button data-related-panel="food">Smaki</button><button data-related-panel="basics">Dla laików</button><button data-related-panel="tennis">Stadion</button></div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div></section>
-  <section class="day-panel" data-panel="morning" hidden><div class="section-heading-row"><h3>Poranek · ikoniczny Midtown</h3><span>07:00–11:20</span></div><p class="panel-intro">Punkty 1–3 zaczynają wspólną numerację dnia. Śniadanie i przejazd oznaczamy symbolami, ponieważ nie są atrakcjami.</p><div class="route-list">${guide.morning.route.map((x,i)=>{const numbers=["☕","1","2","3","→"];return `<article class="route-stop" data-content-key="morning-stop-${i}"><div class="route-number ${(i===0||i===4)?"route-number-transit":""}">${numbers[i]}</div><div><span class="mini-kicker">${x.time}</span><h4>${x.title}</h4><p>${x.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${x.look}</div>${inlinePlaceStories(x.related,guide.morning.stories)}</div></article>`}).join("")}</div><article class="event-card"><h4>Praktycznie w SUMMIT</h4><ul>${guide.morning.practical.map(x=>`<li>${x}</li>`).join("")}</ul></article><button class="museum-day-link" type="button" data-open-place-sheet="summit">Zobacz pełną kartę SUMMIT <span>›</span></button></section>
+  <section class="day-panel" data-panel="morning" hidden><div class="section-heading-row"><h3>Poranek · ikoniczny Midtown</h3><span>07:00–11:20</span></div><p class="panel-intro">Punkty 1–3 zaczynają wspólną numerację dnia. Śniadanie i przejazd oznaczamy symbolami, ponieważ nie są atrakcjami.</p><div class="route-list">${guide.morning.route.map((x,i)=>{const numbers=["☕","1","2","3","→"];return `<article class="route-stop" data-content-key="morning-stop-${i}"><div class="route-number ${(i===0||i===4)?"route-number-transit":""}">${numbers[i]}</div><div><span class="mini-kicker">${x.time}</span><h4>${x.title}</h4><p>${x.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${x.look}</div>${inlinePlaceStories(x.related,guide.morning.stories)}</div></article>`}).join("")}</div><article class="event-card"><h4>Praktycznie w SUMMIT</h4><ul>${guide.morning.practical.map(x=>`<li>${x}</li>`).join("")}</ul></article></section>
   <section class="day-panel" data-panel="route" hidden><div class="section-heading-row"><h3>Queens · od portu do kortów</h3><span>sprawdzono ${guide.checked}</span></div><p class="panel-intro">Punkty 4–8 kontynuują numerację rozpoczętą w Midtown. Przejazd linią 7 pozostaje strzałką.</p><div class="route-list">${guide.route.map((x,i)=>{const numbers=["4","5","→","6","7","8"];return `<article class="route-stop" data-content-key="q-stop-${i}"><div class="route-number ${i===2?"route-number-transit":""}">${numbers[i]}</div><div><span class="mini-kicker">${x.time}</span><h4>${x.title}</h4><p>${x.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${x.look}</div>${inlinePlaceStories(x.related,guide.stories)}${inlineRelatedActions(x.related)}</div></article>`}).join("")}</div></section>
   ${renderFoodPanel(guide)}
   <section class="day-panel" data-panel="tennis" hidden><span class="event-status">${guide.tennis.status}</span><h3>${guide.tennis.title}</h3><div class="event-grid"><article class="event-card"><h4>Rytm wieczoru</h4><ul>${guide.tennis.schedule.map(x=>`<li>${x}</li>`).join("")}</ul></article><article class="event-card"><h4>Torby i bezpieczeństwo</h4><ul>${guide.tennis.rules.map(x=>`<li>${x}</li>`).join("")}</ul></article></div><h3 class="subsection-title">Zachowanie na stadionie</h3><article class="event-card"><ul>${guide.tennis.etiquette.map(x=>`<li>${x}</li>`).join("")}</ul></article><div class="link-grid compact-links"><a href="${guide.tennis.returnUrl}" target="_blank" rel="noopener">Powrót do hotelu <span>↗</span></a></div></section>
@@ -1118,6 +1118,31 @@ function bindPlaceCards() {
   document.querySelectorAll("[data-open-place]").forEach(button=>button.addEventListener("click",()=>renderPlaceDetail(button.dataset.openPlace)));
 }
 
+const PLACE_DAY_APPEARANCES = {
+  "bryant-park":[{dayId:"2026-08-22",panel:"evening"},{dayId:"2026-08-24",panel:"movie"},{dayId:"2026-08-30",panel:"walk"}],
+  grandcentral:[{dayId:"2026-08-26",panel:"morning"},{dayId:"2026-08-30",panel:"walk"}]
+};
+
+function placeDayAppearances(place) {
+  return PLACE_DAY_APPEARANCES[place.id] || [{dayId:place.dayId,panel:place.panel}];
+}
+
+function appendDayPlaceLinks(dayId) {
+  const links=PLACES.flatMap(place=>placeDayAppearances(place).filter(appearance=>appearance.dayId===dayId).map(appearance=>({place,...appearance})));
+  links.forEach(({place,panel})=>{
+    const section=sheetContent.querySelector(`.day-panel[data-panel="${panel}"]`);
+    if(!section) return;
+    let block=section.querySelector(".day-place-crosslinks");
+    if(!block){
+      block=document.createElement("section");
+      block.className="day-place-crosslinks";
+      block.innerHTML='<span class="mini-kicker">POWIĄZANE Z ATLASEM MIEJSC</span><h3>Przeczytaj więcej o miejscu</h3><div></div>';
+      section.appendChild(block);
+    }
+    block.querySelector("div").insertAdjacentHTML("beforeend",`<button type="button" data-open-place-sheet="${place.id}"><span>${place.icon}</span><strong>${place.title}</strong><b>›</b></button>`);
+  });
+}
+
 const MATYLDA_ATLAS = [
   { icon:"▣", title:"Animacja w MoMA", meta:"Dzień 3 · 24.08", text:"„It’s Alive!” i sto lat animacji — od pierwszych bohaterów po współczesny ruchomy obraz.", dayId:"2026-08-24", panel:"animation", placeId:"moma" },
   { icon:"☆", title:"Fifth Avenue i Rockefeller", meta:"Dzień 3 · 24.08", text:"Pierwsza sesja zakupowa: dwa sklepy główne i jeden szybki, bez schodzenia z trasy dnia.", dayId:"2026-08-24", panel:"shopping", placeId:"rockefeller-shopping" },
@@ -1161,7 +1186,8 @@ function renderPlaceDetail(id) {
   const extra=PLACE_EXTRAS[id]||{};
   const region=TRIP_REGIONS.find(item=>item.id===placeRegion(place));
   const nearby=(extra.nearby||[]).map(nearId=>PLACES.find(item=>item.id===nearId)).filter(Boolean);
-  app.innerHTML=`<button class="view-back" type="button" id="placeRegionBack">← ${region?.name||"Miejsca"}</button><article class="place-detail-hero" style="--region:${region?.color||"#f5c518"}">${place.image?`<img src="${place.image}" alt="${place.title}">`:`<div class="place-detail-symbol">${place.icon}</div>`}<div><span>${extra.status||"w planie"} · ${place.category}</span><h2>${place.title}</h2><p>${place.meta}</p></div></article><section class="place-detail-grid"><article><small>DLACZEGO TU JESTEŚMY</small><p>${extra.why||place.text}</p></article><article><small>HISTORIA / CIEKAWOSTKA</small><p>${extra.curiosity||place.text}</p></article><article class="photo-advice"><small>JAK ZROBIĆ DOBRE ZDJĘCIE</small><p>${extra.photoTip||"Zatrzymajcie się na chwilę, znajdźcie czytelne tło i pokażcie miejsce wraz z jego miejskim otoczeniem."}</p></article></section><div class="place-detail-actions"><button data-linked-day="${place.dayId}" data-linked-panel="${place.panel}">Otwórz w dniu</button><a href="${place.map}" target="_blank" rel="noopener">Prowadź w Mapach ↗</a></div><label class="place-visited checkable-card"><input type="checkbox" data-save-check="place-visited-${place.id}"><span><strong>Byliśmy tutaj</strong><small>Zapisz jako odwiedzone w „Naszym NY”</small></span></label>${nearby.length?`<div class="section-title"><h3>W pobliżu</h3><span>warto połączyć</span></div><div class="atlas-place-list compact">${nearby.map(placeCard).join("")}</div>`:""}`;
+  const appearances=placeDayAppearances(place);
+  app.innerHTML=`<button class="view-back" type="button" id="placeRegionBack">← ${region?.name||"Miejsca"}</button><article class="place-detail-hero" style="--region:${region?.color||"#f5c518"}">${place.image?`<img src="${place.image}" alt="${place.title}">`:`<div class="place-detail-symbol">${place.icon}</div>`}<div><span>${extra.status||"w planie"} · ${place.category}</span><h2>${place.title}</h2><p>${place.meta}</p></div></article><section class="place-detail-grid"><article><small>DLACZEGO TU JESTEŚMY</small><p>${extra.why||place.text}</p></article><article><small>HISTORIA / CIEKAWOSTKA</small><p>${extra.curiosity||place.text}</p></article><article class="photo-advice"><small>JAK ZROBIĆ DOBRE ZDJĘCIE</small><p>${extra.photoTip||"Zatrzymajcie się na chwilę, znajdźcie czytelne tło i pokażcie miejsce wraz z jego miejskim otoczeniem."}</p></article></section><div class="place-detail-actions">${appearances.map(appearance=>{const day=DAYS.find(item=>item.id===appearance.dayId);return `<button data-linked-day="${appearance.dayId}" data-linked-panel="${appearance.panel}">Otwórz w dniu ${day?.day||""}</button>`}).join("")}<a href="${place.map}" target="_blank" rel="noopener">Prowadź w Mapach ↗</a></div><label class="place-visited checkable-card"><input type="checkbox" data-save-check="place-visited-${place.id}"><span><strong>Byliśmy tutaj</strong><small>Zapisz jako odwiedzone w „Naszym NY”</small></span></label>${nearby.length?`<div class="section-title"><h3>W pobliżu</h3><span>warto połączyć</span></div><div class="atlas-place-list compact">${nearby.map(placeCard).join("")}</div>`:""}`;
   document.getElementById("placeRegionBack")?.addEventListener("click",()=>renderPlaceRegion(placeRegion(place)));
   bindPlaceCards(); bindLinkedDayActions(); bindSavedChecks();
 }
@@ -1324,6 +1350,7 @@ function openDay(id, options = {}) {
     ${dayAdventureMap(day)}
     <button class="context-back" id="dayContextBack" type="button" hidden>← Wróć</button>
     ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}`;
+  appendDayPlaceLinks(day.id);
   sheet.hidden = false;
   sheetBackdrop.hidden = false;
   document.body.style.overflow = "hidden";
