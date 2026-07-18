@@ -1,4 +1,4 @@
-const CACHE = "nyc-2026-v77";
+const CACHE = "nyc-2026-v78";
 const ASSETS = [
   "./",
   "./index.html",
@@ -12,14 +12,10 @@ const ASSETS = [
   "./icons/apple-touch-icon.png",
   "./icons/favicon-32.png"
   ,"./assets/maps/nyc-illustrated-master-v1.png"
-  ,"./assets/places/washington-square.jpg"
-  ,"./assets/places/stonewall.jpg"
   ,"./assets/places/blue-note.jpg"
-  ,"./assets/places/jefferson-market.jpg"
-  ,"./assets/places/friends-house.jpg"
   ,"./assets/places/carrie-house.jpg"
   ,"./assets/places/magnolia.jpg"
-  ,...Array.from({length:126},(_,index)=>`./assets/photos/${String(index+1).padStart(3,"0")}.jpg`)
+  ,...Array.from({length:130},(_,index)=>`./assets/photos/${String(index+1).padStart(3,"0")}.jpg`)
 ];
 
 self.addEventListener("install", event => {
