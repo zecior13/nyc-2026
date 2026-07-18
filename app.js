@@ -721,6 +721,17 @@ function tripMapMarkup() {
     { id:"yankees", icon:"⚾", label:"Yankees", left:76, top:13 },
     { id:"queens", icon:"◎", label:"Queens", left:83, top:43 }
   ];
+  const regionLabels = [
+    { name:"Harlem", days:"Dzień 8", left:57.1, top:5.4 },
+    { name:"Museum Mile", days:"Dni 4 + 9", left:54.5, top:20.3 },
+    { name:"Midtown", days:"Dni 1 + 3 + 4 + 9", left:50.8, top:31.3 },
+    { name:"West Side", days:"Dzień 6", left:40.4, top:45.2 },
+    { name:"Village + SoHo", days:"Dni 2 + 7", left:37.8, top:53.7 },
+    { name:"Downtown", days:"Dzień 6", left:33.9, top:68.5 },
+    { name:"Bronx", days:"Dzień 7", left:82, top:8.5 },
+    { name:"Queens", days:"Dzień 5", left:83.4, top:33.1 },
+    { name:"Brooklyn", days:"Dzień 8", left:77.3, top:69.9 }
+  ];
   return `<section class="trip-map-card">
     <div class="strategic-map illustrated-map" data-gesture-map>
       <div class="illustrated-map-canvas">
@@ -737,18 +748,10 @@ function tripMapMarkup() {
             <path data-region="queens" class="soft-region region-queens" d="M584 310 C746 248 854 351 860 581 C838 739 762 875 630 954 C577 898 548 814 552 711 C591 594 605 458 584 310 Z"/>
             <path data-region="brooklyn" class="soft-region region-brooklyn" d="M497 1000 C630 898 795 905 861 1014 L862 1519 C781 1608 659 1628 535 1569 C456 1479 424 1321 448 1178 C457 1113 473 1054 497 1000 Z"/>
           </g>
-          <g class="map-region-labels" aria-hidden="true">
-            <text x="492" y="98">HARLEM<tspan x="492" dy="28">DZIEŃ 8</tspan></text>
-            <text x="470" y="370">MUSEUM MILE<tspan x="470" dy="28">DNI 4 + 9</tspan></text>
-            <text x="438" y="570">MIDTOWN<tspan x="438" dy="28">DNI 1 + 3 + 4 + 9</tspan></text>
-            <text x="348" y="825">WEST SIDE<tspan x="348" dy="28">DZIEŃ 6</tspan></text>
-            <text x="326" y="980">VILLAGE + SOHO<tspan x="326" dy="28">DNI 2 + 7</tspan></text>
-            <text x="292" y="1249">DOWNTOWN<tspan x="292" dy="28">DZIEŃ 6</tspan></text>
-            <text x="707" y="155">BRONX<tspan x="707" dy="28">DZIEŃ 7</tspan></text>
-            <text x="719" y="603">QUEENS<tspan x="719" dy="28">DZIEŃ 5</tspan></text>
-            <text x="666" y="1275">BROOKLYN<tspan x="666" dy="28">DZIEŃ 8</tspan></text>
-          </g>
         </svg>
+        <div class="map-region-captions" aria-hidden="true">
+          ${regionLabels.map(region => `<div class="map-region-caption" style="--left:${region.left}%;--top:${region.top}%"><strong>${region.name}</strong><small>${region.days}</small></div>`).join("")}
+        </div>
         <div class="map-landmarks" aria-label="Interaktywne miejsca na mapie">
           ${landmarks.map(place => `<button type="button" class="map-landmark" style="--left:${place.left}%;--top:${place.top}%" data-map-place="${place.id}" aria-label="Otwórz ${place.label}"><span>${place.icon}</span><small>${place.label}</small></button>`).join("")}
         </div>
