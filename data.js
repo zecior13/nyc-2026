@@ -949,14 +949,18 @@ const MATYLDA_SHOPS = [
 const MATYLDA_SHOPPING_ROUTES = {
   midtown: {
     title:"24.08 · Fifth Avenue i Rockefeller Center",
-    note:"MoMA → UNIQLO/Abercrombie → LEGO → Nintendo/FAO → Sephora. MINISO zostaje osobnym szybkim przystankiem przy hotelu i Bryant Park.",
-    map:"https://www.google.com/maps/dir/?api=1&origin=The+Museum+of+Modern+Art,+11+W+53rd+St,+New+York&destination=Sephora,+580+Fifth+Avenue,+New+York&waypoints=UNIQLO,+660+Fifth+Avenue,+New+York%7CLEGO+Store,+636+Fifth+Avenue,+New+York%7CNintendo+NY,+10+Rockefeller+Plaza,+New+York&travelmode=walking",
+    note:"MoMA → UNIQLO/Abercrombie → LEGO → Nintendo/FAO → Sephora → Bryant Park. MINISO zostaje osobnym, szybkim przystankiem przy hotelu.",
+    fromTo:"od wyjścia z MoMA do Bryant Park",
+    hint:"Mapa używa trzech punktów kotwiczących. Abercrombie, FAO Schwarz i Sephora leżą bezpośrednio przy tym spacerze; ich osobne pinezki znajdziesz poniżej.",
+    map:"https://www.google.com/maps/dir/?api=1&origin=The+Museum+of+Modern+Art,+11+W+53rd+St,+New+York&destination=Bryant+Park,+New+York&waypoints=UNIQLO,+660+Fifth+Avenue,+New+York%7CLEGO+Store,+636+Fifth+Avenue,+New+York%7CNintendo+NY,+10+Rockefeller+Plaza,+New+York&travelmode=walking",
     extra:"https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Bryant+Park,+New+York&waypoints=MINISO,+155+W+41st+St,+New+York&travelmode=walking"
   },
   soho: {
     title:"28.08 · jeden ciąg po Broadwayu",
-    note:"Urban Outfitters → AE/Aerie → Hollister → Brandy → Princess Polly/Garage/PacSun → Glossier. Crumbl jest opcjonalnym finałem, nie obowiązkowym wydłużeniem.",
-    map:"https://www.google.com/maps/dir/?api=1&origin=Urban+Outfitters,+628+Broadway,+New+York&destination=Glossier,+72+Spring+Street,+New+York&waypoints=American+Eagle+Aerie,+599+Broadway,+New+York%7CHollister,+547+Broadway,+New+York%7CPrincess+Polly,+514+Broadway,+New+York&travelmode=walking",
+    note:"Mercer/Prince → Urban Outfitters → AE/Aerie → Hollister → Brandy → Princess Polly/Garage/PacSun → Glossier → Nolita. Crumbl pozostaje opcjonalnym finałem.",
+    fromTo:"od końca spaceru Mercer/Prince do Nolita",
+    hint:"Mapa kotwiczy spacer w Urban Outfitters, AE/Aerie i Princess Polly. Pozostałe sklepy leżą przy tej samej osi Broadwayu lub tuż obok; ich osobne pinezki znajdziesz poniżej.",
+    map:"https://www.google.com/maps/dir/?api=1&origin=Mercer+Street+and+Prince+Street,+New+York&destination=Elizabeth+Street+Garden,+New+York&waypoints=Urban+Outfitters,+628+Broadway,+New+York%7CAmerican+Eagle+Aerie,+599+Broadway,+New+York%7CPrincess+Polly,+514+Broadway,+New+York&travelmode=walking",
     extra:"https://www.google.com/maps/dir/?api=1&origin=Glossier,+72+Spring+Street,+New+York&destination=Crumbl,+195+Bleecker+Street,+New+York&travelmode=walking"
   }
 };
