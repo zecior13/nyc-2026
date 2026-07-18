@@ -4,7 +4,7 @@ const sheet = document.getElementById("detailSheet");
 const sheetBackdrop = document.getElementById("sheetBackdrop");
 const sheetContent = document.getElementById("sheetContent");
 
-let currentView = "plan";
+let currentView = "home";
 let currentReadingText = "";
 let reading = false;
 let activeSnippetButton = null;
@@ -705,15 +705,21 @@ function daySchematic(day) {
 function tripMapMarkup() {
   const landmarks = [
     { id:"liberty", icon:"★", label:"Statua", left:13, top:80 },
-    { id:"downtown", icon:"$", label:"Downtown", left:40, top:67 },
-    { id:"dumbo", icon:"▱", label:"DUMBO", left:61, top:70 },
-    { id:"village", icon:"♟", label:"Village", left:42, top:57 },
-    { id:"westside", icon:"↗", label:"High Line", left:40, top:49 },
-    { id:"moma", icon:"▣", label:"MoMA", left:47, top:39 },
-    { id:"met", icon:"◉", label:"The Met", left:52, top:27 },
-    { id:"harlem", icon:"♫", label:"Harlem", left:54, top:12 },
+    { id:"downtown", icon:"$", label:"Wall Street", left:38, top:68 },
+    { id:"dumbo", icon:"▱", label:"DUMBO", left:61, top:72 },
+    { id:"soho", icon:"◇", label:"SoHo", left:38, top:61 },
+    { id:"village", icon:"♟", label:"Village", left:44, top:56 },
+    { id:"bluenote", icon:"♪", label:"Blue Note", left:49, top:60 },
+    { id:"westside", icon:"↗", label:"Whitney", left:37, top:50 },
+    { id:"moma", icon:"▣", label:"MoMA", left:45, top:40 },
+    { id:"rockefeller-shopping", icon:"☆", label:"Rockefeller", left:50, top:39 },
+    { id:"grandcentral", icon:"⌘", label:"Grand Central", left:55, top:42 },
+    { id:"summit", icon:"△", label:"SUMMIT", left:58, top:40 },
+    { id:"met", icon:"◉", label:"The Met", left:55, top:28 },
+    { id:"guggenheim", icon:"◌", label:"Guggenheim", left:57, top:24 },
+    { id:"harlem", icon:"♫", label:"Apollo", left:53, top:14 },
     { id:"yankees", icon:"⚾", label:"Yankees", left:76, top:13 },
-    { id:"queens", icon:"◎", label:"Queens", left:83, top:42 }
+    { id:"queens", icon:"◎", label:"Queens", left:83, top:43 }
   ];
   return `<section class="trip-map-card">
     <div class="map-card-head"><div><span class="mini-kicker">Wasza ilustrowana plansza</span><h3>Nowy Jork jako dziewięć wypraw</h3></div><button class="map-expand" type="button" data-map-expand aria-pressed="false">Powiększ</button></div>
@@ -733,11 +739,11 @@ function tripMapMarkup() {
             <path data-region="brooklyn" class="soft-region region-brooklyn" d="M497 1000 C630 898 795 905 861 1014 L862 1519 C781 1608 659 1628 535 1569 C456 1479 424 1321 448 1178 C457 1113 473 1054 497 1000 Z"/>
           </g>
           <g class="map-region-labels" aria-hidden="true">
-            <text x="492" y="184">HARLEM<tspan x="492" dy="28">DZIEŃ 8</tspan></text>
-            <text x="481" y="416">MUSEUM MILE<tspan x="481" dy="28">DNI 4 + 9</tspan></text>
-            <text x="454" y="645">MIDTOWN<tspan x="454" dy="28">DNI 1 + 3 + 4 + 9</tspan></text>
-            <text x="367" y="868">WEST SIDE<tspan x="367" dy="28">DZIEŃ 6</tspan></text>
-            <text x="342" y="1051">VILLAGE + SOHO<tspan x="342" dy="28">DNI 2 + 7</tspan></text>
+            <text x="492" y="98">HARLEM<tspan x="492" dy="28">DZIEŃ 8</tspan></text>
+            <text x="470" y="370">MUSEUM MILE<tspan x="470" dy="28">DNI 4 + 9</tspan></text>
+            <text x="438" y="570">MIDTOWN<tspan x="438" dy="28">DNI 1 + 3 + 4 + 9</tspan></text>
+            <text x="348" y="825">WEST SIDE<tspan x="348" dy="28">DZIEŃ 6</tspan></text>
+            <text x="326" y="980">VILLAGE + SOHO<tspan x="326" dy="28">DNI 2 + 7</tspan></text>
             <text x="292" y="1249">DOWNTOWN<tspan x="292" dy="28">DZIEŃ 6</tspan></text>
             <text x="707" y="155">BRONX<tspan x="707" dy="28">DZIEŃ 7</tspan></text>
             <text x="719" y="603">QUEENS<tspan x="719" dy="28">DZIEŃ 5</tspan></text>
@@ -785,8 +791,7 @@ function bindTripMap() {
 
 function renderPlan() {
   app.innerHTML = `
-    <div class="view-heading"><h2>Plan podróży</h2><p>Stałe rezerwacje są chronione, a pozostałe punkty można skracać lub zamieniać bez burzenia dnia.</p></div>
-    ${tripMapMarkup()}
+    <div class="view-heading"><h2>Dni podróży</h2><p>Dziewięć wypraw. Każda otwiera własną planszę, kolejność punktów i powiązane historie.</p></div>
     <div class="section-title"><h3>Wszystkie dni</h3><span>9 wypraw</span></div>
     <div class="card-list">${DAYS.map(day => `
       <article class="day-card" data-open-day="${day.id}" tabindex="0" role="button">
@@ -798,6 +803,20 @@ function renderPlan() {
         </div>
         <div class="day-arrow">›</div>
       </article>`).join("")}</div>`;
+  bindDynamicActions();
+}
+
+function renderHome() {
+  app.innerHTML = `
+    <div class="home-screen">
+    <div class="home-map-intro"><span class="mini-kicker">22–30 sierpnia 2026</span><h2>Nasz Nowy Jork</h2><p>Dotknij obszaru, symbolu miejsca albo wybierz jeden z czterech modułów.</p></div>
+    ${tripMapMarkup()}
+    <section class="home-modules" aria-label="Główne moduły aplikacji">
+      <button type="button" data-view-jump="plan"><span class="home-module-icon">09</span><strong>Dni</strong><small>plansze i kolejność wypraw</small></button>
+      <button type="button" data-view-jump="places"><span class="home-module-icon">◇</span><strong>Miejsca</strong><small>dzielnice, historie i zdjęcia</small></button>
+      <button type="button" data-view-jump="museums"><span class="home-module-icon">▤</span><strong>Muzea</strong><small>piętra, artyści i dzieła</small></button>
+      <button type="button" data-view-jump="prepare"><span class="home-module-icon">▶</span><strong>Przed wyjazdem</strong><small>filmy, muzyka, aplikacje i bilety</small></button>
+    </section></div>`;
   bindDynamicActions();
   bindTripMap();
 }
@@ -1125,6 +1144,7 @@ function bindDynamicActions() {
 function setView(view) {
   currentView = view;
   navItems.forEach(item => item.classList.toggle("active", item.dataset.view === view));
+  if (view === "home") renderHome();
   if (view === "today") renderToday();
   if (view === "plan") renderPlan();
   if (view === "places") renderPlaces();
@@ -1136,6 +1156,7 @@ function setView(view) {
 }
 
 navItems.forEach(item => item.addEventListener("click", () => setView(item.dataset.view)));
+document.getElementById("homeButton").addEventListener("click", () => setView("home"));
 document.getElementById("closeSheetButton").addEventListener("click", closeSheet);
 sheetBackdrop.addEventListener("click", closeSheet);
 document.getElementById("openTripButton").addEventListener("click", openTripInfo);
