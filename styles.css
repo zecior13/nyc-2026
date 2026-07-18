@@ -168,12 +168,12 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .village-adventure-map .day-map-board { --day-bg-position:52% 33%; --day-bg-size:190% auto; }
 .day-map-board::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(169,79,61,.14),transparent 55%); pointer-events:none; }
 .day-map-board svg { position:absolute; inset:0; z-index:1; width:100%; height:100%; }
-.day-route-path { fill:none; stroke-width:1.5; stroke-linecap:round; stroke-dasharray:2.5 2; filter:drop-shadow(0 2px 2px rgba(11,31,51,.45)); }
+.day-route-path { fill:none; stroke-width:1.5; stroke-linecap:round; stroke-dasharray:2.5 2; filter:drop-shadow(0 2px 2px rgba(11,31,51,.45)); vector-effect:non-scaling-stroke; }
 .day-route-walk { stroke:rgba(245,197,24,.98); }
 .day-route-transit { stroke:#d64b3d; stroke-width:1.8; }
-.day-map-stop { position:absolute; left:var(--left); top:var(--top); z-index:3; display:grid; justify-items:center; padding:0; border:0; background:transparent; transform:translate(-50%,-50%); filter:drop-shadow(0 3px 5px rgba(11,31,51,.3)); }
-.day-map-stop span { position:relative; z-index:5; display:grid; place-items:center; width:34px; height:34px; border:2px solid white; border-radius:50%; color:var(--navy); background:var(--taxi); font-weight:950; transform:scale(var(--map-inverse,1)); transform-origin:center bottom; }
-.day-map-stop small { position:relative; z-index:1; margin-top:2px; padding:3px 6px; border-radius:999px; color:white; background:rgba(11,31,51,.82); font-size:8px; font-weight:850; white-space:nowrap; pointer-events:none; transform:scale(var(--map-inverse,1)); transform-origin:center top; }
+.day-map-stop { position:absolute; left:var(--left); top:var(--top); z-index:3; display:grid; justify-items:center; padding:0; border:0; background:transparent; transform:translate(-50%,-50%) scale(var(--map-inverse,1)); transform-origin:center; filter:drop-shadow(0 3px 5px rgba(11,31,51,.3)); pointer-events:none; }
+.day-map-stop span { position:relative; z-index:5; display:grid; place-items:center; width:34px; height:34px; border:2px solid white; border-radius:50%; color:var(--navy); background:var(--taxi); font-weight:950; pointer-events:auto; cursor:pointer; }
+.day-map-stop small { position:relative; z-index:1; margin-top:2px; padding:3px 6px; border-radius:999px; color:white; background:rgba(11,31,51,.82); font-size:8px; font-weight:850; white-space:nowrap; pointer-events:none; }
 .day-map-stop:focus,.day-map-stop:hover,.day-map-stop.selected { z-index:20; }
 .day-map-stop-offmap span { color:white; background:#d64b3d; }
 .day-map-stop-offmap small { background:rgba(114,42,33,.9); }
@@ -588,7 +588,7 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .related-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .related-row button { padding: 7px 9px; border: 1px solid #c3d0d8; border-radius: 999px; color: var(--navy-2); background: white; font-size: 10px; font-weight: 800; }
 .pause-prompt { margin-top: 10px; padding: 11px; border-left: 4px solid var(--park); border-radius: 4px 10px 10px 4px; color: #34513a; background: #e4efe4; font-size: 11px; line-height: 1.45; }
-.next-stop { margin-top: 11px; padding: 8px 10px; border: 0; border-radius: 9px; color: white; background: var(--navy-2); font-size: 10.5px; font-weight: 850; }
+.next-stop { display:none !important; }
 .quick-filters { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0 3px; }
 .quick-filters button { padding: 8px 10px; border: 1px solid #c5d1d8; border-radius: 999px; color: var(--navy-2); background: white; font-size: 10px; font-weight: 800; }
 .context-highlight { outline: 3px solid var(--taxi); outline-offset: 2px; }
