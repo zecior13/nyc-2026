@@ -160,7 +160,15 @@ function dayReadingText(day) {
 }
 
 function guideCard(item, audioKey = "", audioLabel = "Posłuchaj historii", contentKey = "") {
-  return `<article class="guide-card" ${contentKey ? `data-content-key="${contentKey}"` : ""}>${item.image ? `<figure class="orientation-photo"><img src="${item.image.src}" alt="${item.image.alt}"><figcaption>Punkt orientacyjny · ${item.image.credit}</figcaption></figure>` : ""}<h4>${item.title}</h4><p>${item.text}</p>${audioKey ? `<button class="audio-chip" type="button" data-audio-key="${audioKey}">▶ ${audioLabel}</button>` : ""}</article>`;
+  return `<article class="guide-card" ${contentKey ? `data-content-key="${contentKey}"` : ""}>${item.image ? `<figure class="orientation-photo"><img src="${item.image.src}" alt="${item.image.alt}"><figcaption>Punkt orientacyjny · ${item.image.credit}</figcaption></figure>` : ""}<h4>${item.title}</h4><p>${item.text}</p></article>`;
+}
+
+function renderVillageFoodPanel(guide) {
+  const groups = [
+    { title:"Brunch · główny posiłek", note:"Wybierzcie jedno miejsce zależnie od kolejki, apetytu i budżetu.", items:guide.food.filter(item=>!/deser|kawa/i.test(item.category)) },
+    { title:"Kawa, deser i odpoczynek", note:"Ten przystanek przypada po spacerze i przed Blue Note.", items:guide.food.filter(item=>/deser|kawa/i.test(item.category)) }
+  ];
+  return `<section class="day-panel" data-panel="food" hidden><h3>Jedzenie według momentu dnia</h3><p class="panel-intro">Nie jest to jedna lista restauracji — każda grupa odpowiada konkretnemu etapowi planu.</p>${groups.map(group=>`<section class="food-moment"><div class="food-moment-head"><span>${group.title}</span><p>${group.note}</p></div><div class="food-list">${group.items.map(place=>`<article class="food-card">${place.image?`<figure class="orientation-photo"><img src="${place.image.src}" alt="${place.image.alt}"><figcaption>Punkt orientacyjny · ${place.image.credit}</figcaption></figure>`:""}<div><span class="mini-kicker">${place.category} · ${place.price}</span><h4>${place.name}</h4><p>${place.address}</p><p>${place.note}</p></div><a href="${place.url}" target="_blank" rel="noopener">Menu / informacje ↗</a></article>`).join("")}</div></section>`).join("")}</section>`;
 }
 
 function renderFoodPanel(guide) {
@@ -174,42 +182,33 @@ function renderFoodPanel(guide) {
 
 function renderVillageGuide(day, guide) {
   return `
-    <nav class="day-tabs" aria-label="Sekcje dnia">
-      <button class="day-tab active" type="button" data-day-panel="overview">Plan</button>
-      <button class="day-tab" type="button" data-day-panel="route">Trasa</button>
-      <button class="day-tab" type="button" data-day-panel="stories">Historie</button>
-      <button class="day-tab" type="button" data-day-panel="screen">Seriale</button>
-      <button class="day-tab" type="button" data-day-panel="food">Jedzenie</button>
-      <button class="day-tab" type="button" data-day-panel="variants">Warianty</button>
-      <button class="day-tab" type="button" data-day-panel="bluenote">Blue Note</button>
-      <button class="day-tab" type="button" data-day-panel="links">Mapy</button>
+    <nav class="day-module-nav" aria-label="Sekcje dnia">
+      <button class="day-module active" type="button" data-day-panel="overview"><b>01</b><span>Plan</span><small>godziny i kolejność</small></button>
+      <button class="day-module" type="button" data-day-panel="route"><b>◇</b><span>Miejsca spaceru</span><small>punkty i ich historie</small></button>
+      <button class="day-module" type="button" data-day-panel="food"><b>☕</b><span>Jedzenie</span><small>brunch, kawa i deser</small></button>
+      <button class="day-module" type="button" data-day-panel="screen"><b>▣</b><span>Serialowe Village</span><small>Friends i Carrie</small></button>
+      <button class="day-module day-module-feature" type="button" data-day-panel="bluenote"><b>♪</b><span>Blue Note</span><small>Hiromi i wieczór</small></button>
+      <button class="day-module" type="button" data-day-panel="links"><b>↗</b><span>Mapy</span><small>Google Maps i powrót</small></button>
     </nav>
     <section class="day-panel active" data-panel="overview">
       <div class="sheet-section"><h3>Plan dnia · wybierz punkt</h3>${timeline(day.items, guide.timelineTargets)}</div>
-      <div class="quick-filters" aria-label="Skróty tematyczne"><button data-related-panel="stories">Historia</button><button data-related-panel="screen">Seriale</button><button data-related-panel="bluenote">Muzyka</button><button data-related-panel="screen">Dla Matyldy</button></div>
       <div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>
     </section>
     <section class="day-panel" data-panel="route" hidden>
-      <div class="section-heading-row"><h3>Spacer przez Greenwich Village</h3><span>sprawdzono ${guide.checked}</span></div>
-      <p class="panel-intro">To kolejność, nie rozkład jazdy. Każdy kolejny punkt można skrócić bez psucia opowieści.</p>
+      <div class="section-heading-row"><h3>Miejsca spaceru</h3><span>sprawdzono ${guide.checked}</span></div>
+      <p class="panel-intro">Każda historia znajduje się przy miejscu, którego dotyczy. To kolejność, nie sztywny rozkład jazdy.</p>
       <div class="route-list">${guide.route.map((stop, index) => `
         <article class="route-stop">
           <div class="route-number">${index + 1}</div>
-          <div>${stop.image ? `<figure class="orientation-photo"><img src="${stop.image.src}" alt="${stop.image.alt}"><figcaption>Punkt orientacyjny · ${stop.image.credit}</figcaption></figure>` : ""}<span class="mini-kicker">${stop.time}</span><h4>${stop.title}</h4><p>${stop.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${stop.look}</div>${stop.pause ? `<div class="pause-prompt">${stop.pause}</div>` : ""}${stop.related?.length ? `<div class="related-row">${stop.related.map(item => `<button type="button" data-related-panel="${item.panel}" ${item.key ? `data-related-key="${item.key}"` : ""}>${item.label} ›</button>`).join("")}</div>` : ""}${index < guide.route.length - 1 ? `<button class="next-stop" type="button" data-next-stop="${index + 1}">Następny punkt →</button>` : ""}</div>
+          <div>${stop.image ? `<figure class="orientation-photo"><img src="${stop.image.src}" alt="${stop.image.alt}"><figcaption>Punkt orientacyjny · ${stop.image.credit}</figcaption></figure>` : ""}<span class="mini-kicker">${stop.time}</span><h4>${stop.title}</h4><p>${stop.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${stop.look}</div>${stop.pause ? `<div class="pause-prompt">${stop.pause}</div>` : ""}${stop.related?.filter(item=>item.panel==="stories").map(item=>{const story=guide.stories[Number(item.key?.split("-")[1])];return story?`<details class="place-story"><summary>${story.title}</summary><p>${story.text}</p></details>`:"";}).join("")||""}${stop.related?.filter(item=>item.panel!=="stories").length ? `<div class="related-row">${stop.related.filter(item=>item.panel!=="stories").map(item => `<button type="button" data-related-panel="${item.panel}">${item.label} ›</button>`).join("")}</div>` : ""}${index < guide.route.length - 1 ? `<button class="next-stop" type="button" data-next-stop="${index + 1}">Następny punkt →</button>` : ""}</div>
         </article>`).join("")}</div>
-    </section>
-    <section class="day-panel" data-panel="stories" hidden>
-      <h3>Pięć historii Village</h3>
-      <p class="panel-intro">Każdą historię można odtworzyć osobno dokładnie w miejscu, którego dotyczy.</p>
-      <div class="guide-grid">${guide.stories.map((item, index) => guideCard(item, `story-${index}`, "Posłuchaj historii", `story-${index}`)).join("")}</div>
     </section>
     <section class="day-panel" data-panel="screen" hidden>
       <h3>Serialowe i filmowe Village</h3>
       <p class="panel-intro">Adresy są dodatkiem do dzielnicy. Jeśli nie macie ochoty na popkulturę, można pominąć cały moduł jednym ruchem.</p>
       <div class="guide-grid">${guide.screen.map((item, index) => guideCard(item, `screen-${index}`, "Posłuchaj", `screen-${index}`)).join("")}</div>
     </section>
-    ${renderFoodPanel(guide)}
-    <section class="day-panel" data-panel="variants" hidden><h3>Wybierz wersję dnia</h3><div class="guide-grid">${guide.variants.map(item => guideCard(item)).join("")}</div></section>
+    ${renderVillageFoodPanel(guide)}
     <section class="day-panel" data-panel="bluenote" hidden>
       <span class="event-status">Potwierdzone · 23.08.2026 · 20:00</span>
       <h3>${guide.bluenote.artist}</h3>
@@ -612,12 +611,12 @@ function showDayPanel(panelName, focusKey = "", options = {}) {
     panel.hidden = !active;
     panel.classList.toggle("active", active);
   });
-  sheetContent.querySelectorAll(".day-tab").forEach(tab => {
+  sheetContent.querySelectorAll(".day-tab, .day-module").forEach(tab => {
     const active = tab.dataset.dayPanel === panelName;
     tab.classList.toggle("active", active);
     tab.setAttribute("aria-selected", String(active));
   });
-  const tabs = sheetContent.querySelector(".day-tabs");
+  const tabs = sheetContent.querySelector(".day-tabs, .day-module-nav");
   if (restoreScroll !== null) {
     requestAnimationFrame(() => sheet.scrollTo({ top: restoreScroll, behavior: "instant" }));
   } else if (tabs) {
@@ -726,9 +725,9 @@ const VILLAGE_MAP_STOPS = [
 function dayAdventureMap(day) {
   if (day.id !== "2026-08-23") return daySchematic(day);
   return `<section class="day-adventure-map village-adventure-map">
-    <div class="day-map-heading"><span class="mini-kicker">Dzień na mapie</span><strong>Greenwich Village · od łuku do Blue Note</strong><p>Dotknij punktu, aby najpierw zobaczyć krótki opis.</p></div>
+    <div class="day-map-heading"><div><span class="mini-kicker">Dzień na mapie</span><strong>Greenwich Village · od łuku do Blue Note</strong><p>Dotknij punktu, aby najpierw zobaczyć krótki opis.</p></div><button type="button" data-day-map-direct="links">↗ Mapy i trasy</button></div>
     <div class="day-map-board">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path" d="M75 10 C68 19 62 25 55 31 S47 39 42 43 S33 51 29 59 S37 68 45 72 S57 78 64 86"/></svg>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path day-route-transit" d="M75 10 C68 19 62 25 55 31"/><path class="day-route-path day-route-walk" d="M55 31 C49 37 46 40 42 43 S33 51 29 59 S37 68 45 72 S57 78 64 86"/></svg>
       ${VILLAGE_MAP_STOPS.map(stop => `<button type="button" class="day-map-stop" style="--left:${stop.left}%;--top:${stop.top}%" data-day-map-panel="${stop.panel}" data-day-map-title="${stop.title}" data-day-map-note="${stop.note}"><span>${stop.icon}</span><small>${stop.title}</small></button>`).join("")}
     </div>
     <div class="day-map-detail" id="dayMapDetail"><strong>Wybierz punkt trasy</strong><p>Zobaczysz jego rolę w dniu, a dopiero potem zdecydujesz, czy otworzyć pełny opis.</p></div>
@@ -1122,24 +1121,14 @@ function openDay(id, options = {}) {
     <h2 id="sheetTitle">${day.title}</h2>
     <p class="lead">${day.story}</p>
     ${dayAdventureMap(day)}
-    <div class="reader" aria-label="Odtwarzanie głosowe">
-      <button class="reader-play" id="readerPlayButton" type="button">▶ Odsłuchaj dzień</button>
-      <button class="reader-stop" id="readerStopButton" type="button" disabled>■ Zatrzymaj</button>
-      <span class="reader-status" id="readerStatus" aria-live="polite"></span>
-      <details class="voice-settings"><summary>Zmień głos lektora</summary><div><select id="voiceSelect" aria-label="Wybierz polski głos"></select><button type="button" id="voicePreviewButton">Odtwórz próbkę</button></div><p>Naturalniejsze głosy „rozszerzone” lub „premium” pobiera się w ustawieniach dostępności urządzenia.</p></details>
-    </div>
     <button class="context-back" id="dayContextBack" type="button" hidden>← Wróć</button>
     ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}`;
   sheet.hidden = false;
   sheetBackdrop.hidden = false;
   document.body.style.overflow = "hidden";
   sheet.scrollTop = 0;
-  document.getElementById("readerPlayButton").addEventListener("click", toggleReading);
-  document.getElementById("readerStopButton").addEventListener("click", () => stopReading("Odtwarzanie zatrzymane"));
-  populateVoiceSelect();
-  document.getElementById("voiceSelect")?.addEventListener("change", event => localStorage.setItem("nyc-preferred-voice", event.target.value));
-  document.getElementById("voicePreviewButton")?.addEventListener("click", event => playSnippet("Witajcie w Nowym Jorku. Za chwilę ruszamy na spacer przez Greenwich Village.", event.currentTarget));
   document.getElementById("dayContextBack")?.addEventListener("click", returnToPreviousDayContext);
+  sheetContent.querySelectorAll("[data-day-map-direct]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.dayMapDirect, "", { remember:true, originLabel:"Mapa dnia" })));
   sheetContent.querySelectorAll("[data-day-map-panel]").forEach(button => button.addEventListener("click", () => {
     sheetContent.querySelectorAll("[data-day-map-panel]").forEach(item => item.classList.toggle("selected", item === button));
     const detail = document.getElementById("dayMapDetail");
