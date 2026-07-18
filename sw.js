@@ -1,4 +1,4 @@
-const CACHE = "nyc-2026-v35";
+const CACHE = "nyc-2026-v36";
 const ASSETS = [
   "./",
   "./index.html",
@@ -35,6 +35,17 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+  const sameOrigin = new URL(event.request.url).origin === self.location.origin;
+  if (sameOrigin) {
+    event.respondWith(
+      fetch(event.request).then(response => {
+        const copy = response.clone();
+        caches.open(CACHE).then(cache => cache.put(event.request, copy));
+        return response;
+      }).catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html")))
+    );
+    return;
+  }
   event.respondWith(
     caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
       const copy = response.clone();
