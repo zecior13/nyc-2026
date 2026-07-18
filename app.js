@@ -722,8 +722,7 @@ function tripMapMarkup() {
     { id:"queens", icon:"◎", label:"Queens", left:83, top:43 }
   ];
   return `<section class="trip-map-card">
-    <div class="map-card-head"><div><span class="mini-kicker">Wasza ilustrowana plansza</span><h3>Nowy Jork jako dziewięć wypraw</h3></div><button class="map-expand" type="button" data-map-expand aria-pressed="false">Powiększ</button></div>
-    <div class="strategic-map illustrated-map" data-map-expanded="false">
+    <div class="strategic-map illustrated-map" data-gesture-map>
       <div class="illustrated-map-canvas">
         <img src="assets/maps/nyc-illustrated-master-v1.png" alt="Ilustrowana mapa Manhattanu, portu, Brooklynu, Queens, Bronksu i nabrzeża New Jersey">
         <svg class="interactive-region-layer" viewBox="0 0 862 1824" role="img" aria-label="Aktywne obszary planu podróży">
@@ -779,14 +778,79 @@ function bindTripMap() {
     const place = PLACES.find(item => item.id === button.dataset.mapPlace);
     if (place) openLinkedDay(place.dayId, place.panel);
   }));
-  document.querySelector("[data-map-expand]")?.addEventListener("click", event => {
-    const map = document.querySelector("[data-map-expanded]");
-    if (!map) return;
-    const expanded = map.dataset.mapExpanded !== "true";
-    map.dataset.mapExpanded = String(expanded);
-    event.currentTarget.setAttribute("aria-pressed", String(expanded));
-    event.currentTarget.textContent = expanded ? "Pomniejsz" : "Powiększ";
+  bindGestureMap(document.querySelector("[data-gesture-map]"));
+}
+
+function bindGestureMap(map) {
+  if (!map) return;
+  const canvas = map.querySelector(".illustrated-map-canvas");
+  const pointers = new Map();
+  const state = { scale: 1, x: 0, y: 0, startScale: 1, startX: 0, startY: 0, startDistance: 0, startCenter: null };
+
+  const clampState = () => {
+    const rect = map.getBoundingClientRect();
+    const limitX = rect.width * (state.scale - 1) / 2;
+    const limitY = rect.height * (state.scale - 1) / 2;
+    state.x = Math.max(-limitX, Math.min(limitX, state.x));
+    state.y = Math.max(-limitY, Math.min(limitY, state.y));
+  };
+  const paint = () => {
+    clampState();
+    canvas.style.setProperty("--map-scale", state.scale.toFixed(3));
+    canvas.style.setProperty("--map-inverse", (1 / state.scale).toFixed(4));
+    canvas.style.setProperty("--map-x", `${state.x.toFixed(1)}px`);
+    canvas.style.setProperty("--map-y", `${state.y.toFixed(1)}px`);
+  };
+  const pair = () => [...pointers.values()].slice(0, 2);
+  const distance = points => Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+  const center = points => ({ x:(points[0].x + points[1].x) / 2, y:(points[0].y + points[1].y) / 2 });
+
+  map.addEventListener("wheel", event => {
+    event.preventDefault();
+    const rect = map.getBoundingClientRect();
+    const oldScale = state.scale;
+    const nextScale = Math.max(1, Math.min(3.5, oldScale * Math.exp(-event.deltaY * .002)));
+    const px = event.clientX - rect.left - rect.width / 2;
+    const py = event.clientY - rect.top - rect.height / 2;
+    state.x = px - (px - state.x) * (nextScale / oldScale);
+    state.y = py - (py - state.y) * (nextScale / oldScale);
+    state.scale = nextScale;
+    paint();
+  }, { passive:false });
+
+  map.addEventListener("pointerdown", event => {
+    pointers.set(event.pointerId, { x:event.clientX, y:event.clientY });
+    map.setPointerCapture(event.pointerId);
+    state.startScale = state.scale;
+    state.startX = state.x;
+    state.startY = state.y;
+    if (pointers.size === 2) {
+      const points = pair();
+      state.startDistance = distance(points);
+      state.startCenter = center(points);
+    } else {
+      state.startCenter = { x:event.clientX, y:event.clientY };
+    }
   });
+  map.addEventListener("pointermove", event => {
+    if (!pointers.has(event.pointerId)) return;
+    pointers.set(event.pointerId, { x:event.clientX, y:event.clientY });
+    if (pointers.size >= 2) {
+      const points = pair();
+      const currentCenter = center(points);
+      state.scale = Math.max(1, Math.min(3.5, state.startScale * distance(points) / Math.max(1, state.startDistance)));
+      state.x = state.startX + currentCenter.x - state.startCenter.x;
+      state.y = state.startY + currentCenter.y - state.startCenter.y;
+    } else if (state.scale > 1) {
+      state.x = state.startX + event.clientX - state.startCenter.x;
+      state.y = state.startY + event.clientY - state.startCenter.y;
+    }
+    paint();
+  });
+  const endPointer = event => pointers.delete(event.pointerId);
+  map.addEventListener("pointerup", endPointer);
+  map.addEventListener("pointercancel", endPointer);
+  paint();
 }
 
 function renderPlan() {
@@ -809,7 +873,6 @@ function renderPlan() {
 function renderHome() {
   app.innerHTML = `
     <div class="home-screen">
-    <div class="home-map-intro"><span class="mini-kicker">22–30 sierpnia 2026</span><h2>Nasz Nowy Jork</h2><p>Dotknij obszaru, symbolu miejsca albo wybierz jeden z czterech modułów.</p></div>
     ${tripMapMarkup()}
     <section class="home-modules" aria-label="Główne moduły aplikacji">
       <button type="button" data-view-jump="plan"><span class="home-module-icon">09</span><strong>Dni</strong><small>plansze i kolejność wypraw</small></button>
@@ -1159,7 +1222,6 @@ navItems.forEach(item => item.addEventListener("click", () => setView(item.datas
 document.getElementById("homeButton").addEventListener("click", () => setView("home"));
 document.getElementById("closeSheetButton").addEventListener("click", closeSheet);
 sheetBackdrop.addEventListener("click", closeSheet);
-document.getElementById("openTripButton").addEventListener("click", openTripInfo);
 document.addEventListener("keydown", event => { if (event.key === "Escape" && !sheet.hidden) closeSheet(); });
 
 if ("serviceWorker" in navigator) {
