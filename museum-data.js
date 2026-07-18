@@ -157,3 +157,69 @@ const MUSEUMS = [
     ]
   }
 ];
+
+const MUSEUM_COVER_NUMBERS={moma:"021",met:"022",guggenheim:"023",whitney:"024"};
+let museumWorkPhotoNumber=25;
+MUSEUMS.forEach(museum=>{
+  museum.coverImage=`assets/photos/${MUSEUM_COVER_NUMBERS[museum.id]}.jpg`;
+  museum.works.forEach(work=>{work.image=`assets/photos/${String(museumWorkPhotoNumber++).padStart(3,"0")}.jpg`;});
+});
+
+const ARTIST_PROFILES = {
+  "Agnolo Bronzino":{years:"1503–1572",style:"manieryzm florencki",breakthrough:"Nadawał portretom arystokratyczny chłód, niezwykłą gładkość i wyrafinowaną sztuczność, charakterystyczną dla dworu Medyceuszy."},
+  "Albert Gleizes":{years:"1881–1953",style:"kubizm",breakthrough:"Współtworzył teorię kubizmu i rozciągnął rozbijanie formy na tematy nowoczesnego miasta, ruchu oraz architektury."},
+  "Alexander Calder":{years:"1898–1976",style:"rzeźba kinetyczna, abstrakcja",breakthrough:"Wprowadził mobile — rzeźby poruszane powietrzem — dzięki czemu ruch, równowaga i przypadek stały się tworzywem dzieła."},
+  "Amedeo Modigliani":{years:"1884–1920",style:"modernizm, ekspresyjny portret",breakthrough:"Połączył inspiracje rzeźbą afrykańską i włoskim manieryzmem w rozpoznawalnych, wydłużonych twarzach i sylwetkach."},
+  "Andy Warhol":{years:"1928–1987",style:"pop-art",breakthrough:"Zatarł granicę między sztuką, reklamą i kulturą masową, powtarzając produkty oraz wizerunki celebrytów jak towary z taśmy."},
+  "Archibald Motley":{years:"1891–1981",style:"Harlem Renaissance, modernizm",breakthrough:"Pokazywał miejskie życie czarnych społeczności poprzez nasycony kolor, sztuczne światło, jazzowy rytm i złożone sceny zbiorowe."},
+  "Auguste Rodin":{years:"1840–1917",style:"nowoczesna rzeźba",breakthrough:"Zerwał z akademickim wygładzeniem: ślady modelowania, fragment i napięcie ciała uczynił nośnikami psychologii."},
+  "Camille Pissarro":{years:"1830–1903",style:"impresjonizm, neoimpresjonizm",breakthrough:"Był organizatorem i mentorem impresjonistów; konsekwentnie badał światło w zwykłych pejzażach, wsiach i nowoczesnym mieście."},
+  "Caravaggio":{years:"1571–1610",style:"barok, caravaggionizm",breakthrough:"Radykalny światłocień i modele wyglądający jak zwykli ludzie nadały scenom religijnym bezpośredniość niemal teatralnego zdarzenia."},
+  "Claude Monet":{years:"1840–1926",style:"impresjonizm",breakthrough:"Uczynił zmienne światło i samo doświadczenie patrzenia ważniejszymi niż trwały kontur przedmiotów; seriami badał ten sam motyw o różnych porach."},
+  "Constantin Brancusi":{years:"1876–1957",style:"modernistyczna rzeźba",breakthrough:"Redukował postać do najbardziej elementarnego kształtu, pokazując, że uproszczenie może oddać istotę ruchu, ciała lub lotu."},
+  "Diego Rivera":{years:"1886–1957",style:"muralizm meksykański",breakthrough:"Połączył nowoczesną formę z publiczną, monumentalną opowieścią o pracy, rewolucji i historii społecznej Meksyku."},
+  "Diego Velázquez":{years:"1599–1660",style:"barok hiszpański",breakthrough:"Łączył dworską reprezentację z niezwykle swobodnym malowaniem światła i psychologiczną obecnością modela."},
+  "Duccio di Buoninsegna":{years:"ok. 1255–1319",style:"malarstwo sieneńskie, gotyk",breakthrough:"Zachował złote, bizantyjskie dziedzictwo, ale nadał figurom większą czułość, przestrzeń i ludzką relację — krok ku renesansowi."},
+  "Edgar Degas":{years:"1834–1917",style:"impresjonizm, realizm",breakthrough:"Kadrował nowoczesne życie jak fotografia: asymetrycznie, z zaskakujących punktów widzenia, badając ruch baletnic, koni i ludzi przy pracy."},
+  "Edward Hopper":{years:"1882–1967",style:"realizm amerykański",breakthrough:"Z ciszy, ostrego światła i architektury codzienności stworzył obrazy psychologicznego dystansu, samotności oraz oczekiwania."},
+  "El Greco":{years:"1541–1614",style:"manieryzm",breakthrough:"Wydłużone postacie, nienaturalny kolor i gwałtowne niebo podporządkował duchowemu napięciu, wyprzedzając ekspresjonistyczną wrażliwość."},
+  "Emanuel Leutze":{years:"1816–1868",style:"malarstwo historyczne, romantyzm",breakthrough:"Budował monumentalne obrazy historii jako emocjonalne, patriotyczne widowiska, które kształtowały zbiorową pamięć bardziej niż dokument."},
+  "Faith Ringgold":{years:"1930–2024",style:"story quilts, sztuka feministyczna",breakthrough:"Połączyła malarstwo, tkaninę i tekst, aby opowiadać o doświadczeniu czarnych kobiet językiem wywodzącym się także z rodzinnego rzemiosła."},
+  "Franz Marc":{years:"1880–1916",style:"ekspresjonizm, Der Blaue Reiter",breakthrough:"Kolorowi nadał znaczenie emocjonalne i duchowe, a zwierzęta uczynił symbolem czystszego sposobu istnienia niż nowoczesna cywilizacja."},
+  "Frida Kahlo":{years:"1907–1954",style:"modernizm meksykański, symboliczny autoportret",breakthrough:"Własne ciało, ból, tożsamość i kulturę Meksyku zmieniła w bezkompromisową autobiografię wizualną, unikając prostych kategorii surrealizmu."},
+  "George Tooker":{years:"1920–2011",style:"realizm magiczny, tempera",breakthrough:"Używał renesansowej techniki tempery do niepokojących scen nowoczesnych biur, metra i instytucji, pokazując alienację jednostki."},
+  "Georges Braque":{years:"1882–1963",style:"fowizm, kubizm",breakthrough:"Wraz z Picassem rozwinął kubizm analityczny i kolaż, zastępując jeden punkt widzenia równoczesnym oglądem przedmiotu z wielu stron."},
+  "Georges Seurat":{years:"1859–1891",style:"neoimpresjonizm, pointylizm",breakthrough:"Oparł obraz na systematycznym zestawianiu drobnych plam czystego koloru, łącząc naukę o widzeniu z monumentalną kompozycją."},
+  "Georgia O’Keeffe":{years:"1887–1986",style:"amerykański modernizm",breakthrough:"Monumentalizowała kwiaty, kości i krajobrazy, budując niezależny język na granicy obserwacji oraz abstrakcji; współtworzyła ikonografię Nowego Meksyku."},
+  "Gustav Klimt":{years:"1862–1918",style:"secesja wiedeńska, symbolizm",breakthrough:"Połączył płaską, dekoracyjną ornamentykę ze zmysłowym, psychologicznym portretem i otworzył wiedeńską sztukę na modernizm."},
+  "Henri Matisse":{years:"1869–1954",style:"fowizm, modernizm",breakthrough:"Uwolnił kolor od opisywania rzeczywistości, traktując go jako samodzielne źródło emocji, rytmu i konstrukcji obrazu."},
+  "Henri Rousseau":{years:"1844–1910",style:"prymitywizm, malarstwo naiwne",breakthrough:"Jako samouk tworzył wyobrażone dżungle i dziwne, płaskie przestrzenie, które fascynowały awangardę świadomym odejściem od akademickiej poprawności."},
+  "Jackson Pollock":{years:"1912–1956",style:"ekspresjonizm abstrakcyjny, action painting",breakthrough:"Rozłożył płótno na podłodze i uczynił proces kapania oraz ruch całego ciała bezpośrednim zapisem powstawania obrazu."},
+  "Jacob Lawrence":{years:"1917–2000",style:"modernizm narracyjny",breakthrough:"W cyklach niewielkich paneli opowiadał historię czarnych Amerykanów rytmicznym kolorem i syntetyczną formą, łącząc dokument z epicką narracją."},
+  "Jasper Johns":{years:"ur. 1930",style:"neo-dada, prekursor pop-artu",breakthrough:"Używał flag, tarcz i cyfr — znaków już znanych widzowi — aby przesunąć uwagę z tematu na materialność i mechanizm patrzenia."},
+  "Jean Metzinger":{years:"1883–1956",style:"kubizm",breakthrough:"Teoretyzował wielość punktów widzenia i łączył kubistyczną konstrukcję z bardziej czytelną figuracją oraz dekoracyjnym kolorem."},
+  "Johannes Vermeer":{years:"1632–1675",style:"barok holenderski",breakthrough:"Z codziennych wnętrz stworzył precyzyjne studia światła, ciszy i uwagi, w których drobny gest nabiera psychologicznej wagi."},
+  "John Singer Sargent":{years:"1856–1925",style:"realizm, portret kosmopolityczny",breakthrough:"Łączył wirtuozerską, swobodną plamę z bezbłędnym wyczuciem pozy, stroju i społecznego charakteru modela."},
+  "Kazimir Malevich":{years:"1879–1935",style:"suprematyzm, awangarda rosyjska",breakthrough:"Sprowadził malarstwo do podstawowych figur i czystego odczucia, odrzucając obowiązek przedstawiania widzialnego świata."},
+  "Louis Comfort Tiffany":{years:"1848–1933",style:"Art Nouveau, sztuka dekoracyjna",breakthrough:"Traktował szkło jak medium malarskie, rozwijając opalizujące materiały i złożone przejścia barwne w oknach oraz przedmiotach."},
+  "Mabel Dwight":{years:"1876–1955",style:"realizm społeczny, litografia",breakthrough:"Z humorem i empatią obserwowała miejskie tłumy, kino, teatr i codzienne rytuały, przywracając litografii rolę nowoczesnego komentarza społecznego."},
+  "Marc Chagall":{years:"1887–1985",style:"modernizm poetycki",breakthrough:"Połączył żydowską pamięć rodzinnego Witebska, folklor i doświadczenie emigracji w unoszące się, nielogiczne obrazy działające jak sny."},
+  "Mary Cassatt":{years:"1844–1926",style:"impresjonizm",breakthrough:"Pokazywała nowoczesne życie kobiet i intymność opieki bez sentymentalizmu, eksperymentując z kadrem oraz inspiracją japońskim drzeworytem."},
+  "Meret Oppenheim":{years:"1913–1985",style:"surrealizm",breakthrough:"Przekształcała codzienne przedmioty przez zaskakujące zestawienia materiałów, wydobywając z nich cielesność, pragnienie i niepokój."},
+  "Pablo Picasso":{years:"1881–1973",style:"kubizm, modernizm",breakthrough:"Wielokrotnie zmieniał język sztuki; z Braque’em rozbił renesansową perspektywę, a później swobodnie przetwarzał figurę, mit i historię."},
+  "Paul Cézanne":{years:"1839–1906",style:"postimpresjonizm",breakthrough:"Budował naturę kolorem i podstawowymi bryłami, podważając jednolitą perspektywę i przygotowując grunt pod kubizm."},
+  "Paul Gauguin":{years:"1848–1903",style:"postimpresjonizm, syntetyzm",breakthrough:"Stosował płaskie pola koloru i symbol zamiast naturalizmu; jego dzieła są dziś czytane także krytycznie w kontekście kolonializmu."},
+  "Paul Klee":{years:"1879–1940",style:"modernizm, Bauhaus",breakthrough:"Łączył dziecięcą prostotę, muzyczny rytm, teorię koloru i subtelny humor, tworząc obrazy jak znaki nieistniejącego pisma."},
+  "Pierre-Auguste Renoir":{years:"1841–1919",style:"impresjonizm",breakthrough:"Światło i drgający kolor wykorzystał do scen towarzyskich oraz portretów, skupiając się na obecności ciała i przyjemności patrzenia."},
+  "Piet Mondrian":{years:"1872–1944",style:"neoplastycyzm, De Stijl",breakthrough:"Zredukował obraz do pionów, poziomów i barw podstawowych, szukając uniwersalnej równowagi niezależnej od przedstawiania natury."},
+  "Rembrandt":{years:"1606–1669",style:"barok holenderski",breakthrough:"Światło, gęstą farbę i gest podporządkował psychologii; bohaterów historycznych oraz zwykłych ludzi malował z niespotykaną empatią."},
+  "Salvador Dalí":{years:"1904–1989",style:"surrealizm",breakthrough:"Łączył akademicką precyzję z halucynacyjnymi obrazami snu, rozwijając własną metodę wydobywania irracjonalnych skojarzeń."},
+  "Starożytny Egipt":{years:"ok. 3000 p.n.e.–IV w. n.e.",style:"sztuka sakralna i królewska",breakthrough:"Nie jest to jeden artysta: dzieła powstawały według trwałych zasad zapewniających porządek, wieczność i skuteczność rytuału, a nie indywidualną ekspresję twórcy."},
+  "Stuart Davis":{years:"1892–1964",style:"amerykański modernizm, proto-pop",breakthrough:"Przekładał jazz, reklamę, szyldy i rytm ulicy na płaskie, ostre układy koloru, poprzedzając wizualny język pop-artu."},
+  "Sun Yuan & Peng Yu":{years:"duet aktywny od lat 90.",style:"chińska sztuka współczesna, instalacja",breakthrough:"Budują mechaniczne i performatywne sytuacje, w których technologia ujawnia przemoc, kontrolę, bezsens pracy oraz relację widza z władzą."},
+  "Vasily Kandinsky":{years:"1866–1944",style:"abstrakcja, ekspresjonizm",breakthrough:"Należał do pionierów malarstwa nieprzedstawiającego; kolor i linię traktował jak muzykę zdolną działać bez rozpoznawalnego tematu."},
+  "Vincent van Gogh":{years:"1853–1890",style:"postimpresjonizm",breakthrough:"Kolor, fakturę i rytm pociągnięć podporządkował intensywnemu doświadczeniu natury oraz emocji, wywierając ogromny wpływ na ekspresjonizm."},
+  "Willem de Kooning":{years:"1904–1997",style:"ekspresjonizm abstrakcyjny",breakthrough:"Łączył gwałtowny gest abstrakcji z uporczywie powracającą figurą, pokazując obraz jako pole ciągłego poprawiania i napięcia."},
+  "Winslow Homer":{years:"1836–1910",style:"realizm amerykański",breakthrough:"Z obserwacji wojny, pracy i morza stworzył surowe opowieści o człowieku wobec natury, bez heroicznego upiększenia."},
+  "Édouard Manet":{years:"1832–1883",style:"realizm, prekursor modernizmu",breakthrough:"Współczesne tematy i płaska, jawnie malarska powierzchnia podważyły akademicką iluzję oraz otworzyły drogę impresjonistom."}
+};

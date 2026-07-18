@@ -1,4 +1,4 @@
-const CACHE = "nyc-2026-v59";
+const CACHE = "nyc-2026-v62";
 const ASSETS = [
   "./",
   "./index.html",
@@ -19,6 +19,7 @@ const ASSETS = [
   ,"./assets/places/friends-house.jpg"
   ,"./assets/places/carrie-house.jpg"
   ,"./assets/places/magnolia.jpg"
+  ,...Array.from({length:124},(_,index)=>`./assets/photos/${String(index+1).padStart(3,"0")}.jpg`)
 ];
 
 self.addEventListener("install", event => {

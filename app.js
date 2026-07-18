@@ -165,8 +165,9 @@ function guideCard(item, audioKey = "", audioLabel = "Posłuchaj historii", cont
 
 function matyldaShoppingWishlist(area) {
   const shops=MATYLDA_SHOPS.filter(shop=>shop.area===area);
-  const labels={moda:"Moda",beauty:"Beauty i K-Beauty",fun:"Kultowe i kolekcjonerskie"};
-  return `<section class="shopping-wishlist"><div class="section-heading-row"><div><span class="mini-kicker">Pełna lista Matyldy</span><h3>Najpierw wybór, potem trasa</h3></div><span data-progress-for="shop-${area}-"></span></div><p class="panel-intro">Zaznaczenie oznacza „chcemy wejść”. Adres otwieramy w Mapach i potwierdzamy krótko przed wyjazdem, bo sklepy oraz pop-upy mogą się zmieniać.</p>${Object.entries(labels).map(([category,label])=>`<div class="shop-category"><h4>${label}</h4><div class="shop-choice-grid">${shops.filter(shop=>shop.category===category).map(shop=>`<article class="shop-choice checkable-card"><label><input type="checkbox" data-save-check="shop-${area}-${shop.id}"><span><strong>${shop.name}</strong><small>${shop.priority==="pop-up"?"tylko po potwierdzeniu pop-upu":`priorytet ${shop.priority}`}</small></span></label><p>${shop.note}</p><a href="${shop.map}" target="_blank" rel="noopener">Sprawdź lokalizację ↗</a></article>`).join("")}</div></div>`).join("")}</section>`;
+  const route=MATYLDA_SHOPPING_ROUTES[area];
+  const labels={moda:"Moda",beauty:"Beauty",fun:"Kultowe i kolekcjonerskie",food:"Słodki finał"};
+  return `<section class="shopping-wishlist"><div class="section-heading-row"><div><span class="mini-kicker">Zweryfikowane przy trasie dnia</span><h3>${route.title}</h3></div><span data-progress-for="shop-${area}-"></span></div><div class="shopping-route-box"><p>${route.note}</p><div class="related-row"><a href="${route.map}" target="_blank" rel="noopener">Spacer sklep po sklepie ↗</a><a href="${route.extra}" target="_blank" rel="noopener">${area==="midtown"?"MINISO przy hotelu":"Opcjonalnie: Crumbl"} ↗</a></div></div><p class="panel-intro">To nie lista do zaliczenia. Zaznaczcie dwa sklepy główne i najwyżej jeden szybki; kolejność poniżej odpowiada spacerowi z północy na południe.</p>${Object.entries(labels).map(([category,label])=>`<div class="shop-category"><h4>${label}</h4><div class="shop-choice-grid">${shops.filter(shop=>shop.category===category).map(shop=>`<article class="shop-choice checkable-card"><label><input type="checkbox" data-save-check="shop-${area}-${shop.id}"><span><strong>${shop.name}</strong><small>${shop.address} · ${shop.priority}</small></span></label><p>${shop.note}</p><a href="${shop.map}" target="_blank" rel="noopener">Pokaż ten sklep ↗</a></article>`).join("")}</div></div>`).join("")}</section>`;
 }
 
 function renderVillageFoodPanel(guide) {
@@ -318,7 +319,6 @@ function renderMomaGuide(day, guide) {
     <section class="day-panel" data-panel="shopping" hidden>
       <h3>Zakupy Matyldy · reguła 2 + 1</h3>
       <div class="notice">Wybierzcie dwa sklepy główne i najwyżej jeden szybki. Pięć propozycji nie jest listą do zaliczenia.</div>
-      <div class="food-list shopping-list">${guide.shopping.map(place => `<article class="food-card"><div><span class="mini-kicker">${place.category} · ${place.hours}</span><h4>${place.name}</h4><p>${place.address}</p><p>${place.note}</p></div><a href="${place.url}" target="_blank" rel="noopener">Oficjalna strona ↗</a></article>`).join("")}</div>
       ${matyldaShoppingWishlist("midtown")}
     </section>
     ${renderFoodPanel(guide)}
@@ -389,7 +389,7 @@ function renderSohoYankeesGuide(day, guide) {
   <section class="day-panel active" data-panel="overview"><div class="sheet-section"><h3>Plan dnia · wybierz punkt</h3>${timeline(day.items,guide.timelineTargets)}</div><div class="quick-filters"><button data-related-panel="shopping">Dla Matyldy</button><button data-related-panel="stories">Historia miasta</button><button data-related-panel="baseball">Dla laików</button><button data-related-panel="stadium">Mecz</button></div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div></section>
   <section class="day-panel" data-panel="route" hidden><div class="section-heading-row"><h3>SoHo i Nolita · fasady, nie lista sklepów</h3><span>sprawdzono ${guide.checked}</span></div><div class="route-list">${guide.route.map((x,i)=>`<article class="route-stop"><div class="route-number">${i+1}</div><div><span class="mini-kicker">${x.time}</span><h4>${x.title}</h4><p>${x.text}</p><div class="look-box"><strong>Rozejrzyj się:</strong> ${x.look}</div><button class="audio-chip" data-audio-key="syroute-${i}">▶ Posłuchaj na miejscu</button>${x.related?.length?`<div class="related-row">${x.related.map(r=>`<button data-related-panel="stories" data-related-key="${r.key}">${r.label} ›</button>`).join("")}</div>`:""}${i<guide.route.length-1?`<button class="next-stop" data-next-stop="${i+1}">Następny punkt →</button>`:""}</div></article>`).join("")}</div></section>
   <section class="day-panel" data-panel="stories" hidden><h3>Historie SoHo i wielkiej rywalizacji</h3><p class="panel-intro">Opowieści są połączone z punktami trasy i można je odtwarzać osobno.</p><div class="guide-grid">${guide.stories.map((x,i)=>guideCard(x,`systory-${i}`,"Posłuchaj historii",`systory-${i}`)).join("")}</div></section>
-  <section class="day-panel" data-panel="shopping" hidden><h3>Zakupy Matyldy · wybór, nie maraton</h3><div class="notice">Wybierzcie dwa sklepy główne i maksymalnie jeden szybki. O 14:15 kończą się zakupy niezależnie od kolejek.</div><div class="food-list shopping-list">${guide.shopping.map(x=>`<article class="food-card"><div><span class="mini-kicker">${x.category}</span><h4>${x.name}</h4><p>${x.address}</p><p>${x.note}</p></div><a href="${x.url}" target="_blank" rel="noopener">Oficjalne informacje ↗</a></article>`).join("")}</div>${matyldaShoppingWishlist("soho")}</section>
+  <section class="day-panel" data-panel="shopping" hidden><h3>Zakupy Matyldy · wybór, nie maraton</h3><div class="notice">Wybierzcie dwa sklepy główne i maksymalnie jeden szybki. O 14:15 kończą się zakupy niezależnie od kolejek.</div>${matyldaShoppingWishlist("soho")}</section>
   ${renderFoodPanel(guide)}
   <section class="day-panel" data-panel="rest" hidden><h3>Hotel · 45 minut zmiany trybu</h3><div class="notice">Zakupy zostają w pokoju. Woda, ładowanie telefonu, wygodne buty i bilety dodane do Apple Wallet. Ten bufor chroni Monument Park — nie zamieniamy go na kolejny sklep.</div></section>
   <section class="day-panel" data-panel="transport" hidden><h3>Manhattan → Bronx → hotel</h3><article class="event-card"><ul>${guide.transport.notes.map(x=>`<li>${x}</li>`).join("")}</ul></article><div class="link-grid compact-links"><a href="${guide.transport.returnUrl}" target="_blank" rel="noopener">Powrót po meczu <span>↗</span></a></div></section>
@@ -721,7 +721,7 @@ function renderToday() {
       <article class="today-next"><small>${beforeTrip?"Pierwszy punkt":"Teraz / następnie"}</small><strong>${next?.time || "Start"} · ${next?.title || day.title}</strong></article>
       <div class="today-actions"><button data-open-day="${day.id}">Otwórz dzień</button><button data-view-jump="wallet">Bilety</button><button data-view-jump="plan">Wszystkie dni</button></div>
     </section>
-    <section class="journey-progress"><div><strong>${stats.places}</strong><span>miejsc odwiedzonych</span></div><div><strong>${stats.works}</strong><span>dzieł zobaczonych</span></div><div><strong>${stats.days}/9</strong><span>dni zapisanych</span></div></section>
+    <section class="journey-progress"><div><strong>${stats.places}</strong><span>miejsc odwiedzonych</span></div><div><strong>${stats.works}</strong><span>dzieł zobaczonych</span></div><div><strong>9</strong><span>miejskich wypraw</span></div></section>
     <div class="section-title"><h3>Po kolei</h3><span>${day.items.length} punktów</span></div>${timeline(day.items)}`;
   bindDynamicActions();
 }
@@ -1097,8 +1097,7 @@ function journeyStats() {
   const keys=Object.keys(localStorage);
   return {
     places:keys.filter(key=>key.startsWith("nyc-check-place-visited-")&&localStorage.getItem(key)==="1").length,
-    works:keys.filter(key=>key.startsWith("nyc-check-museum-seen-")&&localStorage.getItem(key)==="1").length,
-    days:keys.filter(key=>key.startsWith("nyc-check-event-")&&localStorage.getItem(key)==="1").length
+    works:keys.filter(key=>key.startsWith("nyc-check-museum-seen-")&&localStorage.getItem(key)==="1").length
   };
 }
 
@@ -1150,10 +1149,16 @@ function museumWorkStatus(status) {
   return ["Sprawdź przed wizytą", "work-check"];
 }
 
+function worksCountLabel(count) {
+  if(count===1) return "1 dzieło";
+  if(count>=2&&count<=4) return `${count} dzieła`;
+  return `${count} dzieł`;
+}
+
 function renderMuseumHub() {
   app.innerHTML = `<div class="view-heading"><h2>Muzea</h2><p>Osobisty przewodnik Gosi: orientacja w budynku, szeroki wybór dzieł i własna lista bez ryzyka, że aplikacja wybierze wszystko za Was.</p></div>
     <div class="notice">„W kolekcji” nie znaczy automatycznie „na ścianie”. Przy każdym dziele pokazujemy osobno status ekspozycji, a listę aktualizujemy przed podróżą.</div>
-    <div class="museum-hub-grid">${MUSEUMS.map(museum => `<article class="museum-hub-card" style="--museum:${museum.accent}"><div class="museum-monogram">${museum.name.slice(0,2).toUpperCase()}</div><span class="mini-kicker">${museum.time}</span><h3>${museum.name}</h3><p>${museum.intro}</p><div class="museum-card-stats"><span>${museum.floors.length} poziomów/obszarów</span><span>${museum.works.length} dzieł w katalogu</span></div><button type="button" data-open-museum="${museum.id}">Otwórz przewodnik ›</button></article>`).join("")}</div>
+    <div class="museum-hub-grid">${MUSEUMS.map(museum => `<article class="museum-hub-card" style="--museum:${museum.accent}"><img class="museum-cover" src="${museum.coverImage}" alt="${museum.fullName}"><span class="mini-kicker">${museum.time}</span><h3>${museum.name}</h3><p>${museum.intro}</p><div class="museum-card-stats"><span>${museum.floors.length} poziomów/obszarów</span><span>${museum.works.length} dzieł w katalogu</span></div><button type="button" data-open-museum="${museum.id}">Otwórz przewodnik ›</button></article>`).join("")}</div>
     <div class="simple-card museum-method"><h3>Jak będziemy uzupełniać katalog?</h3><p>Dla znanych artystów lista ma być szeroka. Przed wyjazdem porównamy ją z oficjalnym filtrem „on view”, dzięki czemu Gosia zobaczy zarówno wszystkie interesujące prace w kolekcji, jak i realnie dostępny zestaw na dzień wizyty.</p></div>`;
   document.querySelectorAll("[data-open-museum]").forEach(button => button.addEventListener("click", () => renderMuseumDetail(button.dataset.openMuseum)));
 }
@@ -1167,7 +1172,7 @@ function museumWorkCard(work, museum) {
   const [statusLabel, statusClass] = museumWorkStatus(work.status);
   return `<details class="museum-work-card" data-work-search="${`${work.artist} ${work.title} ${work.section}`.toLocaleLowerCase("pl")}" data-work-priority="${work.priority}" data-work-status="${work.status}" data-work-artist="${work.artist}" data-work-section="${work.section}">
     <summary>${work.image?`<img class="work-image" src="${work.image}" alt="${work.title} · ${work.artist}">`:`<div class="work-visual" style="--museum:${museum.accent}"><span>${work.artist.split(" ").map(x=>x[0]).slice(0,2).join("")}</span></div>`}<div class="work-summary"><span class="mini-kicker">${work.artist} · ${work.year}</span><h4>${work.title}</h4><div class="work-badges"><span class="${work.priority === "must" ? "work-must" : "work-good"}">${work.priority === "must" ? "Must see" : "Warto zobaczyć"}</span><span class="${statusClass}">${statusLabel}</span><span>${work.floor==="sprawdź"||work.floor==="magazyn"?work.floor:`piętro ${work.floor}`}</span></div></div><span class="work-open">＋</span></summary>
-    <div class="work-detail"><p><strong>Styl / dział:</strong> ${work.section}</p><p><strong>Dlaczego jest ważne?</strong><br>${work.why}</p><div class="look-box"><strong>Jak czytać i na co patrzeć:</strong> ${work.look}</div><div class="work-actions"><label><input type="checkbox" data-save-check="museum-want-${work.id}"> chcę zobaczyć</label><label><input type="checkbox" data-save-check="museum-seen-${work.id}"> widziane</label><button class="audio-chip" type="button" data-museum-audio="${work.id}">▶ Posłuchaj przy dziele</button></div></div>
+    <div class="work-detail"><img class="work-detail-image" src="${work.image}" alt="${work.title} · ${work.artist}"><p><strong>Styl / dział:</strong> ${work.section}</p><p><strong>Dlaczego jest ważne?</strong><br>${work.why}</p><div class="look-box"><strong>Jak czytać i na co patrzeć:</strong> ${work.look}</div><div class="work-actions"><label><input type="checkbox" data-save-check="museum-want-${work.id}"> chcę zobaczyć</label><label><input type="checkbox" data-save-check="museum-seen-${work.id}"> widziane</label><button class="audio-chip" type="button" data-museum-audio="${work.id}">▶ Posłuchaj przy dziele</button></div></div>
   </details>`;
 }
 
@@ -1199,12 +1204,12 @@ function renderMuseumDetail(id) {
   const artists = [...new Set(museum.works.map(work => work.artist))].sort((a,b)=>a.localeCompare(b,"pl"));
   const sections = [...new Set(museum.works.map(work => work.section))].sort((a,b)=>a.localeCompare(b,"pl"));
   app.innerHTML = `<button class="view-back" type="button" id="museumHubBack">← Wszystkie muzea</button>
-    <section class="museum-hero" style="--museum:${museum.accent}"><span class="mini-kicker">${museum.time} · ${museum.works.length} dzieł do wyboru</span><h2>${museum.fullName}</h2><p>${museum.intro}</p><div class="hero-actions"><button class="button" data-linked-day="${museum.dayId}" data-linked-panel="${museum.dayPanel}">Otwórz w planie dnia</button><span data-progress-for="museum-seen-"></span></div></section>
+    <section class="museum-hero" style="--museum:${museum.accent}"><img src="${museum.coverImage}" alt="${museum.fullName}"><div><span class="mini-kicker">${museum.time} · ${museum.works.length} dzieł do wyboru</span><h2>${museum.fullName}</h2><p>${museum.intro}</p><div class="hero-actions"><button class="button" data-linked-day="${museum.dayId}" data-linked-panel="${museum.dayPanel}">Otwórz w planie dnia</button><span data-progress-for="museum-seen-"></span></div></div></section>
     <nav class="museum-tabs" aria-label="Sekcje muzeum"><button class="active" data-museum-panel="overview">Start</button><button data-museum-panel="floors">Piętra</button><button data-museum-panel="works">Dzieła</button><button data-museum-panel="artists">Artyści</button></nav>
     <section data-museum-content="overview"><div class="notice">${museum.statusNote}</div><div class="museum-start-grid"><article class="simple-card"><h3>60 minut</h3><p>Tylko zaznaczone Must see. Po pięciu dziełach oceńcie energię i nie próbujcie nadrabiać biegiem.</p></article><article class="simple-card"><h3>90–120 minut</h3><p>Must see oraz wybrani wcześniej artyści. To podstawowy wariant dla Whitney i Guggenheimu.</p></article><article class="simple-card"><h3>Pełny czas</h3><p>Własna lista Gosi, przerwa w połowie i najwyżej jedno spontaniczne odejście od trasy na piętro.</p></article></div><button class="button museum-primary-action" data-museum-jump="works">Wybierz dzieła przed wyjazdem</button></section>
     <section data-museum-content="floors" hidden><div class="view-heading compact"><h2>Jak duże jest muzeum?</h2><p>Uproszczony schemat pokazuje względną skalę i podział funkcjonalny. Nie zastępuje oficjalnego planu sal.</p></div>${museumFloorPlan(museum)}</section>
     <section data-museum-content="works" hidden><div class="museum-filter-bar"><label class="museum-search">Szukaj<input id="museumSearch" type="search" placeholder="artysta, dzieło lub dział"></label><label>Priorytet<select id="museumPriority"><option value="all">Wszystkie</option><option value="must">Must see</option><option value="good">Warto zobaczyć</option></select></label><label>Status<select id="museumStatus"><option value="all">Każdy status</option><option value="on">Na ekspozycji</option><option value="check">Do sprawdzenia</option><option value="off">Niewystawiane</option></select></label><label>Dział<select id="museumSection"><option value="all">Wszystkie działy</option>${sections.map(section=>`<option value="${section}">${section}</option>`).join("")}</select></label><label>Artysta<select id="museumArtist"><option value="all">Wszyscy artyści</option>${artists.map(artist=>`<option value="${artist}">${artist}</option>`).join("")}</select></label></div><div class="section-title"><h3>Katalog do własnego wyboru</h3><span id="museumFilterCount">${museum.works.length} dzieł</span></div><div class="museum-work-list">${museum.works.map(work=>museumWorkCard(work,museum)).join("")}</div></section>
-    <section data-museum-content="artists" hidden><div class="view-heading compact"><h2>Artyści i ich dzieła</h2><p>Rozwiń nazwisko, aby zobaczyć pełną zapisaną listę. Naciśnięcie dzieła otwiera jego kartę z datą, kontekstem i wskazówkami oglądania.</p></div><div class="museum-artist-groups">${artists.map(artist=>{const works=museum.works.filter(work=>work.artist===artist);return `<details class="museum-artist-group"><summary><strong>${artist}</strong><span>${works.length} ${works.length===1?"dzieło":"dzieła"}</span></summary><div class="artist-work-links">${works.map(work=>`<button type="button" data-work-jump="${work.id}" data-work-artist-jump="${artist}"><span>${work.title}</span><small>${work.year} · ${work.priority==="must"?"Must see":"Warto zobaczyć"}</small></button>`).join("")}</div></details>`}).join("")}</div></section>`;
+    <section data-museum-content="artists" hidden><div class="view-heading compact"><h2>Artyści i ich dzieła</h2><p>Każdy profil wyjaśnia styl, okres twórczości i najważniejszy przełom. Naciśnięcie dzieła otwiera jego pełną kartę.</p></div><div class="museum-artist-groups">${artists.map(artist=>{const works=museum.works.filter(work=>work.artist===artist);const profile=ARTIST_PROFILES[artist]||{years:"",style:"",breakthrough:""};return `<details class="museum-artist-group"><summary><div><strong>${artist}</strong><small>${profile.years} · ${profile.style}</small></div><span>${worksCountLabel(works.length)}</span></summary><div class="artist-profile"><b>Dlaczego jest ważny?</b><p>${profile.breakthrough}</p></div><div class="artist-work-links">${works.map(work=>`<button type="button" data-work-jump="${work.id}" data-work-artist-jump="${artist}"><img src="${work.image}" alt=""><span>${work.title}</span><small>${work.year} · ${work.priority==="must"?"Must see":"Warto zobaczyć"}</small></button>`).join("")}</div></details>`}).join("")}</div></section>`;
   document.getElementById("museumHubBack")?.addEventListener("click", renderMuseumHub);
   document.querySelectorAll("[data-museum-panel]").forEach(button=>button.addEventListener("click",()=>showMuseumPanel(button.dataset.museumPanel)));
   document.querySelectorAll("[data-museum-jump]").forEach(button=>button.addEventListener("click",()=>showMuseumPanel(button.dataset.museumJump)));
@@ -1278,17 +1283,6 @@ function renderWallet() {
   bindLinkedDayActions();
 }
 
-function dayMemoryMarkup(day) {
-  return `<section class="day-memory"><div><span class="mini-kicker">Wspomnienie z dnia ${day.day}</span><h3>Co zostaje z nami?</h3><p>Krótka notatka zostaje tylko na tym urządzeniu.</p></div><label><span>Ulubione miejsce</span><input id="dayMemoryFavorite" type="text" placeholder="np. koncert w Blue Note"></label><label><span>Jedno zdanie z tego dnia</span><textarea id="dayMemoryNote" rows="3" placeholder="Co było najbardziej nowojorskie?"></textarea></label><label class="memory-done"><input type="checkbox" data-save-check="event-${day.id}"><span>Dzień zapisany we wspomnieniach</span></label></section>`;
-}
-
-function bindDayMemory(dayId) {
-  const favorite=document.getElementById("dayMemoryFavorite");
-  const note=document.getElementById("dayMemoryNote");
-  if(favorite){favorite.value=localStorage.getItem(`nyc-memory-favorite-${dayId}`)||"";favorite.addEventListener("input",()=>localStorage.setItem(`nyc-memory-favorite-${dayId}`,favorite.value));}
-  if(note){note.value=localStorage.getItem(`nyc-memory-note-${dayId}`)||"";note.addEventListener("input",()=>localStorage.setItem(`nyc-memory-note-${dayId}`,note.value));}
-}
-
 function openDay(id, options = {}) {
   const { restore = true } = options;
   const day = DAYS.find(item => item.id === id);
@@ -1306,13 +1300,11 @@ function openDay(id, options = {}) {
     <p class="lead">${day.story}</p>
     ${dayAdventureMap(day)}
     <button class="context-back" id="dayContextBack" type="button" hidden>← Wróć</button>
-    ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}
-    ${dayMemoryMarkup(day)}`;
+    ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}`;
   sheet.hidden = false;
   sheetBackdrop.hidden = false;
   document.body.style.overflow = "hidden";
   sheet.scrollTop = 0;
-  bindDayMemory(day.id);
   bindSavedChecks();
   document.getElementById("dayContextBack")?.addEventListener("click", returnToPreviousDayContext);
   sheetContent.querySelectorAll("[data-day-map-direct]").forEach(button => button.addEventListener("click", () => showDayPanel(button.dataset.dayMapDirect, "", { remember:true, originLabel:"Mapa dnia" })));

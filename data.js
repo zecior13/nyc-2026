@@ -921,28 +921,45 @@ const PLACES = [
   { id:"guggenheim", title:"Guggenheim od środka", icon:"◌", category:"sztuka", text:"Rotunda Wrighta i dwugodzinna trasa Radka i Gosi przed Village.", meta:"23.08 · 10:30", dayId:"2026-08-23", panel:"guggenheim", map:"https://www.google.com/maps/search/?api=1&query=Solomon+R+Guggenheim+Museum" }
 ];
 
+const PLACE_PHOTO_NUMBERS = {
+  "times-square":"001","bryant-park":"002",moma:"003","rockefeller-shopping":"004",met:"005","central-park":"006",queens:"007","us-open":"008",liberty:"009",downtown:"010",westside:"011",summit:"012",soho:"013",yankees:"014",dumbo:"015",bargemusic:"016",harlem:"017","charlie-parker":"018",grandcentral:"019",guggenheim:"020"
+};
+PLACES.forEach(place=>{ if(PLACE_PHOTO_NUMBERS[place.id]) place.image=`assets/photos/${PLACE_PHOTO_NUMBERS[place.id]}.jpg`; });
+
 const MATYLDA_SHOPS = [
-  {id:"brandy",name:"Brandy Melville",category:"moda",area:"soho",priority:"wysoki",note:"Naturalny wybór na spacer po SoHo; przed wyjazdem sprawdzić aktualny adres sklepu.",map:"https://www.google.com/maps/search/?api=1&query=Brandy+Melville+New+York"},
-  {id:"american-eagle",name:"American Eagle",category:"moda",area:"midtown",priority:"wysoki",note:"Najwygodniej połączyć z Times Square. Dobry wspólny przystanek z Aerie.",map:"https://www.google.com/maps/search/?api=1&query=American+Eagle+Times+Square+New+York"},
-  {id:"aerie",name:"Aerie",category:"moda",area:"midtown",priority:"wysoki",note:"Sprawdzić, czy aktualnie działa razem z American Eagle w wybranej lokalizacji.",map:"https://www.google.com/maps/search/?api=1&query=Aerie+Times+Square+New+York"},
-  {id:"hollister",name:"Hollister",category:"moda",area:"midtown",priority:"średni",note:"Wariant zakupowy w rejonie Midtown; wybierać zamiast kolejnej podobnej sieciówki.",map:"https://www.google.com/maps/search/?api=1&query=Hollister+Manhattan+New+York"},
-  {id:"abercrombie",name:"Abercrombie & Fitch",category:"moda",area:"midtown",priority:"średni",note:"Dla 13-latki sprawdzić zarówno linię główną, jak i dostępność Abercrombie Kids.",map:"https://www.google.com/maps/search/?api=1&query=Abercrombie+Fitch+Fifth+Avenue+New+York"},
-  {id:"urban",name:"Urban Outfitters",category:"moda",area:"soho",priority:"wysoki",note:"Pasuje do dnia SoHo: ubrania, dodatki i popkulturowe drobiazgi w jednym miejscu.",map:"https://www.google.com/maps/search/?api=1&query=Urban+Outfitters+SoHo+New+York"},
-  {id:"pacsun",name:"PacSun",category:"moda",area:"soho",priority:"średni",note:"Streetwearowy kandydat; lokalizację potwierdzić przed spacerem.",map:"https://www.google.com/maps/search/?api=1&query=PacSun+Manhattan+New+York"},
-  {id:"garage",name:"Garage",category:"moda",area:"soho",priority:"wysoki",note:"Marka dobrze pasująca do profilu zakupów Matyldy; sprawdzić aktualny sklep na Broadwayu.",map:"https://www.google.com/maps/search/?api=1&query=Garage+Broadway+SoHo+New+York"},
-  {id:"princess-polly",name:"Princess Polly",category:"moda",area:"soho",priority:"pop-up",note:"Nie planujemy trasy pod ten punkt. Dodajemy tylko wtedy, gdy przed wyjazdem potwierdzimy pop-up w Nowym Jorku.",map:"https://www.google.com/maps/search/?api=1&query=Princess+Polly+pop+up+New+York"},
-  {id:"uniqlo",name:"Uniqlo",category:"moda",area:"midtown",priority:"wysoki",note:"Duży sklep przy Fifth Avenue; ustalić konkretną listę i limit czasu.",map:"https://www.google.com/maps/search/?api=1&query=Uniqlo+Fifth+Avenue+New+York"},
-  {id:"sephora",name:"Sephora",category:"beauty",area:"midtown",priority:"wysoki",note:"Łatwy do połączenia z Rockefeller Center; wcześniej ustalić produkty, żeby uniknąć długiego przeglądania.",map:"https://www.google.com/maps/search/?api=1&query=Sephora+Fifth+Avenue+New+York"},
-  {id:"ulta",name:"Ulta Beauty",category:"beauty",area:"midtown",priority:"średni",note:"Dobry wariant w rejonie Herald Square, ale tylko jeżeli ma marki niedostępne w Sephorze.",map:"https://www.google.com/maps/search/?api=1&query=Ulta+Beauty+Herald+Square+New+York"},
-  {id:"glossier",name:"Glossier",category:"beauty",area:"soho",priority:"wysoki",note:"Jeden z najbardziej charakterystycznych beauty-stopów w SoHo.",map:"https://www.google.com/maps/search/?api=1&query=Glossier+SoHo+New+York"},
-  {id:"teso",name:"Teso Life i K-Beauty",category:"beauty",area:"midtown",priority:"wysoki",note:"Połączyć z Koreatown: kosmetyki azjatyckie, przekąski i współczesny klimat miasta.",map:"https://www.google.com/maps/search/?api=1&query=Teso+Life+Koreatown+New+York"},
-  {id:"bath-body",name:"Bath & Body Works",category:"beauty",area:"midtown",priority:"średni",note:"Szybki przystanek na zapachy i drobne prezenty, nie osobny cel dnia.",map:"https://www.google.com/maps/search/?api=1&query=Bath+Body+Works+Midtown+Manhattan"},
-  {id:"nintendo",name:"Nintendo NY",category:"fun",area:"midtown",priority:"wysoki",note:"Kultowy sklep przy Rockefeller Plaza — bardziej atrakcja niż zwykłe zakupy.",map:"https://www.google.com/maps/search/?api=1&query=Nintendo+NY"},
-  {id:"lego",name:"LEGO Store",category:"fun",area:"midtown",priority:"średni",note:"Łatwy dodatek przy Rockefeller Center, jeżeli zostanie czas po sklepie głównym.",map:"https://www.google.com/maps/search/?api=1&query=LEGO+Store+Fifth+Avenue+New+York"},
-  {id:"fao",name:"FAO Schwarz",category:"fun",area:"midtown",priority:"wysoki",note:"Ikoniczny nowojorski sklep z zabawkami; warto wejść również bez planu dużych zakupów.",map:"https://www.google.com/maps/search/?api=1&query=FAO+Schwarz+Rockefeller+Plaza"},
-  {id:"pop-mart",name:"Pop Mart",category:"fun",area:"midtown",priority:"wysoki",note:"Figurki kolekcjonerskie; przed wyjazdem wybrać najwygodniejszą aktualną lokalizację.",map:"https://www.google.com/maps/search/?api=1&query=Pop+Mart+Manhattan+New+York"},
-  {id:"miniso",name:"Miniso",category:"fun",area:"midtown",priority:"średni",note:"Drobiazgi i prezenty; traktować jako szybki przystanek, jeśli leży na trasie.",map:"https://www.google.com/maps/search/?api=1&query=Miniso+Midtown+Manhattan"}
+  {id:"abercrombie",name:"Abercrombie & Fitch",category:"moda",area:"midtown",priority:"wysoki",address:"668 Fifth Avenue",note:"Tuż obok UNIQLO i MoMA; jeden z dwóch głównych wyborów dnia.",map:"https://www.google.com/maps/search/?api=1&query=Abercrombie+Fitch+668+Fifth+Avenue+New+York"},
+  {id:"uniqlo",name:"UNIQLO Fifth Avenue",category:"moda",area:"midtown",priority:"wysoki",address:"660 Fifth Avenue",note:"Flagship przy 53rd Street — dokładnie przy przejściu z MoMA w stronę Rockefeller Center.",map:"https://www.google.com/maps/search/?api=1&query=UNIQLO+660+Fifth+Avenue+New+York"},
+  {id:"sephora",name:"Sephora Fifth Avenue",category:"beauty",area:"midtown",priority:"wysoki",address:"580 Fifth Avenue",note:"Na południe od Rockefeller Center; nie wymaga odbijania do innej dzielnicy.",map:"https://www.google.com/maps/search/?api=1&query=Sephora+580+Fifth+Avenue+New+York"},
+  {id:"lego",name:"LEGO Store Fifth Avenue",category:"fun",area:"midtown",priority:"średni",address:"636 Fifth Avenue",note:"Przy Rockefeller Center; traktujcie jako krótki sklep-atrakcję.",map:"https://www.google.com/maps/search/?api=1&query=LEGO+Store+636+Fifth+Avenue+New+York"},
+  {id:"fao",name:"FAO Schwarz",category:"fun",area:"midtown",priority:"średni",address:"30 Rockefeller Plaza",note:"Ikoniczny sklep i wielki fortepian; leży obok Nintendo i LEGO.",map:"https://www.google.com/maps/search/?api=1&query=FAO+Schwarz+30+Rockefeller+Plaza+New+York"},
+  {id:"nintendo",name:"Nintendo NY",category:"fun",area:"midtown",priority:"wysoki",address:"10 Rockefeller Plaza",note:"Najbardziej „nowojorski” sklep Matyldy tego dnia; bardziej atrakcja niż zwykłe zakupy.",map:"https://www.google.com/maps/search/?api=1&query=Nintendo+NY+10+Rockefeller+Plaza"},
+  {id:"miniso",name:"MINISO Times Square",category:"fun",area:"midtown",priority:"średni",address:"155 W 41st Street",note:"Przy hotelu i Bryant Park; szybki finał dopiero po powrocie z Rockefeller Center.",map:"https://www.google.com/maps/search/?api=1&query=MINISO+155+West+41st+Street+New+York"},
+
+  {id:"urban",name:"Urban Outfitters SoHo",category:"moda",area:"soho",priority:"wysoki",address:"628 Broadway",note:"Najbardziej północny sklep pętli; stąd schodzicie Broadwayem bez zawracania.",map:"https://www.google.com/maps/search/?api=1&query=Urban+Outfitters+628+Broadway+New+York"},
+  {id:"american-aerie",name:"American Eagle + Aerie",category:"moda",area:"soho",priority:"wysoki",address:"599 Broadway",note:"Obie marki w jednej lokalizacji — nie liczymy ich jako dwóch osobnych przystanków.",map:"https://www.google.com/maps/search/?api=1&query=American+Eagle+Aerie+599+Broadway+New+York"},
+  {id:"hollister",name:"Hollister SoHo",category:"moda",area:"soho",priority:"średni",address:"547 Broadway",note:"Leży na tej samej osi Broadwayu; wybór zamienny wobec AE/Aerie.",map:"https://www.google.com/maps/search/?api=1&query=Hollister+547+Broadway+New+York"},
+  {id:"brandy",name:"Brandy Melville SoHo",category:"moda",area:"soho",priority:"wysoki",address:"519 Broadway",note:"Na trasie, ale lokalizacja ma niespójne bieżące informacje — koniecznie potwierdźcie ją w tygodniu wyjazdu.",map:"https://www.google.com/maps/search/?api=1&query=Brandy+Melville+519+Broadway+New+York"},
+  {id:"princess-polly",name:"Princess Polly SoHo",category:"moda",area:"soho",priority:"wysoki",address:"514 Broadway",note:"To stały sklep, nie pop-up. Leży w samym środku zakupowego odcinka.",map:"https://www.google.com/maps/search/?api=1&query=Princess+Polly+514+Broadway+New+York"},
+  {id:"garage",name:"Garage",category:"moda",area:"soho",priority:"wysoki",address:"508 Broadway",note:"Kilka kroków od Princess Polly i PacSun — bez dodatkowego dojścia.",map:"https://www.google.com/maps/search/?api=1&query=Garage+508+Broadway+New+York"},
+  {id:"pacsun",name:"PacSun SoHo",category:"moda",area:"soho",priority:"średni",address:"503 Broadway",note:"Dokładnie przy Broadway i Spring Street, czyli przy punkcie trasy dnia.",map:"https://www.google.com/maps/search/?api=1&query=PacSun+503+Broadway+New+York"},
+  {id:"glossier",name:"Glossier SoHo",category:"beauty",area:"soho",priority:"wysoki",address:"72 Spring Street",note:"Krótki beauty-stop jedną przecznicę od głównego ciągu sklepów.",map:"https://www.google.com/maps/search/?api=1&query=Glossier+72+Spring+Street+New+York"},
+  {id:"crumbl",name:"Crumbl · West Village",category:"food",area:"soho",priority:"opcjonalny",address:"195 Bleecker Street",note:"Opcjonalny słodki finał, około 15 minut od Glossier. Pomijacie bez żalu, jeśli zakupy się przeciągną.",map:"https://www.google.com/maps/search/?api=1&query=Crumbl+195+Bleecker+Street+New+York"}
 ];
+
+const MATYLDA_SHOPPING_ROUTES = {
+  midtown: {
+    title:"24.08 · Fifth Avenue i Rockefeller Center",
+    note:"MoMA → UNIQLO/Abercrombie → LEGO → Nintendo/FAO → Sephora. MINISO zostaje osobnym szybkim przystankiem przy hotelu i Bryant Park.",
+    map:"https://www.google.com/maps/dir/?api=1&origin=The+Museum+of+Modern+Art,+11+W+53rd+St,+New+York&destination=Sephora,+580+Fifth+Avenue,+New+York&waypoints=UNIQLO,+660+Fifth+Avenue,+New+York%7CLEGO+Store,+636+Fifth+Avenue,+New+York%7CNintendo+NY,+10+Rockefeller+Plaza,+New+York&travelmode=walking",
+    extra:"https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Bryant+Park,+New+York&waypoints=MINISO,+155+W+41st+St,+New+York&travelmode=walking"
+  },
+  soho: {
+    title:"28.08 · jeden ciąg po Broadwayu",
+    note:"Urban Outfitters → AE/Aerie → Hollister → Brandy → Princess Polly/Garage/PacSun → Glossier. Crumbl jest opcjonalnym finałem, nie obowiązkowym wydłużeniem.",
+    map:"https://www.google.com/maps/dir/?api=1&origin=Urban+Outfitters,+628+Broadway,+New+York&destination=Glossier,+72+Spring+Street,+New+York&waypoints=American+Eagle+Aerie,+599+Broadway,+New+York%7CHollister,+547+Broadway,+New+York%7CPrincess+Polly,+514+Broadway,+New+York&travelmode=walking",
+    extra:"https://www.google.com/maps/dir/?api=1&origin=Glossier,+72+Spring+Street,+New+York&destination=Crumbl,+195+Bleecker+Street,+New+York&travelmode=walking"
+  }
+};
 
 const WALLET_ITEMS = [
   { id:"hotel", type:"hotel", title:TRIP.hotel.name, date:"22–30.08 · 8 nocy", place:TRIP.hotel.address, status:"Potwierdzić numer rezerwacji", dayId:"2026-08-22", panel:"transport", map:"https://www.google.com/maps/search/?api=1&query=Holiday+Inn+New+York+City+Times+Square+585+8th+Avenue" },

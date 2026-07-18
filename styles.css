@@ -244,8 +244,8 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .place-detail-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0; }.place-detail-actions button,.place-detail-actions a{display:grid;place-items:center;min-height:42px;padding:9px;border:0;border-radius:12px;color:white;background:var(--navy);font-size:9px;font-weight:900;text-decoration:none}.place-detail-actions a{color:var(--navy);background:var(--taxi)}
 .place-visited { display:flex; align-items:center; gap:10px; padding:13px; border:1px solid var(--line); border-radius:15px; background:var(--card); }.place-visited input{width:20px;height:20px;accent-color:var(--brick)}.place-visited span,.place-visited strong,.place-visited small{display:block}.place-visited strong{font-size:10px}.place-visited small{color:var(--muted);font-size:8px}.place-visited.done{border-color:#78a48f;background:#edf7f2}
 .atlas-place-list.compact .atlas-place-card{grid-template-columns:50px 1fr 15px}.atlas-place-list.compact .atlas-place-card>img,.atlas-place-list.compact .atlas-place-visual{width:50px;height:64px}
-.day-memory { margin:22px 0 8px; padding:17px; border:1px solid #dfc54d; border-radius:20px; background:linear-gradient(145deg,#fff9df,#fffdf8); }.day-memory h3{margin:4px 0;font-family:Georgia,serif}.day-memory>div>p{margin:0 0 12px;color:var(--muted);font-size:9px}.day-memory label{display:block;margin-top:9px}.day-memory label>span{display:block;margin-bottom:4px;font-size:8px;font-weight:900}.day-memory input[type=text],.day-memory textarea{box-sizing:border-box;width:100%;padding:10px;border:1px solid #d8d0be;border-radius:11px;background:white;font:inherit;font-size:11px}.memory-done{display:flex!important;align-items:center;gap:8px;padding-top:8px;border-top:1px solid #e5dba9}.memory-done input{width:18px;height:18px;accent-color:var(--brick)}.memory-done span{margin:0!important}
 .shopping-wishlist { margin-top:24px; padding-top:18px; border-top:2px solid var(--navy); }.shopping-wishlist .section-heading-row h3{margin:3px 0}.shop-category{margin-top:17px}.shop-category>h4{margin:0 0 8px;color:var(--brick);font-size:11px}.shop-choice-grid{display:grid;gap:8px}.shop-choice{padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.shop-choice>label{display:flex;align-items:center;gap:9px}.shop-choice input{width:19px;height:19px;accent-color:var(--brick)}.shop-choice label span,.shop-choice label strong,.shop-choice label small{display:block}.shop-choice label strong{font-size:11px}.shop-choice label small{margin-top:2px;color:var(--brick);font-size:7px;font-weight:900;text-transform:uppercase}.shop-choice p{margin:8px 0;color:var(--muted);font-size:9px;line-height:1.45}.shop-choice>a{color:var(--navy);font-size:8px;font-weight:900;text-decoration:none}.shop-choice.done{border-color:#78a48f;background:#edf7f2}
+.shopping-route-box{margin:14px 0;padding:14px;border-radius:16px;background:var(--navy);color:#fff}.shopping-route-box p{margin:0 0 10px;font-size:10px;line-height:1.5}.shopping-route-box .related-row a{display:inline-flex;padding:9px 11px;border-radius:999px;background:var(--yellow);color:var(--navy);font-size:8px;font-weight:900;text-decoration:none}
 
 @media (min-width:720px) { .atlas-region-grid{grid-template-columns:repeat(3,1fr)}.atlas-place-list{grid-template-columns:1fr 1fr}.place-detail-grid{grid-template-columns:1fr 1fr}.place-detail-grid .photo-advice{grid-column:1/-1}.shop-choice-grid{grid-template-columns:1fr 1fr} }
 
@@ -486,6 +486,7 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .wallet-status { display:inline-block; margin-top:8px; padding:5px 8px; border-radius:999px; color:#744614; background:#f5e7c8; font-size:8.5px; font-weight:900; text-transform:uppercase; }
 .wallet-ready { color:#15583b; background:#dcefe5; }
 @media (min-width:720px) { .place-grid,.media-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:520px) { .museum-hero{grid-template-columns:1fr}.museum-hero>img{width:100%;height:150px;min-height:0}.museum-hero>div{padding:0 18px 18px}.artist-work-links button{grid-template-columns:38px 1fr}.artist-work-links button small{grid-column:2;text-align:left} }
 
 .notice { padding: 14px 15px; border-left: 4px solid var(--taxi); border-radius: 4px 14px 14px 4px; background: #fff4c7; font-size: 13px; line-height: 1.48; }
 
@@ -499,10 +500,13 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .museum-card-stats { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0; }
 .museum-card-stats span { padding:5px 7px; border-radius:999px; background:var(--paper); font-size:9px; font-weight:850; }
 .museum-hub-card > button,.view-back { padding:9px 11px; border:0; border-radius:11px; color:white; background:var(--navy); font-weight:850; }
+.museum-cover { display:block; width:calc(100% + 36px); height:150px; margin:-18px -18px 14px; object-fit:cover; }
 .museum-method { margin-top:16px; }
 
 .view-back { margin-bottom:12px; color:var(--navy); background:#e5e0d5; }
-.museum-hero { padding:20px; border-radius:22px; color:white; background:linear-gradient(145deg,color-mix(in srgb,var(--museum) 72%,var(--navy)),var(--navy)); box-shadow:var(--shadow); }
+.museum-hero { display:grid; grid-template-columns:112px 1fr; gap:16px; align-items:stretch; padding:0; overflow:hidden; border-radius:22px; color:white; background:linear-gradient(145deg,color-mix(in srgb,var(--museum) 72%,var(--navy)),var(--navy)); box-shadow:var(--shadow); }
+.museum-hero > img { width:112px; height:100%; min-height:210px; object-fit:cover; }
+.museum-hero > div { padding:20px 18px 18px 0; }
 .museum-hero h2 { margin:5px 0 8px; font-family:Georgia,serif; font-size:28px; }
 .museum-hero p { margin:0; color:rgba(255,255,255,.82); line-height:1.5; }
 .museum-hero .hero-actions { align-items:center; }
@@ -533,11 +537,17 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .museum-artist-group > summary::-webkit-details-marker { display:none; }
 .museum-artist-group > summary strong { font-size:12px; }
 .museum-artist-group > summary span { color:var(--muted); font-size:9px; }
+.museum-artist-group > summary div small { display:block; margin-top:3px; color:var(--brick); font-size:8px; font-weight:800; }
+.artist-profile { margin:0 10px 9px; padding:11px 12px; border-left:3px solid var(--museum); border-radius:4px 11px 11px 4px; background:#f8f2e8; }
+.artist-profile b { font-size:9px; }
+.artist-profile p { margin:4px 0 0; color:var(--muted); font-size:10px; line-height:1.5; }
 .artist-work-links { display:grid; gap:6px; padding:0 9px 9px; }
-.artist-work-links button { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 10px; border:0; border-radius:10px; color:var(--navy); background:#f2eee5; text-align:left; }
+.artist-work-links button { display:grid; grid-template-columns:38px 1fr auto; align-items:center; gap:9px; padding:7px 9px; border:0; border-radius:10px; color:var(--navy); background:#f2eee5; text-align:left; }
+.artist-work-links img { width:38px; height:38px; border-radius:8px; object-fit:cover; background:#ddd; }
 .artist-work-links span { font-size:10px; font-weight:850; }
 .artist-work-links small { color:var(--muted); font-size:8px; text-align:right; }
 .work-image { width:48px; height:48px; object-fit:cover; border-radius:10px; }
+.work-detail-image { display:block; width:100%; max-height:520px; margin-bottom:13px; border-radius:12px; object-fit:contain; background:#e8e4dc; }
 
 .museum-filter-bar { display:grid; grid-template-columns:2fr repeat(3,1fr); gap:8px; padding:12px; border-radius:17px; background:#e9e4d9; }
 .museum-filter-bar label { display:grid; gap:4px; color:var(--muted); font-size:9px; font-weight:850; text-transform:uppercase; }
