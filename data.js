@@ -76,19 +76,22 @@ const DAYS = [
   },
   {
     id: "2026-08-26", day: 5, date: "26.08", weekday: "środa",
-    title: "Queens i US Open",
-    subtitle: "Long Island City → Flushing → Flushing Meadows",
-    accent: "river", tags: ["Queens", "jedzenie", "tenis"],
-    story: "Dzień poza Manhattanem prowadzi od przemysłowego nabrzeża przez migracyjny Nowy Jork i wystawę światową do wielkiego sportu.",
+    title: "Midtown, Queens i US Open",
+    subtitle: "Fifth Avenue → SUMMIT → Long Island City → Flushing",
+    accent: "river", tags: ["Midtown", "Queens", "tenis"],
+    story: "Poranek pokazuje ikoniczny Midtown z góry i z ulicy, a potem dzień prowadzi przez przemysłowe nabrzeże, migracyjny Nowy Jork i wystawę światową do wielkiego sportu.",
     items: [
-      { time: "10:30", title: "Spokojne śniadanie", note: "Bez pośpiechu po intensywnym dniu muzealnym i Broadwayu.", type: "plan" },
-      { time: "11:15", title: "Gantry Plaza State Park", note: "Suwnice, znak Pepsi i panorama Midtown.", type: "plan" },
+      { time: "07:00", title: "Szybkie śniadanie", note: "Bajgiel i kawa po drodze — ten poranek zaczyna się wcześniej.", type: "plan" },
+      { time: "07:40", title: "Empire State i Fifth Avenue", note: "Empire State Building z zewnątrz i spacer Fifth Avenue w stronę Grand Central.", type: "plan" },
+      { time: "08:30", title: "SUMMIT One Vanderbilt", note: "Pierwszy poranny slot i około 90 minut na trzy poziomy instalacji oraz panoramę.", type: "fixed" },
+      { time: "10:05", title: "Grand Central i katedra św. Patryka", note: "Krótki Main Concourse, spacer na Fifth Avenue i 15–20 minut wewnątrz katedry.", type: "plan" },
+      { time: "11:20", title: "Gantry Plaza State Park", note: "Suwnice, znak Pepsi i panorama Midtown oglądanego rano z góry.", type: "plan" },
       { time: "14:20", title: "Kulinarne Flushing", note: "Kilka małych dań zamiast jednej ciężkiej kolacji.", type: "plan" },
       { time: "16:35", title: "Unisphere", note: "Opcja mocno rekomendowana, pomijana przy upale lub opóźnieniu.", type: "option" },
       { time: "17:30", title: "Wejście do US Open", note: "Kontrola bezpieczeństwa, teren kompleksu i znalezienie miejsc.", type: "fixed" },
       { time: "19:00", title: "US Open Mixed Doubles", note: "Półfinały i finał; koniec zależny od przebiegu meczów.", type: "fixed" }
     ],
-    essentials: ["Bilety w aplikacji US Open", "Bez zwykłych plecaków", "Mała torba maks. 12 × 12 × 16 cali"]
+    essentials: ["Rezerwacja SUMMIT na pierwszy poranny slot", "Bilety w aplikacji US Open", "Bez zwykłych plecaków", "Mała torba maks. 12 × 12 × 16 cali"]
   },
   {
     id: "2026-08-27", day: 6, date: "27.08", weekday: "czwartek",
@@ -454,11 +457,22 @@ const DAY_GUIDES = {
   "2026-08-26": {
     kind: "queens",
     checked: "16.07.2026",
-    timelineTargets: ["food", "route", "food", "route", "tennis", "tennis"],
+    timelineTargets: ["food", "morning", "morning", "morning", "route", "food", "route", "tennis", "tennis"],
+    morning: {
+      route: [
+        { time: "07:00–07:30", title: "Szybkie śniadanie", text: "Best Bagel & Coffee przy 35th Street pasuje do kierunku spaceru. Zamówcie do ręki, zamiast zaczynać dzień od długiego śniadania przy stoliku.", look: "Nowojorski poranny rytm: kolejka przesuwa się szybko, a bajgiel można zjeść przed Empire State." },
+        { time: "07:40–08:15", title: "Empire State Building i Fifth Avenue", text: "Empire State oglądacie z zewnątrz. Następnie idźcie na północ Fifth Avenue do 42nd Street — to krótki przekrój przez klasyczny Midtown.", look: "Art déco, cofające się ku górze kondygnacje Empire State i widok wieży między fasadami Fifth Avenue." },
+        { time: "08:30–10:00", title: "SUMMIT One Vanderbilt", text: "Trzy poziomy łączą panoramę z instalacją AIR autorstwa Kenzo Digital, lustrami, kulami Affinity i tarasem na 93. piętrze. Rezerwujcie pierwszy dostępny poranny slot.", look: "Porównajcie Chrysler Building, Central Park, East River i Empire State — rano światło jest zupełnie inne niż przy wieczornym tarasie." },
+        { time: "10:05–10:20", title: "Grand Central Terminal", text: "Wejście do SUMMIT jest połączone z Grand Central, więc wykorzystajcie przejście przez Main Concourse bez osobnego powrotu ostatniego dnia.", look: "Turkusowy sufit z gwiazdozbiorami, zegar nad punktem informacji i kamienne łuki terminalu." },
+        { time: "10:30–10:50", title: "Katedra św. Patryka", text: "Podejdźcie Madison Avenue na 50th Street i zajrzyjcie do środka na kilkanaście minut. To neogotycki kontrapunkt dla Rockefeller Center po drugiej stronie Fifth Avenue.", look: "Białe marmurowe iglice, rozeta, sklepienia i ołtarz wciśnięte między komercyjne wieżowce Midtown." },
+        { time: "10:50–11:20", title: "Przejazd do Long Island City", text: "Z okolic Rockefeller Center jedźcie metrem do Vernon Boulevard–Jackson Avenue, a następnie podejdźcie do Gantry Plaza.", look: "Po wyjściu z metra zmienia się skala zabudowy i odsłania panorama Manhattanu po drugiej stronie East River." }
+      ],
+      practical: ["SUMMIT rekomenduje około 90 minut", "Weźcie okulary przeciwsłoneczne — lustrzane powierzchnie są bardzo jasne", "Najlepiej spodnie lub szorty; lustrzane podłogi nie sprzyjają spódnicom", "W katedrze zachowujemy ciszę i sprawdzamy, czy nie trwa msza"]
+    },
     route: [
-      { time: "11:15–12:45", title: "Gantry Plaza · przemysłowa rama panoramy", text: "Zacznijcie przy dwóch monumentalnych suwnicach przeładunkowych i idźcie nabrzeżem na północ. Park ma około 12 akrów, a po drugiej stronie rzeki widać ONZ i Empire State Building.", look: "Ustawcie sylwetkę Manhattanu między nogami suwnicy. Zobaczcie, że Queens było zapleczem portowym i kolejowym, zanim stało się dzielnicą apartamentowców.", related: [{ key: "qstory-0", label: "Po co były suwnice?" }] },
-      { time: "12:45–13:10", title: "Pepsi-Cola Sign", text: "Czerwony neon stał niegdyś na rozlewni Pepsi działającej przy nabrzeżu od 1938 roku. Fabrykę zamknięto i rozebrano, ale znak zachowano jako zabytek miejskiego krajobrazu.", look: "Najlepszy punkt orientacyjny to czerwone litery ustawione równolegle do East River; za nimi widać Midtown.", related: [{ key: "qstory-1", label: "Historia znaku Pepsi" }] },
-      { time: "13:10–14:20", title: "Przejazd 7 do Flushing", text: "Linia 7 jest osią północnego Queens. Z okien naziemnego odcinka widać dzielnice ukształtowane przez kolejne fale migracji. Wysiądźcie na końcowej Flushing–Main Street.", look: "Obserwujcie zmianę szyldów, języków i zabudowy między Long Island City a Flushing.", related: [{ key: "qstory-2", label: "Dlaczego Flushing jest inne?" }] },
+      { time: "11:20–12:40", title: "Gantry Plaza · przemysłowa rama panoramy", text: "Zacznijcie przy dwóch monumentalnych suwnicach przeładunkowych i idźcie nabrzeżem na północ. Park ma około 12 akrów, a po drugiej stronie rzeki widać ONZ i Empire State Building.", look: "Ustawcie sylwetkę Manhattanu między nogami suwnicy. Zobaczcie, że Queens było zapleczem portowym i kolejowym, zanim stało się dzielnicą apartamentowców.", related: [{ key: "qstory-0", label: "Po co były suwnice?" }] },
+      { time: "12:40–13:00", title: "Pepsi-Cola Sign", text: "Czerwony neon stał niegdyś na rozlewni Pepsi działającej przy nabrzeżu od 1938 roku. Fabrykę zamknięto i rozebrano, ale znak zachowano jako zabytek miejskiego krajobrazu.", look: "Najlepszy punkt orientacyjny to czerwone litery ustawione równolegle do East River; za nimi widać Midtown.", related: [{ key: "qstory-1", label: "Historia znaku Pepsi" }] },
+      { time: "13:00–14:20", title: "Przejazd 7 do Flushing", text: "Linia 7 jest osią północnego Queens. Z okien naziemnego odcinka widać dzielnice ukształtowane przez kolejne fale migracji. Wysiądźcie na końcowej Flushing–Main Street.", look: "Obserwujcie zmianę szyldów, języków i zabudowy między Long Island City a Flushing.", related: [{ key: "qstory-2", label: "Dlaczego Flushing jest inne?" }] },
       { time: "14:20–16:15", title: "Flushing · spacer jedzeniowy", text: "To nie jedna „chińska restauracja”, lecz wiele regionalnych kuchni Chin oraz wpływy koreańskie i tajwańskie. Wybierzcie dwa małe dania i deser zamiast jednej ciężkiej uczty.", look: "Main Street, Roosevelt Avenue, podziemny food court New World Mall i kolejki mieszkańców, nie tylko turystyczne rankingi.", related: [{ panel: "food", label: "Wybierz jedzenie" }, { key: "qstory-3", label: "Jak jeść w food courcie?" }] },
       { time: "16:35–17:05", title: "Unisphere i ślady World’s Fair", text: "Stalowy glob o wysokości około 43 metrów został zbudowany jako symbol targów światowych 1964–65. Park wcześniej powstał na potrzeby targów 1939–40, na dawnych mokradłach i wysypisku popiołu.", look: "Orbity trzech pierwszych sztucznych satelitów i pozostałości New York State Pavilion w oddali.", related: [{ key: "qstory-4", label: "Dwie wystawy światowe" }] },
       { time: "17:30", title: "National Tennis Center", text: "Podejdźcie do wejścia bez zwykłych plecaków. Po kontroli znajdźcie stadion, toalety i punkt z wodą, zanim zacznie się sesja.", look: "Arthur Ashe Stadium jest największym stadionem tenisowym świata; sprawdźcie na bilecie, na którym obiekcie rozgrywany jest mikst.", related: [{ panel: "tennis", label: "Instrukcja stadionowa" }] }
@@ -497,13 +511,16 @@ const DAY_GUIDES = {
       { category: "Na stadionie", name: "US Open concessions", price: "$$–$$$", address: "National Tennis Center", note: "Wygodnie, lecz drożej. Po Flushing wystarczy napój lub przekąska zamiast kolejnej pełnej kolacji.", url: "https://www.usopen.org/en_US/visit/at_the_open.html" }
     ],
     variants: [
-      { title: "Wersja pełna", text: "Gantry i Pepsi → linia 7 → food crawl → Unisphere → wejście 17:30 → tenis." },
+      { title: "Wersja pełna", text: "Empire State z zewnątrz → SUMMIT → Grand Central i katedra → Gantry i Pepsi → Flushing → Unisphere → tenis." },
       { title: "Upał", text: "Skróćcie nabrzeże do 45 minut, zjedzcie w klimatyzowanym New World Mall i jedźcie bezpośrednio do stadionu. Unisphere tylko przy zapasie energii." },
       { title: "Zmęczenie po Broadwayu", text: "Późniejszy start → Gantry i Pepsi → jedno miejsce w Flushing → stadion. Pomijamy Unisphere, choć jest blisko kompleksu." },
       { title: "Deszcz", text: "Krótki Gantry lub pominięcie nabrzeża → dłuższy moduł kulinarny pod dachem → wcześniejsze wejście. Stała sesja tenisowa pozostaje." }
     ],
     links: [
-      { label: "Start · hotel → Gantry Plaza", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Gantry+Plaza+State+Park,+Queens,+NY&travelmode=transit" },
+      { label: "Poranek · hotel → Best Bagel → Empire State → SUMMIT", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=SUMMIT+One+Vanderbilt,+New+York&waypoints=Best+Bagel+and+Coffee,+225+W+35th+St,+New+York%7CEmpire+State+Building,+New+York&travelmode=walking" },
+      { label: "SUMMIT → Grand Central → St. Patrick’s Cathedral", url: "https://www.google.com/maps/dir/?api=1&origin=SUMMIT+One+Vanderbilt,+New+York&destination=St.+Patrick%27s+Cathedral,+New+York&waypoints=Grand+Central+Terminal,+New+York&travelmode=walking" },
+      { label: "St. Patrick’s → Gantry Plaza", url: "https://www.google.com/maps/dir/?api=1&origin=St.+Patrick%27s+Cathedral,+New+York&destination=Gantry+Plaza+State+Park,+Queens,+NY&travelmode=transit" },
+      { label: "SUMMIT · oficjalna strona i bilety", url: "https://summitov.com/" },
       { label: "Spacer · Gantry → Pepsi-Cola Sign", url: "https://www.google.com/maps/dir/?api=1&origin=Gantry+Plaza+State+Park,+Queens,+NY&destination=Pepsi-Cola+Sign,+Queens,+NY&travelmode=walking" },
       { label: "Pepsi Sign → Flushing–Main Street", url: "https://www.google.com/maps/dir/?api=1&origin=Pepsi-Cola+Sign,+Queens,+NY&destination=Flushing-Main+Street+Station,+Queens,+NY&travelmode=transit" },
       { label: "Food crawl · New World Mall → Nan Xiang → Tai Pan", url: "https://www.google.com/maps/dir/?api=1&origin=New+World+Mall,+Flushing,+NY&destination=Tai+Pan+Bakery,+37-25+Main+St,+Flushing,+NY&waypoints=Nan+Xiang+Xiao+Long+Bao,+39-16+Prince+St,+Flushing,+NY&travelmode=walking" },
@@ -584,7 +601,6 @@ const DAY_GUIDES = {
     ],
     evening: [
       { title: "Domyślnie · spokojna kolacja", text: "Koreatown albo Hell’s Kitchen bez biletu, kolejki i presji dobrej pogody." },
-      { title: "SUMMIT One Vanderbilt", text: "Tylko przy dobrej widoczności. Bilet kupujemy tego samego dnia po sprawdzeniu pogody." },
       { title: "Little Island i Hudson", text: "Bezpłatny zachód słońca, ale wymaga powrotu na południe. Lepiej połączyć z wcześniejszym końcem High Line." },
       { title: "Koreatown dla Matyldy", text: "K-beauty, przekąski, photobooth albo karaoke — najbardziej współczesny i najmniej muzealny wariant." }
     ],
@@ -892,7 +908,7 @@ const TO_BUY = [
   { title: "Whitney Museum", status: "Do rezerwacji", kind: "todo", when: "27.08 · 13:30", text: "Wybrać wejście czasowe po zatwierdzeniu dnia. Dla Matyldy również dodać właściwy bilet, nawet jeśli będzie bezpłatny.", action: "Bilety Whitney", url: "https://whitney.org/tickets" },
   { title: "NYC Ferry · Pier 79 → St. George", status: "W dniu rejsu", kind: "dayof", when: "27.08 · rano", text: "Nie kupować wiele miesięcy wcześniej. Kupić i aktywować w aplikacji tuż przed wejściem. Staten Island Ferry w drodze powrotnej jest bezpłatny.", action: "Rozkład i bilety", url: "https://www.ferry.nyc/routes-and-schedules/st-george/" },
   { title: "Bargemusic", status: "Po publikacji programu", kind: "later", when: "29.08", text: "Sprawdzić dokładny koncert i zasady rezerwacji, gdy organizator opublikuje pełny kalendarz na sierpień.", action: "Sprawdź program", url: "https://www.bargemusic.org/" },
-  { title: "SUMMIT One Vanderbilt", status: "Tylko dobra pogoda", kind: "dayof", when: "wariant 27.08", text: "Nie rezerwować teraz. To elastyczny wieczorny wariant kupowany tego samego dnia po sprawdzeniu widoczności.", action: "Oficjalna strona", url: "https://summitov.com/" }
+  { title: "SUMMIT One Vanderbilt", status: "Do rezerwacji", kind: "todo", when: "26.08 · pierwszy poranny slot", text: "Kupić bilet czasowy na około 8:30. Rano przeznaczamy około 90 minut, a następnie jedziemy przez katedrę św. Patryka do Gantry Plaza.", action: "Oficjalna strona", url: "https://summitov.com/" }
   ,{ title: "Guggenheim", status: "Do kupienia", kind: "todo", when: "23.08 · 10:30", text: "Plan główny dla Radka i Gosi. Rezerwacja na pierwsze wejście i twarde wyjście o 12:30.", action: "Godziny i bilety", url: "https://www.guggenheim.org/buy-tickets" }
 ];
 
@@ -910,7 +926,7 @@ const PLACES = [
   { id:"liberty", title:"Port i Statua Wolności", icon:"★", category:"zdjęcia", text:"Dwa promy i instrukcja wspólnego ikonicznego zdjęcia.", meta:"27.08 · rano", dayId:"2026-08-27", panel:"photos", map:"https://www.google.com/maps/search/?api=1&query=Whitehall+Terminal+New+York" },
   { id:"downtown", title:"Lower Manhattan", icon:"$", category:"historia", text:"Charging Bull, Wall Street oraz 9/11 Memorial bez muzeum.", meta:"27.08 · rano", dayId:"2026-08-27", panel:"downtown", map:"https://www.google.com/maps/search/?api=1&query=Charging+Bull+New+York" },
   { id:"westside", title:"Whitney i High Line", icon:"↗", category:"sztuka", text:"Sztuka amerykańska, Meatpacking, dawna kolej i Hudson Yards.", meta:"27.08 · popołudnie", dayId:"2026-08-27", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Whitney+Museum+New+York" },
-  { id:"summit", title:"SUMMIT One Vanderbilt", icon:"△", category:"zdjęcia", status:"Opcjonalne · decyzja pogodowa", text:"Wieczorny widok na Manhattan i lustrzane instalacje. Bilet kupujemy dopiero tego samego dnia przy dobrej widoczności.", meta:"27.08 · wieczór", dayId:"2026-08-27", panel:"evening", map:"https://www.google.com/maps/search/?api=1&query=SUMMIT+One+Vanderbilt+New+York" },
+  { id:"summit", title:"SUMMIT One Vanderbilt", icon:"△", category:"zdjęcia", status:"Plan główny · rezerwacja czasowa", text:"Poranna panorama Manhattanu i trzy poziomy lustrzanych instalacji przed wyjazdem do Queens.", meta:"26.08 · 08:30", dayId:"2026-08-26", panel:"morning", map:"https://www.google.com/maps/search/?api=1&query=SUMMIT+One+Vanderbilt+New+York" },
   { id:"soho", title:"SoHo i Nolita", icon:"◇", category:"dla Matyldy", text:"Żeliwne fasady, streetwear, kosmetyki i niezależne butiki.", meta:"28.08 · rano", dayId:"2026-08-28", panel:"route", map:"https://www.google.com/maps/search/?api=1&query=Greene+Street+SoHo+New+York" },
   { id:"yankees", title:"Yankee Stadium", icon:"⚾", category:"sport", text:"Monument Park, zasady baseballu i Yankees–Red Sox.", meta:"28.08 · 19:05", dayId:"2026-08-28", panel:"stadium", map:"https://www.google.com/maps/search/?api=1&query=Yankee+Stadium" },
   { id:"dumbo", title:"DUMBO i Brooklyn Bridge Park", icon:"▱", category:"zdjęcia", text:"Manhattan Bridge, portowe magazyny, panorama i Bargemusic.", meta:"29.08 · rano", dayId:"2026-08-29", panel:"brooklyn", map:"https://www.google.com/maps/search/?api=1&query=Washington+Street+DUMBO" },
