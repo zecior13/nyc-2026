@@ -1223,6 +1223,9 @@ document.getElementById("homeButton").addEventListener("click", () => setView("h
 document.getElementById("closeSheetButton").addEventListener("click", closeSheet);
 sheetBackdrop.addEventListener("click", closeSheet);
 document.addEventListener("keydown", event => { if (event.key === "Escape" && !sheet.hidden) closeSheet(); });
+window.addEventListener("pageshow", () => {
+  if (currentView === "home") window.scrollTo(0, 0);
+});
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
