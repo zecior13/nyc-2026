@@ -12,6 +12,7 @@ let countdownTimer = null;
 let activeDayId = null;
 let currentDayPanel = "overview";
 let dayPanelHistory = [];
+let daySwipeController = null;
 const savedDayStates = new Map();
 
 // Tekst widoczny w aplikacji pozostaje oryginalny. Ten słownik służy wyłącznie
@@ -1332,6 +1333,38 @@ function renderWallet() {
   bindLinkedDayActions();
 }
 
+function bindDaySwipe(dayId) {
+  daySwipeController?.abort();
+  daySwipeController = new AbortController();
+  const signal = daySwipeController.signal;
+  let start = null;
+  const blocked = target => target.closest(".day-map-board,[data-gesture-map],.day-tabs,.day-module-nav,.museum-tabs,a,button,input,label,summary,select,textarea");
+  sheetContent.addEventListener("touchstart", event => {
+    if (event.touches.length !== 1 || blocked(event.target)) { start = null; return; }
+    const touch = event.touches[0];
+    start = { x:touch.clientX, y:touch.clientY, time:Date.now() };
+  }, { passive:true, signal });
+  sheetContent.addEventListener("touchcancel", () => { start = null; }, { passive:true, signal });
+  sheetContent.addEventListener("touchend", event => {
+    if (!start || event.changedTouches.length !== 1) { start = null; return; }
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    const elapsed = Date.now() - start.time;
+    start = null;
+    if (elapsed > 900 || Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.35) return;
+    const index = DAYS.findIndex(day => day.id === dayId);
+    const direction = dx < 0 ? 1 : -1;
+    const next = DAYS[index + direction];
+    if (!next) {
+      sheetContent.animate?.([{transform:"translateX(0)"},{transform:`translateX(${direction > 0 ? -10 : 10}px)`},{transform:"translateX(0)"}],{duration:180,easing:"ease-out"});
+      return;
+    }
+    openDay(next.id,{restore:false});
+    sheetContent.animate?.([{transform:`translateX(${direction > 0 ? 24 : -24}px)`,opacity:.72},{transform:"translateX(0)",opacity:1}],{duration:210,easing:"cubic-bezier(.2,.8,.2,1)"});
+  }, { passive:true, signal });
+}
+
 function openDay(id, options = {}) {
   const { restore = true } = options;
   const day = DAYS.find(item => item.id === id);
@@ -1347,6 +1380,7 @@ function openDay(id, options = {}) {
     <p class="sheet-kicker">Dzień ${day.day} · ${day.date} · ${day.weekday}</p>
     <h2 id="sheetTitle">${day.title}</h2>
     <p class="lead">${day.story}</p>
+    <div class="day-swipe-hint" aria-label="Przesuwanie między dniami"><span>${day.day>1?"← poprzedni":""}</span><b>przesuń dzień palcem</b><span>${day.day<DAYS.length?"następny →":""}</span></div>
     ${dayAdventureMap(day)}
     <button class="context-back" id="dayContextBack" type="button" hidden>← Wróć</button>
     ${guide ? renderDayGuide(day) : `<div class="sheet-section"><h3>Plan dnia</h3>${timeline(day.items)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div>`}`;
@@ -1453,6 +1487,7 @@ function openDay(id, options = {}) {
       updateContextBackButton();
     }
   }
+  bindDaySwipe(id);
 }
 
 if ("speechSynthesis" in window) speechSynthesis.addEventListener?.("voiceschanged", populateVoiceSelect);
