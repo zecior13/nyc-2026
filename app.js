@@ -242,6 +242,32 @@ function renderVillageGuide(day, guide) {
     </section>`;
 }
 
+function renderArrivalFoodPanel(guide) {
+  const groups = [
+    { title:"Najmniej energii · blisko hotelu", items:guide.food.filter(item=>/Pizza blisko/i.test(item.category)) },
+    { title:"Kolacja połączona z Times Square", items:guide.food.filter(item=>/Szybko i kultowo/i.test(item.category)) },
+    { title:"Spokojniej przy stoliku · tylko gdy macie siłę", items:guide.food.filter(item=>/przy stoliku/i.test(item.category)) }
+  ];
+  return `<section class="day-panel" data-panel="food" hidden><h3>Kolacja według poziomu energii</h3><p class="panel-intro">Pierwszego wieczoru wybór lokalu podporządkowujemy zmęczeniu po locie.</p>${groups.map(group=>`<section class="food-moment"><div class="food-moment-head"><span>${group.title}</span></div><div class="food-list">${group.items.map(place=>`<article class="food-card"><div><span class="mini-kicker">${place.category} · ${place.price}</span><h4>${place.name}</h4><p>${place.address}</p><p>${place.note}</p></div><a href="${place.url}" target="_blank" rel="noopener">Menu / informacje ↗</a></article>`).join("")}</div></section>`).join("")}</section>`;
+}
+
+function renderArrivalGuide(day, guide) {
+  return `<nav class="day-module-nav" aria-label="Sekcje dnia">
+    <button class="day-module active" data-day-panel="overview"><b>01</b><span>Plan</span><small>od lądowania do snu</small></button>
+    <button class="day-module" data-day-panel="arrival"><b>✈</b><span>Po lądowaniu</span><small>granica, bagaż i hala</small></button>
+    <button class="day-module day-module-feature" data-day-panel="transport"><b>→</b><span>JFK → hotel</span><small>taxi, LIRR lub Uber</small></button>
+    <button class="day-module" data-day-panel="evening"><b>◇</b><span>Pierwszy wieczór</span><small>Times Square i opcja Bryant</small></button>
+    <button class="day-module" data-day-panel="food"><b>☕</b><span>Kolacja</span><small>według poziomu energii</small></button>
+    <button class="day-module" data-day-panel="links"><b>↗</b><span>Mapy</span><small>trasy i oficjalne źródła</small></button>
+  </nav>
+  <section class="day-panel active" data-panel="overview"><div class="sheet-section"><h3>Plan dnia · wybierz punkt</h3>${timeline(day.items,guide.timelineTargets)}</div><div class="sheet-section"><h3>Najważniejsze</h3><div class="simple-card"><p>${day.essentials.join("<br>")}</p></div></div></section>
+  <section class="day-panel" data-panel="arrival" hidden><div class="section-heading-row"><h3>Po przylocie · krok po kroku</h3><span>sprawdzono ${guide.checked}</span></div><div class="arrival-steps">${guide.arrival.map((item,index)=>`<article><b>${index+1}</b><div><h4>${item.title.replace(/^\d+\.\s*/,"")}</h4><p>${item.text}</p></div></article>`).join("")}</div></section>
+  <section class="day-panel" data-panel="transport" hidden><h3>Jak jedziemy z JFK?</h3><p class="panel-intro">Najpierw porównujemy czas i cenę, potem podejmujemy jedną decyzję bez dalszego analizowania.</p><div class="transport-list">${guide.transport.map(option=>`<article class="transport-card transport-${option.tone}"><div class="transport-head"><div><span class="transport-badge">${option.badge}</span><h4>${option.name}</h4></div><strong>${option.price}</strong></div><div class="transport-time">${option.time}</div><p>${option.text}</p><details class="transport-steps"><summary>Instrukcja krok po kroku</summary><ol>${option.steps.map(step=>`<li>${step}</li>`).join("")}</ol></details></article>`).join("")}</div><div class="decision-card"><h4>${guide.decision.title}</h4><p>${guide.decision.text}</p></div><h3 class="subsection-title">Cel przejazdu</h3><article class="hotel-card"><h4>${guide.hotel.name}</h4><p>${guide.hotel.address}<br>${guide.hotel.phone}</p><p>${guide.hotel.text}</p></article></section>
+  <section class="day-panel" data-panel="evening" hidden><h3>Pierwszy wieczór · tylko tyle, ile macie siły</h3><div class="arrival-evening-list">${guide.evening.map((item,index)=>{const stories=item.related?.filter(link=>link.panel==="stories").map(link=>guide.stories[Number(link.key?.split("-")[1])]).filter(Boolean)||[];return `<article class="arrival-evening-card"><span>${index===0?"RESET":index}</span><div><small>${item.time}</small><h4>${item.title}</h4><p>${item.text}</p>${stories.map(story=>`<details class="place-story"><summary>${story.title}</summary><p>${story.text}</p></details>`).join("")}${item.related?.some(link=>link.panel==="food")?`<button data-related-panel="food">Wybierz kolację ›</button>`:""}</div></article>`;}).join("")}</div></section>
+  ${renderArrivalFoodPanel(guide)}
+  <section class="day-panel" data-panel="links" hidden><h3>Mapy i oficjalne informacje</h3><div class="link-grid">${guide.links.map(link=>`<a href="${link.url}" target="_blank" rel="noopener">${link.label}<span>↗</span></a>`).join("")}</div><p class="data-note">Przed wyborem przejazdu sprawdzamy aktualny komunikat JFK oraz czas drogowy. Instrukcje pozostają dostępne offline.</p></section>`;
+}
+
 function renderMomaGuide(day, guide) {
   return `
     <nav class="day-tabs" aria-label="Sekcje dnia">
@@ -392,17 +418,31 @@ function renderDepartureGuide(day, guide) {
   <section class="day-panel" data-panel="links" hidden><h3>Mapy i oficjalne informacje</h3><div class="link-grid">${guide.links.map(x=>`<a href="${x.url}" target="_blank" rel="noopener">${x.label}<span>↗</span></a>`).join("")}</div><p class="data-note">Dzień wcześniej wpisujemy numer lotu i terminal. O 13:45 sprawdzamy TrainTime, AirTrain oraz ruch drogowy i wybieramy wariant bez dalszego odkładania decyzji.</p></section>`;
 }
 
+const MODERN_DAY_MODULES = {
+  moma:[['overview','01','Plan','godziny i kolejność'],['museum','▣','MoMA','trasa po piętrach'],['works','★','Dzieła','najważniejsze prace'],['animation','●','Animacja','moduł rodzinny'],['shopping','◇','Rockefeller i zakupy','moduł Matyldy'],['food','☕','Jedzenie','lunch i piknik'],['movie','▶','Bryant Park','kino pod wieżowcami'],['links','↗','Mapy','trasy i źródła']],
+  metday:[['overview','01','Plan','muzeum, park i teatr'],['guggenheim','◌','Guggenheim','budynek z zewnątrz'],['museum','▣','The Met','wybrane obszary'],['park','♧','Central Park','spacer po muzeum'],['food','☕','Jedzenie','lunch i kolacja'],['rest','H','Odpoczynek','reset w hotelu'],['theatre','★','Broadway','Stranger Things'],['links','↗','Mapy','trasy i źródła']],
+  queens:[['overview','01','Plan','od nabrzeża do kortów'],['route','◎','Miejsca Queens','LIC, Flushing i Unisphere'],['food','☕','Jedzenie','lunch we Flushing'],['tennis','●','US Open','wejście i stadion'],['basics','?','Tenis 101','zasady dla laików'],['links','↗','Mapy','trasy i powrót']],
+  westside:[['overview','01','Plan','port, sztuka i spacer'],['ferry','≈','Promy','dwa rejsy'],['photos','★','Statua','ikoniczne zdjęcia'],['downtown','$','Downtown','Wall Street i memoriał'],['museum','▣','Whitney','sztuka amerykańska'],['route','━','High Line','spacer na północ'],['food','☕','Jedzenie','według części dnia'],['evening','◇','Wieczór','Hudson Yards i opcje'],['links','↗','Mapy','trasy i rozkłady']],
+  sohoyankees:[['overview','01','Plan','SoHo i baseball'],['route','◇','Miejsca SoHo','fasady i Nolita'],['shopping','☆','Zakupy','moduł Matyldy'],['food','☕','Jedzenie','lunch i stadion'],['rest','H','Reset','powrót do hotelu'],['transport','→','Dojazd','metro do Bronksu'],['stadium','⚾','Yankee Stadium','rytuał meczu'],['baseball','?','Baseball 101','zasady dla laików'],['links','↗','Mapy','trasy i powrót']],
+  brooklynjazz:[['overview','01','Plan','Brooklyn i Harlem'],['brooklyn','▱','DUMBO','nabrzeże i zdjęcia'],['food','☕','Jedzenie','lunch przed koncertem'],['bargemusic','♪','Bargemusic','koncert kameralny'],['apollo','★','Apollo','historia sceny'],['festival','♫','Charlie Parker','festiwal w parku'],['parker','B','Bird','bebop i Whiplash'],['artists','●','Artyści','kogo usłyszymy'],['links','↗','Mapy','Brooklyn → Harlem']],
+  departure:[['overview','01','Plan','ostatni dzień'],['diner','☕','Diner','śniadanie'],['hotel','H','Hotel','bagaże i check-out'],['walk','⌘','Ostatni spacer','Bryant, NYPL i Grand Central'],['food','◇','Jedzenie','lunch i droga'],['transport','→','JFK','LIRR, taxi lub Uber'],['airport','✈','Lotnisko','checklista i lot'],['links','↗','Mapy','trasy i statusy']]
+};
+
+function modernizeDayModules(kind, markup) {
+  if (markup.includes('class="day-module-nav"')) return markup;
+  const modules=MODERN_DAY_MODULES[kind];
+  if(!modules) return markup;
+  const nav=`<nav class="day-module-nav" aria-label="Sekcje dnia">${modules.map((item,index)=>`<button class="day-module ${index===0?'active':''}" type="button" data-day-panel="${item[0]}"><b>${item[1]}</b><span>${item[2]}</span><small>${item[3]}</small></button>`).join('')}</nav>`;
+  return markup.replace(/<nav class="day-tabs"[\s\S]*?<\/nav>/,nav);
+}
+
 function renderDayGuide(day) {
   const guide = typeof DAY_GUIDES !== "undefined" ? DAY_GUIDES[day.id] : null;
   if (!guide) return "";
   if (guide.kind === "village") return renderVillageGuide(day, guide);
-  if (guide.kind === "moma") return renderMomaGuide(day, guide);
-  if (guide.kind === "metday") return renderMetDayGuide(day, guide);
-  if (guide.kind === "queens") return renderQueensGuide(day, guide);
-  if (guide.kind === "westside") return renderWestsideGuide(day, guide);
-  if (guide.kind === "sohoyankees") return renderSohoYankeesGuide(day, guide);
-  if (guide.kind === "brooklynjazz") return renderBrooklynJazzGuide(day, guide);
-  if (guide.kind === "departure") return renderDepartureGuide(day, guide);
+  if (guide.kind === "arrival") return renderArrivalGuide(day, guide);
+  const renderers={moma:renderMomaGuide,metday:renderMetDayGuide,queens:renderQueensGuide,westside:renderWestsideGuide,sohoyankees:renderSohoYankeesGuide,brooklynjazz:renderBrooklynJazzGuide,departure:renderDepartureGuide};
+  if(renderers[guide.kind]) return modernizeDayModules(guide.kind,renderers[guide.kind](day,guide));
   return `
     <nav class="day-tabs" aria-label="Sekcje dnia">
       <button class="day-tab active" type="button" data-day-panel="overview">Plan</button>
@@ -718,22 +758,68 @@ const DAY_VISUALS = {
 };
 
 const VILLAGE_MAP_STOPS = [
-  { panel:"guggenheim", title:"Guggenheim", note:"10:30–12:30 · architektura i cztery wybrane obszary", left:76, top:8, icon:"◌" },
-  { panel:"food", title:"Szybki lunch", note:"13:15 · lekki posiłek bez długiej kolejki", left:46, top:31, icon:"1" },
-  { panel:"route", key:"village-stop-0", title:"Washington Sq. i MacDougal", note:"13:45 · łuk, NYU, scena uliczna i folk", left:34, top:43, icon:"2" },
-  { panel:"route", key:"village-stop-1", title:"Jefferson i Commerce", note:"Wieża dawnego sądu oraz kręte ulice Village", left:27, top:56, icon:"3" },
-  { panel:"route", key:"village-stop-2", title:"Perry i Friends", note:"Opcjonalny moduł serialowy na trasie", left:40, top:67, icon:"4" },
-  { panel:"route", key:"village-stop-3", title:"Stonewall", note:"Najważniejszy historyczny przystanek spaceru", left:55, top:76, icon:"5" },
-  { panel:"route", key:"village-stop-4", title:"Kawa i odpoczynek", note:"Rezerwa przed klubem, deser i sprawdzenie biletów", left:67, top:84, icon:"6" },
-  { panel:"bluenote", title:"Blue Note", note:"Hiromi · wejście i koncert", left:76, top:92, icon:"♪" }
+  { panel:"overview", title:"Hotel", note:"Śniadanie i wyjazd na Upper East Side", left:43, top:43, icon:"H" },
+  { panel:"guggenheim", title:"Guggenheim", note:"10:30–12:30 · architektura i cztery wybrane obszary", left:70, top:11, icon:"◌" },
+  { panel:"food", title:"Szybki lunch", note:"13:15 · lekki posiłek bez długiej kolejki", left:33, top:69, icon:"1" },
+  { panel:"route", key:"village-stop-0", title:"Washington Sq. i MacDougal", note:"13:45 · łuk, NYU, scena uliczna i folk", left:38, top:76, icon:"2" },
+  { panel:"route", key:"village-stop-1", title:"Jefferson i Commerce", note:"Wieża dawnego sądu oraz kręte ulice Village", left:30, top:83, icon:"3" },
+  { panel:"route", key:"village-stop-2", title:"Perry i Friends", note:"Opcjonalny moduł serialowy na trasie", left:42, top:87, icon:"4" },
+  { panel:"route", key:"village-stop-3", title:"Stonewall", note:"Najważniejszy historyczny przystanek spaceru", left:53, top:82, icon:"5" },
+  { panel:"route", key:"village-stop-4", title:"Kawa i odpoczynek", note:"Rezerwa przed klubem, deser i sprawdzenie biletów", left:61, top:76, icon:"6" },
+  { panel:"bluenote", title:"Blue Note", note:"Hiromi · wejście i koncert", left:52, top:70, icon:"♪" }
 ];
 
+const ARRIVAL_MAP_STOPS = [
+  { panel:"arrival", title:"JFK", note:"16:59 · lądowanie, granica, bagaż i wyjście do oficjalnego transportu", left:84, top:78, icon:"✈" },
+  { panel:"transport", title:"Wybór transportu", note:"Taxi jako plan główny; LIRR przy dużym korku; Uber po porównaniu ceny", left:68, top:63, icon:"?" },
+  { panel:"transport", title:"Hotel", note:"585 8th Avenue · zameldowanie, prysznic, woda i ocena energii", left:43, top:42, icon:"H" },
+  { panel:"evening", title:"Times Square", note:"Krótki pierwszy spacer i czerwone schody TKTS", left:39, top:27, icon:"1" },
+  { panel:"evening", title:"Bryant Park", note:"Opcjonalne rozszerzenie wyłącznie przy dobrej energii", left:54, top:16, icon:"2" }
+];
+
+function arrivalAdventureMap() {
+  return `<section class="day-adventure-map arrival-adventure-map"><div class="day-map-heading"><div><span class="mini-kicker">Dzień na mapie</span><strong>JFK → hotel → pierwsze światła</strong><p>Czerwona linia oznacza przejazd; żółta — spacer.</p></div><button type="button" data-day-map-direct="links">↗ Mapy i trasy</button></div><div class="day-map-board arrival-map-board"><svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path day-route-transit" d="M84 78 C79 72 74 67 68 63 S52 50 43 42"/><path class="day-route-path day-route-walk" d="M43 42 C40 36 39 31 39 27 S47 20 54 16"/></svg>${ARRIVAL_MAP_STOPS.map(stop=>`<button type="button" class="day-map-stop" style="--left:${stop.left}%;--top:${stop.top}%" data-day-map-panel="${stop.panel}" data-day-map-title="${stop.title}" data-day-map-note="${stop.note}"><span>${stop.icon}</span><small>${stop.title}</small></button>`).join("")}</div><div class="day-map-detail" id="dayMapDetail"><strong>Wybierz punkt dnia</strong><p>Najpierw zobaczysz krótką instrukcję, a potem możesz otworzyć odpowiedni moduł.</p></div></section>`;
+}
+
+const DAY_MAP_CONFIGS = {
+  "2026-08-24": { title:"Hotel → MoMA → Rockefeller → Bryant Park", background:"51% 42% / 300% auto", points:[
+    {panel:"overview",title:"Hotel · start",note:"Start w Midtown",x:20,y:75,icon:"H"},{panel:"museum",title:"MoMA",note:"10:30 · kolekcja i wystawy",x:45,y:25,icon:"1"},{panel:"food",title:"Lunch",note:"13:30 · szybki posiłek w Midtown",x:58,y:38,icon:"2"},{panel:"shopping",title:"Rockefeller",note:"Zakupy Matyldy i architektura kompleksu",x:69,y:27,icon:"3"},{panel:"overview",title:"Hotel · reset",note:"Koc, bluza i krótki odpoczynek",x:28,y:68,icon:"H"},{panel:"movie",title:"Bryant Park",note:"Piknik i King Creole",x:64,y:72,icon:"4"}
+  ],modes:["walk","walk","walk","transit","walk"]},
+  "2026-08-25": { title:"Museum Mile → Central Park → Broadway", background:"53% 29% / 265% auto", points:[
+    {panel:"overview",title:"Hotel",note:"Wyjazd na Upper East Side",x:24,y:82,icon:"H"},{panel:"guggenheim",title:"Guggenheim",note:"Krótko oglądamy budynek z zewnątrz",x:71,y:12,icon:"1"},{panel:"museum",title:"The Met",note:"Wybrane obszary muzeum",x:65,y:29,icon:"2"},{panel:"park",title:"Central Park",note:"Bethesda, Mall, Bow Bridge i Strawberry Fields",x:47,y:48,icon:"3"},{panel:"rest",title:"Hotel · powrót",note:"Obowiązkowy odpoczynek",x:27,y:78,icon:"H"},{panel:"theatre",title:"Broadway",note:"Stranger Things",x:38,y:70,icon:"4"}
+  ],modes:["transit","walk","walk","transit","walk"]},
+  "2026-08-26": { title:"Midtown → Long Island City → Flushing", background:"70% 42% / 190% auto", points:[
+    {panel:"overview",title:"Hotel",note:"Start w Midtown",x:12,y:43,icon:"H"},{panel:"route",title:"Long Island City",note:"Gantry Plaza i widok na Manhattan",x:36,y:42,icon:"1"},{panel:"food",title:"Flushing",note:"Lunch w migracyjnym centrum Queens",x:72,y:45,icon:"2"},{panel:"route",title:"Unisphere",note:"Dziedzictwo World’s Fair",x:80,y:65,icon:"3"},{panel:"tennis",title:"US Open",note:"Mixed Doubles i stadion",x:86,y:54,icon:"4"},{panel:"links",title:"Hotel · powrót",note:"Powrót metrem po meczu",x:16,y:48,icon:"H"}
+  ],modes:["transit","transit","walk","walk","transit"]},
+  "2026-08-27": { title:"Port → Downtown → Whitney → High Line", background:"45% 66% / 190% auto", points:[
+    {panel:"overview",title:"Hotel",note:"Start i dojazd do promu",x:48,y:12,icon:"H"},{panel:"ferry",title:"Pier 79",note:"NYC Ferry do St. George",x:30,y:26,icon:"1"},{panel:"photos",title:"Statua",note:"Zdjęcia z promu i z brzegu",x:18,y:70,icon:"2"},{panel:"downtown",title:"Downtown",note:"Wall Street i 9/11 Memorial",x:50,y:66,icon:"3"},{panel:"museum",title:"Whitney",note:"Sztuka amerykańska",x:45,y:35,icon:"4"},{panel:"route",title:"High Line",note:"Spacer do Hudson Yards",x:48,y:22,icon:"5"},{panel:"evening",title:"Hudson Yards",note:"Wieczór lub opcjonalny SUMMIT",x:54,y:12,icon:"6"}
+  ],modes:["transit","ferry","ferry","transit","walk","walk"]},
+  "2026-08-28": { title:"SoHo → hotel → Yankee Stadium", background:"54% 36% / 185% auto", points:[
+    {panel:"overview",title:"Hotel · start",note:"Wyjazd do SoHo",x:43,y:51,icon:"H"},{panel:"route",title:"SoHo",note:"Żeliwne fasady i Nolita",x:38,y:72,icon:"1"},{panel:"shopping",title:"Zakupy",note:"Streetwear, kosmetyki i butiki",x:45,y:67,icon:"2"},{panel:"rest",title:"Hotel · reset",note:"Powrót i odpoczynek przed meczem",x:49,y:47,icon:"H"},{panel:"stadium",title:"Yankee Stadium",note:"Yankees–Red Sox",x:60,y:10,icon:"3"}
+  ],modes:["transit","walk","transit","transit"]},
+  "2026-08-29": { title:"Brooklyn Waterfront → Harlem", background:"58% 46% / 160% auto", points:[
+    {panel:"overview",title:"Hotel",note:"Metro do Brooklynu",x:38,y:42,icon:"H"},{panel:"brooklyn",title:"DUMBO",note:"Most, nabrzeże i zdjęcia",x:58,y:66,icon:"1"},{panel:"bargemusic",title:"Pier 5",note:"Bargemusic w Boathouse",x:52,y:76,icon:"2"},{panel:"apollo",title:"Apollo",note:"Neon i historia sceny",x:42,y:12,icon:"3"},{panel:"festival",title:"Marcus Garvey Park",note:"Charlie Parker Jazz Festival",x:48,y:16,icon:"4"}
+  ],modes:["transit","walk","transit","walk"]},
+  "2026-08-30": { title:"Midtown → hotel → JFK", background:"58% 47% / 145% auto", points:[
+    {panel:"diner",title:"Diner",note:"Ostatnie nowojorskie śniadanie",x:32,y:32,icon:"1"},{panel:"hotel",title:"Hotel · check-out",note:"Check-out i przechowanie bagaży",x:37,y:43,icon:"H"},{panel:"walk",title:"Bryant Park i NYPL",note:"Ostatni spacer 42nd Street",x:47,y:45,icon:"2"},{panel:"walk",title:"Grand Central",note:"Main Concourse i Whispering Gallery",x:57,y:42,icon:"3"},{panel:"hotel",title:"Hotel · bagaże",note:"Odbiór walizek i kontrola dokumentów",x:42,y:38,icon:"H"},{panel:"transport",title:"JFK",note:"LIRR + AirTrain jako plan główny",x:88,y:76,icon:"✈"}
+  ],modes:["walk","walk","walk","walk","transit"]}
+};
+
+function configuredAdventureMap(day) {
+  const config=DAY_MAP_CONFIGS[day.id];
+  if(!config) return daySchematic(day);
+  const paths=config.points.slice(0,-1).map((point,index)=>{const next=config.points[index+1];const mode=config.modes[index]||"walk";return `<path class="day-route-path ${mode==="walk"?"day-route-walk":"day-route-transit"}" d="M${point.x} ${point.y} L${next.x} ${next.y}"/>`;}).join("");
+  const [position,size]=config.background.split(" / ");
+  return `<section class="day-adventure-map"><div class="day-map-heading"><div><span class="mini-kicker">Dzień na mapie</span><strong>${config.title}</strong><p>Czerwone odcinki oznaczają przejazdy lub promy; żółte — spacer.</p></div><button type="button" data-day-map-direct="links">↗ Mapy i trasy</button></div><div class="day-map-board configured-day-map" style="background-position:${position};background-size:${size}"><svg viewBox="0 0 100 100" aria-hidden="true">${paths}</svg>${config.points.map(point=>`<button type="button" class="day-map-stop" style="--left:${point.x}%;--top:${point.y}%" data-day-map-panel="${point.panel}" data-day-map-title="${point.title}" data-day-map-note="${point.note}"><span>${point.icon}</span><small>${point.title}</small></button>`).join("")}</div><div class="day-map-detail" id="dayMapDetail"><strong>Wybierz punkt dnia</strong><p>Krótki opis pojawi się tutaj, zanim przejdziesz do pełnego modułu.</p></div></section>`;
+}
+
 function dayAdventureMap(day) {
-  if (day.id !== "2026-08-23") return daySchematic(day);
+  if (day.id === "2026-08-22") return arrivalAdventureMap();
+  if (day.id !== "2026-08-23") return configuredAdventureMap(day);
   return `<section class="day-adventure-map village-adventure-map">
     <div class="day-map-heading"><div><span class="mini-kicker">Dzień na mapie</span><strong>Guggenheim → Village → Blue Note</strong><p>Czerwona linia oznacza przejazd; żółta — spacer.</p></div><button type="button" data-day-map-direct="links">↗ Mapy i trasy</button></div>
     <div class="day-map-board">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path day-route-transit" d="M76 8 C67 16 56 24 46 31"/><path class="day-route-path day-route-walk" d="M46 31 C41 36 37 39 34 43 S29 51 27 56 S34 64 40 67 S49 73 55 76 S63 81 67 84 S73 89 76 92"/></svg>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path class="day-route-path day-route-transit" d="M43 43 L70 11 M70 11 C60 31 46 53 33 69"/><path class="day-route-path day-route-walk" d="M33 69 L38 76 L30 83 L42 87 L53 82 L61 76 L52 70"/></svg>
       ${VILLAGE_MAP_STOPS.map(stop => `<button type="button" class="day-map-stop" style="--left:${stop.left}%;--top:${stop.top}%" data-day-map-panel="${stop.panel}" ${stop.key?`data-day-map-key="${stop.key}"`:""} data-day-map-title="${stop.title}" data-day-map-note="${stop.note}"><span>${stop.icon}</span><small>${stop.title}</small></button>`).join("")}
     </div>
     <div class="day-map-detail" id="dayMapDetail"><strong>Wybierz punkt trasy</strong><p>Zobaczysz jego rolę w dniu, a dopiero potem zdecydujesz, czy otworzyć pełny opis.</p></div>
