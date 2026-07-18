@@ -1114,12 +1114,30 @@ function bindPlaceCards() {
   document.querySelectorAll("[data-open-place]").forEach(button=>button.addEventListener("click",()=>renderPlaceDetail(button.dataset.openPlace)));
 }
 
+const MATYLDA_ATLAS = [
+  { icon:"▣", title:"Animacja w MoMA", meta:"Dzień 3 · 24.08", text:"„It’s Alive!” i sto lat animacji — od pierwszych bohaterów po współczesny ruchomy obraz.", dayId:"2026-08-24", panel:"animation", placeId:"moma" },
+  { icon:"☆", title:"Fifth Avenue i Rockefeller", meta:"Dzień 3 · 24.08", text:"Pierwsza sesja zakupowa: dwa sklepy główne i jeden szybki, bez schodzenia z trasy dnia.", dayId:"2026-08-24", panel:"shopping", placeId:"rockefeller-shopping" },
+  { icon:"▶", title:"Stranger Things na Broadwayu", meta:"Dzień 4 · 25.08", text:"Kupione bilety na The First Shadow w Marquis Theatre — wieczór tylko w Nowym Jorku.", dayId:"2026-08-25", panel:"theatre" },
+  { icon:"●", title:"US Open", meta:"Dzień 5 · 26.08", text:"Półfinał miksta, wejście na kompleks i krótki przewodnik po tenisie dla laików.", dayId:"2026-08-26", panel:"tennis", placeId:"us-open" },
+  { icon:"★", title:"Statua Wolności i zdjęcia", meta:"Dzień 6 · 27.08", text:"Prom, najlepsza burta, ustawienie do wspólnego kadru i rezerwowe miejscówki z brzegu.", dayId:"2026-08-27", panel:"photos", placeId:"liberty" },
+  { icon:"◇", title:"Zakupy w SoHo", meta:"Dzień 7 · 28.08", text:"Sklepy w jednym ciągu Broadwayu oraz opcjonalny słodki finał w Crumbl przy 195 Bleecker Street.", dayId:"2026-08-28", panel:"shopping", placeId:"soho", map:"https://www.google.com/maps/search/?api=1&query=Crumbl+195+Bleecker+Street+New+York" },
+  { icon:"⚾", title:"Yankees–Red Sox", meta:"Dzień 7 · 28.08", text:"Baseball 101, Monument Park, stadionowe rytuały i jedna z największych rywalizacji sportowych USA.", dayId:"2026-08-28", panel:"stadium", placeId:"yankees" },
+  { icon:"▱", title:"DUMBO · ikoniczny kadr", meta:"Dzień 8 · 29.08", text:"Manhattan Bridge, Empire State Building w prześwicie i dokładna miejscówka na Washington Street.", dayId:"2026-08-29", panel:"brooklyn", placeId:"dumbo" }
+];
+
+function renderMatyldaAtlas() {
+  app.innerHTML=`<button class="view-back" type="button" id="matyldaBack">← Atlas miejsc</button><section class="matylda-hero"><span>NOWY JORK MATYLDY</span><h2>Cool, kultowo<br>i po swojemu</h2><p>Osiem momentów podróży wybranych z perspektywy Matyldy — od animacji i Broadwayu po zakupy, sport oraz zdjęcia.</p></section><div class="matylda-atlas-list">${MATYLDA_ATLAS.map(item=>`<article class="matylda-atlas-card"><span class="matylda-atlas-icon">${item.icon}</span><div><small>${item.meta}</small><h3>${item.title}</h3><p>${item.text}</p><div class="place-actions"><button data-linked-day="${item.dayId}" data-linked-panel="${item.panel}">Otwórz tę część dnia ›</button>${item.placeId?`<button data-open-place="${item.placeId}">Zobacz miejsce ›</button>`:""}${item.map?`<a href="${item.map}" target="_blank" rel="noopener">Crumbl w Mapach ↗</a>`:""}</div></div></article>`).join("")}</div>`;
+  document.getElementById("matyldaBack")?.addEventListener("click",renderPlaces);
+  bindPlaceCards(); bindLinkedDayActions();
+}
+
 function renderPlaces() {
   const stats=journeyStats();
-  app.innerHTML = `<section class="places-atlas-hero"><span>ATLAS WASZEGO NOWEGO JORKU</span><h2>Dziewięć różnych miast<br>w jednym mieście</h2><p>Najpierw wybierz rejon. Dopiero potem miejsce — z historią, wskazówką fotograficzną i połączeniem z właściwym dniem.</p><div class="atlas-stats"><b>${PLACES.length}<small>miejsc</small></b><b>${TRIP_REGIONS.length}<small>rejonów</small></b><b>${stats.places}<small>odwiedzonych</small></b></div></section>
-    <div class="atlas-region-grid">${TRIP_REGIONS.map(region=>{const count=PLACES.filter(place=>placeRegion(place)===region.id).length;return `<button type="button" style="--region:${region.color}" data-place-region="${region.id}"><span>${String(count).padStart(2,"0")}</span><strong>${region.name}</strong><small>${region.days.map(id=>`D${DAYS.find(d=>d.id===id)?.day}`).join(" · ")}</small></button>`}).join("")}</div>
+  app.innerHTML = `<section class="places-atlas-hero"><span>ATLAS WASZEGO NOWEGO JORKU</span><h2>Dziewięć rejonów<br>i Nowy Jork Matyldy</h2><p>Wybierz część miasta albo osobistą ścieżkę Matyldy. Dalej każde miejsce prowadzi do właściwego dnia, historii, zdjęć i map.</p><div class="atlas-stats"><b>${PLACES.length}<small>miejsc</small></b><b>${TRIP_REGIONS.length}<small>rejonów</small></b><b>${stats.places}<small>odwiedzonych</small></b></div></section>
+    <div class="atlas-region-grid">${TRIP_REGIONS.map(region=>{const count=PLACES.filter(place=>placeRegion(place)===region.id).length;return `<button type="button" style="--region:${region.color}" data-place-region="${region.id}"><span>${String(count).padStart(2,"0")}</span><strong>${region.name}</strong><small>${region.days.map(id=>`D${DAYS.find(d=>d.id===id)?.day}`).join(" · ")}</small></button>`}).join("")}<button type="button" class="matylda-region-card" data-matylda-atlas><span>08</span><strong>MATYLDA</strong><small>cool · zakupy · sport · zdjęcia</small></button></div>
     <div class="section-title"><h3>Wszystkie miejsca</h3><span>dotknij, aby poznać szczegóły</span></div><div class="atlas-place-list">${PLACES.map(placeCard).join("")}</div>`;
   document.querySelectorAll("[data-place-region]").forEach(button=>button.addEventListener("click",()=>renderPlaceRegion(button.dataset.placeRegion)));
+  document.querySelector("[data-matylda-atlas]")?.addEventListener("click",renderMatyldaAtlas);
   bindPlaceCards();
 }
 
