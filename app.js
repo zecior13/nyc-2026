@@ -1300,6 +1300,63 @@ function showMediaPanel(panel) {
   document.querySelectorAll("[data-media-content]").forEach(x=>x.hidden=x.dataset.mediaContent!==panel);
 }
 
+function updateOfflineUI({ done = 0, total = 138, failed = 0, type = "OFFLINE_STATUS" } = {}) {
+  const bar = document.getElementById("offlineProgressBar");
+  const status = document.getElementById("offlineProgressText");
+  const button = document.getElementById("offlineDownloadButton");
+  if (!bar || !status || !button) return;
+  const complete = total > 0 && done === total;
+  const downloading = type === "OFFLINE_PROGRESS";
+  bar.style.width = `${total ? Math.round(done / total * 100) : 0}%`;
+  status.textContent = complete
+    ? `Gotowe · ${done} z ${total} plików zapisanych w telefonie`
+    : downloading
+      ? `Pobieranie · ${done} z ${total}${failed ? ` · błędy: ${failed}` : ""}`
+      : `${done} z ${total} plików jest już w telefonie`;
+  button.disabled = downloading || complete;
+  button.textContent = complete
+    ? "Wszystkie zdjęcia są dostępne offline ✓"
+    : done > 0 ? "Pobierz brakujące zdjęcia" : "Pobierz wszystkie zdjęcia offline";
+  button.classList.toggle("offline-complete", complete);
+}
+
+async function offlineWorker() {
+  if (!("serviceWorker" in navigator)) return null;
+  const registration = await navigator.serviceWorker.ready;
+  return navigator.serviceWorker.controller || registration.active;
+}
+
+async function checkOfflineMedia() {
+  const worker = await offlineWorker();
+  worker?.postMessage({ type: "CHECK_OFFLINE_MEDIA" });
+}
+
+async function downloadOfflineMedia() {
+  const button = document.getElementById("offlineDownloadButton");
+  const status = document.getElementById("offlineProgressText");
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Rozpoczynam pobieranie…";
+  }
+  if (status) status.textContent = "Przygotowuję pamięć telefonu…";
+  try { await navigator.storage?.persist?.(); } catch (error) { /* Safari może nie obsługiwać tej opcji. */ }
+  const worker = await offlineWorker();
+  if (!worker) {
+    if (status) status.textContent = "Tryb offline nie jest dostępny w tej przeglądarce.";
+    if (button) button.disabled = false;
+    return;
+  }
+  worker.postMessage({ type: "CACHE_OFFLINE_MEDIA" });
+}
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.addEventListener("message", event => {
+    if (["OFFLINE_STATUS", "OFFLINE_PROGRESS", "OFFLINE_COMPLETE"].includes(event.data?.type)) {
+      updateOfflineUI(event.data);
+    }
+  });
+}
+
 function renderPrepare() {
   app.innerHTML = `
     <div class="view-heading"><h2>Przed wyjazdem</h2><p>Materiały, aplikacje oraz zakupy i rezerwacje w jednym miejscu — bez mieszania ich z planem bieżącego dnia.</p></div>
@@ -1307,6 +1364,7 @@ function renderPrepare() {
       <button class="prepare-tab active" type="button" role="tab" aria-selected="true" data-prepare-panel="materials">Filmy i muzyka</button>
       <button class="prepare-tab" type="button" role="tab" aria-selected="false" data-prepare-panel="apps">Aplikacje</button>
       <button class="prepare-tab" type="button" role="tab" aria-selected="false" data-prepare-panel="buy">Kupić</button>
+      <button class="prepare-tab" type="button" role="tab" aria-selected="false" data-prepare-panel="offline">Offline</button>
     </div>
     <section class="prepare-panel" data-prepare-content="materials">
       <div class="media-tabs"><button class="media-tab active" data-media-panel="films">Filmy i seriale</button><button class="media-tab" data-media-panel="music">Muzyka</button><button class="media-tab" data-media-panel="museums">Muzea</button></div>
@@ -1333,11 +1391,25 @@ function renderPrepare() {
         </article>`).join("")}</div>
       <div class="section-title"><h3>Już kupione</h3></div>
       <article class="simple-card"><p><strong>Stranger Things</strong> · 25.08<br><strong>US Open Mixed Doubles</strong> · 26.08<br><strong>Yankees–Red Sox</strong> · 28.08</p><div class="card-meta">Bilety zabezpieczone</div></article>
+    </section>
+    <section class="prepare-panel" data-prepare-content="offline" hidden>
+      <article class="offline-download-card">
+        <span class="offline-icon" aria-hidden="true">↓</span>
+        <span class="mini-kicker">Pakiet podróżny</span>
+        <h3>Zdjęcia i przewodnik bez internetu</h3>
+        <p>Pobierz całą paczkę przy dobrym Wi‑Fi. Zostaw aplikację otwartą i ekran włączony aż pojawi się potwierdzenie zapisania wszystkich 138 plików.</p>
+        <div class="offline-progress" aria-hidden="true"><span id="offlineProgressBar"></span></div>
+        <strong id="offlineProgressText" class="offline-status">Sprawdzam zawartość telefonu…</strong>
+        <button id="offlineDownloadButton" class="offline-download-button" type="button">Pobierz wszystkie zdjęcia offline</button>
+        <small>Po zakończeniu włącz tryb samolotowy, zamknij aplikację i uruchom ją ponownie. Nie usuwaj danych witryn Safari — usunęłoby to także zapisane zdjęcia.</small>
+      </article>
     </section>`;
   document.querySelectorAll("[data-prepare-panel]").forEach(button => button.addEventListener("click", () => showPreparePanel(button.dataset.preparePanel)));
   document.querySelectorAll("[data-media-panel]").forEach(button => button.addEventListener("click", () => showMediaPanel(button.dataset.mediaPanel)));
   bindLinkedDayActions();
   bindSavedChecks();
+  document.getElementById("offlineDownloadButton")?.addEventListener("click", downloadOfflineMedia);
+  checkOfflineMedia();
 }
 
 function renderWallet() {
