@@ -29,17 +29,18 @@ const DAYS = [
     title: "Guggenheim, Village i Hiromi",
     subtitle: "Sztuka → lokalny Manhattan → Blue Note",
     accent: "brick", tags: ["Guggenheim", "Village", "jazz"],
-    story: "Dzień Radka i Gosi łączy dwugodzinne Guggenheim z krótszym spacerem przez najważniejsze warstwy Village oraz wieczorem z Hiromi. Matylda może spędzić tę część dnia ze znajomymi.",
+    story: "Dzień Radka i Gosi łączy dwugodzinne Guggenheim z krótszym spacerem przez najważniejsze warstwy Village oraz wieczorem z Hiromi. Na koncert i opcjonalny drink na dachu idą z Anią; Matylda spędza wieczór w hotelu ze znajomymi.",
     items: [
       { time: "09:00", title: "Śniadanie i wyjazd na Upper East Side", note: "Lekki posiłek przed muzeum; pod Guggenheim docieramy około 10:15.", type: "plan" },
       { time: "10:30", title: "Guggenheim", note: "Dwie godziny: architektura Wrighta, Pop, europejski modernizm i Thannhauser.", type: "fixed" },
       { time: "12:30", title: "Guggenheim → Greenwich Village", note: "Metro lub taxi/Uber zależnie od czasu i energii; zakładamy 35–45 minut.", type: "plan" },
       { time: "13:15", title: "Szybki lunch w Village", note: "Bez pełnego brunchu — falafel, tartine albo lekki posiłek bez długiej kolejki.", type: "plan" },
       { time: "13:45", title: "Skrócony spacer po Greenwich Village", note: "Washington Square, MacDougal, Jefferson/Commerce i Stonewall; seriale są opcjonalne.", type: "plan" },
-      { time: "17:45", title: "Kolejka do Blue Note", note: "Cała grupa przychodzi razem; miejsca przy stolikach nie są numerowane.", type: "fixed" },
-      { time: "20:00", title: "Hiromi · The Piano Quintet", note: "Table seating, minimum konsumpcyjne 20 USD na osobę.", type: "fixed" }
+      { time: "17:30", title: "Kolejka do Blue Note", note: "Radek, Gosia i Ania przychodzą razem; miejsca przy stolikach nie są numerowane.", type: "fixed" },
+      { time: "20:00", title: "Hiromi · The Piano Quintet", note: "3 bilety kupione · Radek, Gosia i Ania. Matylda zostaje w hotelu ze znajomymi.", type: "fixed" },
+      { time: "około 22:00", title: "M Social Rooftop · drink dla dorosłych", note: "Opcjonalny nocny finał Radka, Gosi i Ani po koncercie; bar nie wpuszcza osób poniżej 18 lat.", type: "option" }
     ],
-    essentials: ["Bilet Guggenheim na 10:30 i twarde wyjście 12:30", "Potwierdzić, czy Blue Note kupujemy dla 2 czy 3 osób", "Bar jest 21+, Table Seating jest dostępne dla Matyldy"]
+    essentials: ["Bilet Guggenheim na 10:30 i twarde wyjście 12:30", "Blue Note: 3 bilety kupione dla Radka, Gosi i Ani", "M Social tylko dla dorosłych; przed wyjściem potwierdzić plan Matyldy i kontakt ze znajomymi w hotelu"]
   },
   {
     id: "2026-08-24", day: 3, date: "24.08", weekday: "poniedziałek",
@@ -59,20 +60,22 @@ const DAYS = [
   },
   {
     id: "2026-08-25", day: 4, date: "25.08", weekday: "wtorek",
-    title: "The Met, park i Broadway",
-    subtitle: "The Met → Central Park → Stranger Things",
-    accent: "met", tags: ["muzeum", "Central Park", "Broadway"],
-    story: "Najbogatszy dzień wymaga dyscypliny: cztery wybrane obszary The Met, spokojniejsza trasa przez Central Park i obowiązkowy odpoczynek przed teatrem. Guggenheim jest już pełnym punktem dnia 2.",
+    title: "The Met, Central Park na rowerach i Broadway",
+    subtitle: "The Met → rowerowa pętla → Stranger Things",
+    accent: "met", tags: ["muzeum", "rowery", "Broadway"],
+    story: "Najbogatszy dzień wymaga dyscypliny: wybrane obszary The Met, szybki lunch, dwugodzinna rowerowa pętla Central Parku i obowiązkowy odpoczynek przed teatrem.",
     items: [
       { time: "10:00", title: "The Met", note: "Dendur i Giacometti, American Wing, malarstwo europejskie i Costume Art.", type: "fixed" },
-      { time: "14:00", title: "Lunch na Upper East Side", note: "Godzina na posiłek i odpoczynek po muzeum.", type: "plan" },
-      { time: "15:00", title: "Central Park", note: "Bethesda Terrace, The Mall, Bow Bridge i Strawberry Fields.", type: "plan" },
-      { time: "17:00", title: "Hotel i odpoczynek", note: "Prysznic, ładowanie telefonu i minimum 30 minut bez chodzenia.", type: "plan" },
+      { time: "13:30", title: "Szybki lunch na Upper East Side", note: "Maksymalnie 40–45 minut; potem taxi lub autobus do Grand Army Plaza.", type: "plan" },
+      { time: "14:35", title: "Odbiór rowerów · Grand Army Plaza", note: "Bike Rent NYC przy Fifth Avenue i 60th Street; dobór roweru, kask i krótka instrukcja.", type: "plan" },
+      { time: "14:45", title: "Central Park na rowerach", note: "Pętla jednokierunkowa: East Drive → północ parku → West Drive → Strawberry Fields → Grand Army Plaza.", type: "plan" },
+      { time: "16:45", title: "Zwrot rowerów i przejazd do hotelu", note: "Zwrot w tym samym punkcie; taxi lub metro, aby chronić czas odpoczynku.", type: "plan" },
+      { time: "17:15", title: "Hotel i krótki odpoczynek", note: "Prysznic, ładowanie telefonu i zmiana trybu przed teatrem.", type: "plan" },
       { time: "17:45", title: "Wczesna kolacja", note: "Hell’s Kitchen lub okolice teatru; bez ryzyka długiego oczekiwania.", type: "plan" },
       { time: "18:30", title: "Marquis Theatre", note: "Kontrola wejścia i zajęcie miejsc bez pośpiechu.", type: "fixed" },
       { time: "19:00", title: "Stranger Things: The First Shadow", note: "Marquis Theatre; spektakl trwa około 2 godz. 45 min.", type: "fixed" }
     ],
-    essentials: ["Rezerwacja The Met na 10:00", "Powrót do hotelu przed teatrem", "Przyjście do Marquis Theatre o 18:30"]
+    essentials: ["Wyjście z The Met najpóźniej 13:30", "Dokument/paszport do wypożyczenia i kask obowiązkowy dla Matyldy", "Zwrot rowerów 16:45 i przyjście do Marquis Theatre o 18:30"]
   },
   {
     id: "2026-08-26", day: 5, date: "26.08", weekday: "środa",
@@ -113,35 +116,40 @@ const DAYS = [
   },
   {
     id: "2026-08-28", day: 7, date: "28.08", weekday: "piątek",
-    title: "SoHo i Yankees–Red Sox",
-    subtitle: "Cast iron, zakupy i baseball w Bronksie",
-    accent: "yankees", tags: ["zakupy", "architektura", "baseball"],
-    story: "Dawna dzielnica przemysłowa, współczesne zakupy i jedna z największych rywalizacji amerykańskiego sportu.",
+    title: "SoHo, Pier 35 i Yankees–Red Sox",
+    subtitle: "Cast iron, zakupy, East River i baseball w Bronksie",
+    accent: "yankees", tags: ["zakupy", "Pier 35", "baseball"],
+    story: "Dawna dzielnica przemysłowa, współczesne zakupy, krótki reset na huśtawkach nad East River i jedna z największych rywalizacji amerykańskiego sportu.",
     items: [
-      { time: "10:30", title: "Architektura SoHo", note: "Greene, Mercer, Spring i historia żeliwnych fasad.", type: "plan" },
-      { time: "12:00", title: "Zakupy Matyldy", note: "Lista priorytetów i bezwzględny koniec głównych zakupów o 14:15.", type: "plan" },
-      { time: "14:30", title: "Lunch w Nolita lub Chinatown", note: "Posiłek po zakupach, bez dokładania kolejnych sklepów po drodze.", type: "plan" },
-      { time: "16:00", title: "Hotel i zmiana trybu", note: "Zakupy zostają w pokoju; odpoczynek, ładowanie telefonu i bilety do Apple Wallet.", type: "plan" },
+      { time: "09:30", title: "Architektura SoHo", note: "Greene, Mercer, Spring i historia żeliwnych fasad.", type: "plan" },
+      { time: "10:30", title: "Zakupy Matyldy", note: "Lista priorytetów i bezwzględny koniec głównych zakupów o 13:00.", type: "plan" },
+      { time: "13:00", title: "Szybki lunch w Chinatown/LES", note: "Maksymalnie 40 minut i bez dokładania kolejnych sklepów.", type: "plan" },
+      { time: "14:15", title: "Pier 35 · huśtawki nad East River", note: "Około 30 minut na odpoczynek, zieloną ścianę i widok na Manhattan Bridge.", type: "plan" },
+      { time: "15:30", title: "Hotel i zmiana trybu", note: "Zakupy zostają w pokoju; odpoczynek, ładowanie telefonu i bilety do Apple Wallet.", type: "plan" },
       { time: "16:45", title: "Metro do Bronksu", note: "Linia D z 42 St–Bryant Park lub B/D zgodnie z bieżącymi komunikatami.", type: "fixed" },
       { time: "17:35", title: "Otwarcie Yankee Stadium", note: "Po wejściu od razu do Monument Park; kolejka może zamknąć się wcześniej.", type: "fixed" },
       { time: "19:05", title: "Yankees–Red Sox", note: "Godzina poprawiona według oficjalnego terminarza MLB.", type: "fixed" }
     ],
-    essentials: ["Bilety w MLB Ballpark", "Zakupy zostają w hotelu", "Wyjazd z hotelu najpóźniej około 17:00"]
+    essentials: ["Bilety w MLB Ballpark", "Pier 35 wypada jako pierwszy przy opóźnieniu zakupów", "Zakupy zostają w hotelu; wyjazd na stadion o 16:45"]
   },
   {
     id: "2026-08-29", day: 8, date: "29.08", weekday: "sobota",
-    title: "Brooklyn i jazz w Harlemie",
-    subtitle: "DUMBO → Bargemusic → Apollo → Charlie Parker",
-    accent: "jazz", tags: ["Brooklyn", "Harlem", "muzyka"],
-    story: "Most i port, muzyka kameralna, legenda Apollo i bebop w Harlemie — dokładnie w rocznicę urodzin Charliego Parkera.",
+    title: "Helikopter, Brooklyn i jazz w Harlemie",
+    subtitle: "Lot nad Manhattanem → DUMBO → Bargemusic → Charlie Parker",
+    accent: "jazz", tags: ["helikopter", "Brooklyn", "Harlem"],
+    story: "Widok Manhattanu z helikoptera otwiera dzień, który potem schodzi na poziom brooklyńskiego nabrzeża, muzyki kameralnej, legendy Apollo i bebopu w Harlemie — dokładnie w rocznicę urodzin Charliego Parkera.",
     items: [
-      { time: "10:00", title: "DUMBO", note: "Washington Street, Pebble Beach, Brooklyn Bridge i Jane’s Carousel.", type: "plan" },
+      { time: "08:30", title: "Hotel → Downtown Manhattan Heliport", note: "Metro linią 1 do South Ferry i około 10 minut pieszo; taxi/Uber jako wariant pogodowy.", type: "plan" },
+      { time: "09:30", title: "Odprawa Fly Charm", note: "Downtown Manhattan Heliport · Pier 6; odprawa obowiązkowo minimum 30 minut przed lotem.", type: "fixed" },
+      { time: "10:00", title: "Big Apple Tour · lot helikopterem", note: "Kupione · około 17–20 minut nad najważniejszymi ikonami Nowego Jorku.", type: "fixed" },
+      { time: "10:35", title: "Heliport → DUMBO", note: "Spacer do Wall St/Pier 11 i NYC Ferry do DUMBO; metro z Broad St jako plan awaryjny.", type: "plan" },
+      { time: "11:10", title: "DUMBO w wersji zwartej", note: "Washington Street, Jane’s Carousel, Pebble Beach i szybki lunch po drodze do Pier 5.", type: "plan" },
       { time: "13:15", title: "Kolejka na Bargemusic", note: "Nowa lokalizacja: Brooklyn Bridge Park Boathouse przy Pier 5.", type: "fixed" },
       { time: "14:00", title: "Bargemusic", note: "Bezpłatny koncert bez rezerwacji; drzwi otwierają się o 13:40.", type: "fixed" },
       { time: "16:10", title: "Apollo z zewnątrz", note: "Neon, Walk of Fame i sklep; historyczna sala jest zamknięta.", type: "option" },
       { time: "16:50", title: "Charlie Parker Jazz Festival", note: "Dołączamy na finałową część bezpłatnego programu w Marcus Garvey Park.", type: "fixed" }
     ],
-    essentials: ["Lunch kończymy o 12:40", "Galeria Apollo do ponownego potwierdzenia", "Przy opóźnieniu pomijamy Apollo i jedziemy do parku"]
+    essentials: ["Wyjście z hotelu 08:30 i odprawa Fly Charm o 09:30", "Dokumenty zgodne z rezerwacją oraz sprawdzenie pogody/wiadomości operatora", "Po locie DUMBO zwiedzamy w wersji zwartej; przy opóźnieniu pomijamy Apollo"]
   },
   {
     id: "2026-08-30", day: 9, date: "30.08", weekday: "niedziela",
@@ -238,8 +246,8 @@ const DAY_GUIDES = {
   },
   "2026-08-23": {
     kind: "village",
-    checked: "16.07.2026",
-    timelineTargets: ["guggenheim", "guggenheim", "route", "food", "route", "bluenote", "bluenote"],
+    checked: "25.07.2026",
+    timelineTargets: ["guggenheim", "guggenheim", "route", "food", "route", "bluenote", "bluenote", "rooftop"],
     route: [
       { time: "13:45", title: "Washington Square, NYU i MacDougal", text: "Łuk, park, kampus wpisany w miasto oraz dawna scena folkowa i komediowa. To pierwsza warstwa Village: studenci, artyści i życie uliczne.", look: "Łuk, fontanna, One Fifth Avenue i schody klubów na MacDougal Street.", pause: "Usiądźcie na 10–15 minut i obserwujcie muzyków, szachistów, studentów NYU oraz życie wokół fontanny.", image: { src: "assets/photos/127.jpg", alt: "Washington Square Arch, fontanna i życie parku", credit: "zdjęcie orientacyjne" }, related: [{ panel: "stories", key: "story-0", label: "Historia placu" }, { panel: "stories", key: "story-1", label: "Moses i Jane Jacobs" }, { panel: "stories", key: "story-4", label: "Historia muzyczna" }] },
       { time: "14:35", title: "Jefferson Market i Commerce Street", text: "Dawny gmach sądu z charakterystyczną wieżą, niewielki ogród oraz kręte ulice zachodniej części Village.", look: "Czerwona cegła, wieża Jefferson Market Library, brownstones i nietypowy łuk Commerce Street.", image: { src: "assets/photos/128.jpg", alt: "Ceglana bryła i wieża zegarowa Jefferson Market Library", credit: "zdjęcie orientacyjne" }, related: [{ panel: "stories", key: "story-3", label: "Dlaczego ulice się plączą?" }] },
@@ -263,8 +271,8 @@ const DAY_GUIDES = {
       artist: "Hiromi: The Piano Quintet feat. PUBLIQuartet",
       address: "Blue Note Jazz Club · 131 West 3rd Street",
       image: { src: "assets/places/blue-note.jpg", alt: "Wejście do Blue Note Jazz Club", credit: "Frederic Germay · Wikimedia Commons · CC BY-SA 3.0" },
-      schedule: ["17:30 · ustawcie się razem w kolejce", "18:00 · otwarcie drzwi", "20:00 · początek koncertu", "około 21:30 · orientacyjny koniec"],
-      rules: ["Kupujcie Table Seating — miejsca przy stolikach są dostępne dla Matyldy", "Bar Area jest wyłącznie 21+", "Minimum konsumpcyjne: 20 USD na osobę podczas każdego show", "W klubie działa pełna restauracja; można jeść podczas koncertu", "Cała grupa powinna wejść razem"],
+      schedule: ["17:30 · Radek, Gosia i Ania ustawiają się razem w kolejce", "18:00 · otwarcie drzwi", "20:00 · początek koncertu", "około 21:30 · orientacyjny koniec", "Matylda · wieczór w hotelu ze znajomymi"],
+      rules: ["3 bilety Table Seating są kupione", "Bar Area jest wyłącznie 21+", "Minimum konsumpcyjne: 20 USD na osobę podczas każdego show", "W klubie działa pełna restauracja; można jeść podczas koncertu", "Cała trójka powinna wejść razem"],
       about: [
         { title: "Kim jest Hiromi?", text: "Hiromi Uehara to urodzona w Japonii pianistka i kompozytorka, która od debiutu Another Mind w 2003 roku zasłynęła wirtuozerią, sceniczną energią oraz swobodnym łączeniem jazzu, klasyki i popu. Jej improwizacja bywa bardzo złożona, ale najważniejsza jest płynąca z niej radość." },
         { title: "Od Chicka Corei do Stanleya Clarke’a", text: "Hiromi nagrała koncertowy album Duet z legendarnym pianistą Chickiem Coreą. Zagrała również na nagrodzonym Grammy albumie basisty Stanleya Clarke’a Jazz in the Garden. Te współprace pokazują jej miejsce pomiędzy jazzową tradycją i nowoczesnym fusion." },
@@ -285,6 +293,18 @@ const DAY_GUIDES = {
       menuUrl: "https://www.bluenotejazz.com/nyc/menu/",
       countdown: "2026-08-23T18:00:00-04:00"
     },
+    rooftop: {
+      status: "Opcjonalnie po koncercie · tylko dorośli",
+      title: "M Social Times Square · Beast & Butterflies",
+      address: "226 W 52nd Street · taras na 7. piętrze",
+      intro: "Jeden drink i nocny widok na światła Times Square dla Radka, Gosi i Ani. To finał tylko przy energii po koncercie — nie kolejna obowiązkowa rezerwacja.",
+      schedule: ["około 21:30 · wyjście z Blue Note", "około 22:00 · dojazd taxi/Uberem albo metrem", "22:05–23:15 · drink i taras", "najpóźniej 23:30 · wyjście i krótki powrót do hotelu"],
+      rules: ["Osoby poniżej 18 lat nie są wpuszczane do baru ani jego strefy", "Matylda pozostaje w hotelu ze znajomymi zgodnie z planem wieczoru", "Bar działa obecnie do północy; walk-in jest możliwy, ale stolik można zarezerwować", "Przy zmęczeniu po Hiromi jedziecie bezpośrednio do hotelu — rooftop jest dodatkiem"],
+      mapUrl: "https://www.google.com/maps/dir/?api=1&origin=Blue+Note+Jazz+Club,+131+W+3rd+St,+New+York&destination=M+Social+Hotel+Times+Square,+226+W+52nd+St,+New+York&travelmode=transit",
+      returnUrl: "https://www.google.com/maps/dir/?api=1&origin=M+Social+Hotel+Times+Square,+226+W+52nd+St,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=walking",
+      officialUrl: "https://www.msocial.com/en/new-york/m-social-new-york/overview/",
+      reservationUrl: "https://www.beastandbutterfliesnyc.com/"
+    },
     food: [
       { category: "Spokojny brunch", name: "Joseph Leonard", price: "$$–$$$", address: "170 Waverly Place", note: "Małe amerykańskie bistro przy Grove Street. Niedzielny brunch 10:30–15:30; część stolików zostaje dla gości bez rezerwacji.", url: "https://www.josephleonard.com/info/" },
       { category: "Francuski klimat", name: "Buvette", price: "$$–$$$", address: "42 Grove Street", note: "Kameralny francuski lokal, bardzo zgodny z atmosferą West Village. Popularny, więc kolejka może zdecydować za Was.", url: "https://order.toasttab.com/online/buvette" },
@@ -294,20 +314,24 @@ const DAY_GUIDES = {
       ,{ category: "Kawa i historia", name: "Caffè Reggio", price: "$–$$", address: "119 MacDougal Street", note: "Kawa w historycznym wnętrzu bez konieczności pełnego posiłku. Dobra rezerwa przy deszczu albo zmęczeniu.", url: "https://www.caffereggio.com/" }
     ],
     variants: [
-      { title: "Wersja podstawowa", text: "Brunch → Washington Square → historia → seriale → odpoczynek → Blue Note." },
+      { title: "Wersja podstawowa", text: "Guggenheim → szybki lunch → Village → Blue Note → opcjonalnie M Social dla dorosłych." },
       { title: "Po podróży brakuje energii", text: "Późniejszy brunch → Washington Square → Friends → Stonewall → Carrie i Magnolia → Blue Note. Pomijamy Jefferson Market i boczne ulice." },
       { title: "Bez seriali", text: "Washington Square → MacDougal → Minetta Lane → Stonewall → Commerce i Grove → Jefferson Market → kawiarnia → Blue Note." },
-      { title: "Deszcz", text: "Brunch → najważniejsze punkty krótkimi odcinkami → dłuższa kawiarnia lub księgarnia → wcześniejsza kolejka. Nie dokładamy muzeum." }
+      { title: "Deszcz", text: "Najważniejsze punkty Village krótkimi odcinkami → wcześniejsza kolejka → Blue Note. M Social tylko, jeśli taras jest dostępny i nadal macie energię." }
     ],
-    after: "Po koncercie: jeśli macie energię, krótki spacer przez Washington Square Park. W przeciwnym razie metro z West 4th Street do 42nd Street–Port Authority i pieszo do hotelu.",
+    after: "Po koncercie decyzja w 30 sekund: M Social z Anią albo bezpośredni powrót do hotelu. Nie dokładacie już spaceru po Village.",
     returnUrl: "https://www.google.com/maps/dir/?api=1&origin=Blue+Note+Jazz+Club,+131+W+3rd+St,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave&travelmode=transit",
     links: [
       { label: "Hotel → Guggenheim", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Solomon+R.+Guggenheim+Museum,+1071+5th+Ave,+New+York&travelmode=transit" },
       { label: "Guggenheim → Washington Square", url: "https://www.google.com/maps/dir/?api=1&origin=Solomon+R.+Guggenheim+Museum,+1071+5th+Ave,+New+York&destination=Washington+Square+Arch,+New+York&travelmode=transit" },
       { label: "Cały spacer w Mapach", url: "https://www.google.com/maps/dir/?api=1&origin=Washington+Square+Arch,+New+York&destination=Blue+Note+Jazz+Club,+131+W+3rd+St,+New+York&waypoints=MacDougal+Street,+New+York%7CStonewall+National+Monument,+New+York%7C90+Bedford+Street,+New+York%7C66+Perry+Street,+New+York&travelmode=walking" },
       { label: "Blue Note w Mapach", url: "https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+131+West+3rd+Street+New+York" },
+      { label: "Blue Note → M Social Times Square", url: "https://www.google.com/maps/dir/?api=1&origin=Blue+Note+Jazz+Club,+131+W+3rd+St,+New+York&destination=M+Social+Hotel+Times+Square,+226+W+52nd+St,+New+York&travelmode=transit" },
+      { label: "M Social → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=M+Social+Hotel+Times+Square,+226+W+52nd+St,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=walking" },
       { label: "Hiromi · oficjalny koncert", url: "https://www.bluenotejazz.com/nyc/shows/?search=Hiromi" },
       { label: "Zasady Blue Note", url: "https://www.bluenotejazz.com/nyc/faqs/" },
+      { label: "M Social · zasady i godziny", url: "https://www.msocial.com/en/new-york/m-social-new-york/overview/" },
+      { label: "Beast & Butterflies · rezerwacja", url: "https://www.beastandbutterfliesnyc.com/" },
       { label: "Stonewall Visitor Center", url: "https://stonewallvisitorcenter.org/visit/" },
       { label: "Guggenheim · bilety", url: "https://www.guggenheim.org/buy-tickets" }
     ]
@@ -388,8 +412,8 @@ const DAY_GUIDES = {
   },
   "2026-08-25": {
     kind: "metday",
-    checked: "16.07.2026",
-    timelineTargets: ["museum", "food", "park", "rest", "food", "theatre", "theatre"],
+    checked: "25.07.2026",
+    timelineTargets: ["museum", "food", "park", "park", "park", "rest", "food", "theatre", "theatre"],
     guggenheim: {
       title: "Guggenheim · dziesięć minut z architekturą",
       text: "Frank Lloyd Wright otrzymał zlecenie w 1943 roku, lecz budynek otwarto dopiero 21 października 1959 — sześć miesięcy po jego śmierci. Zamiast tradycyjnych pięter zaprojektował spiralną rampę oplatającą rotundę. Budynek jest częścią światowego dziedzictwa UNESCO.",
@@ -415,8 +439,16 @@ const DAY_GUIDES = {
       { title: "The Met jako miasto w budynku", text: "Muzeum powstało w 1870 roku, ale dzisiejszy gmach jest wynikiem kolejnych rozbudów. Ma ponad dwa miliony stóp kwadratowych i dziesiątki tysięcy obiektów na widoku. Zgubienie się nie jest porażką — jest częścią jego skali." }
     ],
     park: {
-      route: ["Wyjście z The Met i lunch na Upper East Side", "Bethesda Terrace i arkady z płytkami Minton", "Fontanna Bethesda i widok na jezioro", "Bow Bridge", "Strawberry Fields i mozaika Imagine", "Wyjście przy 72nd Street West i metro/taxi do hotelu"],
-      notes: ["The Mall dodajcie tylko, jeśli jest czas i energia", "Nie próbujcie dojść pieszo aż do hotelu", "Przy upale skróćcie trasę po Bethesda Terrace i od razu jedźcie odpocząć"]
+      route: ["14:35 · odbiór rowerów przy Grand Army Plaza", "East Drive · Zoo, Conservatory Water i fasada The Met", "Reservoir i północna część pętli", "West Drive · zjazd przez bardziej krajobrazową stronę parku", "Strawberry Fields · krótki postój po przypięciu rowerów", "Sheep Meadow i południowa panorama", "16:45 · zwrot przy Grand Army Plaza"],
+      notes: ["Cała pętla ma około 9,7 km i prowadzi wyłącznie przeciwnie do ruchu wskazówek zegara", "Na chodnikach i ścieżkach pieszych zsiadacie z roweru; piesi zawsze mają pierwszeństwo", "Matylda jako osoba poniżej 14 lat musi jechać w kasku — kaski rekomendujemy całej trójce", "Bethesda Terrace i Bow Bridge są opcjonalnym krótkim dojściem po przypięciu rowerów, nie odcinkiem do przejechania", "Jeżeli odbiór przeciągnie się po 14:50, skracacie postoje, a nie odpoczynek przed teatrem"],
+      rental: {
+        operator: "Bike Rent NYC · sezonowa wypożyczalnia wskazywana przez Central Park Conservancy",
+        location: "Grand Army Plaza · wejście do parku przy Fifth Avenue i East 60th Street",
+        return: "Zwrot w tym samym punkcie najpóźniej około 16:45",
+        cost: "Orientacyjnie od 20 USD za rower; bieżącą cenę i dostępność potwierdźcie przed wyjazdem. Kask, zapięcie i mapa są zwykle w zestawie.",
+        steps: ["Podejdźcie do stanowiska z dokumentem/paszportem i kartą płatniczą", "Dobierzcie wysokość trzech rowerów; poproście o kask dla Matyldy i najlepiej także dla dorosłych", "Zróbcie zdjęcie rowerów i zapamiętajcie godzinę zwrotu", "Jedźcie tylko parkową pętlą w kierunku przeciwnym do ruchu wskazówek zegara", "Przy postoju przypnijcie rowery; oddajcie je dokładnie w punkcie odbioru"],
+        citi: "Citi Bike nie jest dobrym wariantem dla Was: minimalny wiek to 16 lat, a Day Pass kosztuje 25 USD i obejmuje jedynie 30 minut każdego przejazdu klasycznym rowerem."
+      }
     },
     theatre: {
       title: "Stranger Things: The First Shadow",
@@ -439,14 +471,17 @@ const DAY_GUIDES = {
       { category: "Bezpiecznie przed teatrem", name: "Los Tacos No. 1", price: "$", address: "229 W 43rd St", note: "Szybko, bez ryzyka przeciągniętej obsługi. Jedzenie na stojąco, więc po odpoczynku w hotelu.", url: "https://www.lostacos1.com/locations/" }
     ],
     variants: [
-      { title: "Wersja pełna", text: "4 godziny w The Met → lunch → spokojny park → hotel → kolacja → teatr." },
-      { title: "Muzealne zmęczenie", text: "Trasa The Met 2 godziny → wcześniejszy lunch → Bethesda i Strawberry Fields → dłuższy odpoczynek." },
-      { title: "Upał lub ulewa", text: "Pomijamy Bow Bridge i The Mall. Po lunchu Bethesda Terrace albo od razu hotel; rezerwacja teatralna zostaje nietknięta." },
+      { title: "Wersja pełna", text: "3,5 godziny w The Met → szybki lunch → pełna pętla rowerowa → hotel → kolacja → teatr." },
+      { title: "Muzealne opóźnienie", text: "Krótszy lunch → południowa pętla rowerowa bez północnego odcinka → Strawberry Fields → zwrot o 16:45." },
+      { title: "Upał lub ulewa", text: "Przy ulewie rezygnujecie z rowerów. Przy upale robicie krótszy odcinek południowy z wodą i bez długich postojów." },
       { title: "Dla Matyldy", text: "W muzeum priorytet: Dendur + Giacometti, Costume Art i jeden obraz. Więcej czasu na zadania obserwacyjne, mniej na podpisy." }
     ],
     links: [
       { label: "Start · hotel → The Met", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=The+Metropolitan+Museum+of+Art,+1000+5th+Ave,+New+York&travelmode=transit" },
-      { label: "Park · The Met → Bethesda → Bow Bridge → Strawberry Fields", url: "https://www.google.com/maps/dir/?api=1&origin=The+Metropolitan+Museum+of+Art,+1000+5th+Ave,+New+York&destination=Strawberry+Fields,+New+York&waypoints=Bethesda+Terrace,+New+York%7CBow+Bridge,+New+York&travelmode=walking" },
+      { label: "The Met → Bike Rent NYC · Grand Army Plaza", url: "https://www.google.com/maps/dir/?api=1&origin=The+Metropolitan+Museum+of+Art,+1000+5th+Ave,+New+York&destination=Grand+Army+Plaza,+East+60th+Street+and+5th+Avenue,+New+York&travelmode=transit" },
+      { label: "Oficjalna mapa rowerowa Central Parku", url: "https://assets.centralparknyc.org/media/images/CPCWeb_Downloadablemaps_2022_CPBikeMap_Final.pdf" },
+      { label: "Central Park · zasady jazdy i wypożyczalnie", url: "https://www.centralparknyc.org/activities/guides/bicycling" },
+      { label: "Bike Rent NYC · operator", url: "https://www.bikeride.nyc/" },
       { label: "The Met · informacje i bilety", url: "https://www.metmuseum.org/plan-your-visit" },
       { label: "Interaktywna mapa The Met", url: "https://maps.metmuseum.org/" },
       { label: "Giacometti przy Dendur", url: "https://www.metmuseum.org/exhibitions/giacometti-in-the-temple-of-dendur" },
@@ -634,21 +669,31 @@ const DAY_GUIDES = {
     ]
   },
   "2026-08-28": {
-    kind: "sohoyankees", checked: "16.07.2026",
-    timelineTargets: ["route", "shopping", "food", "rest", "transport", "stadium", "baseball"],
+    kind: "sohoyankees", checked: "25.07.2026",
+    timelineTargets: ["route", "shopping", "food", "pier35", "rest", "transport", "stadium", "baseball"],
     route: [
-      { time: "10:30", title: "Greene Street", text: "Najlepszy początek opowieści o żeliwnych fasadach. Powtarzalne kolumny wyglądały jak kamień, ale można je było produkować w fabryce i szybko składać na miejscu.", look: "Numery 72–76 i 28–30 Greene Street; porównajcie rytm okien, kolumny i schody pożarowe.", related: [{ key: "systory-0", label: "Dlaczego cast iron?" }] },
-      { time: "11:05", title: "Mercer i Prince Street", text: "Dawne lofty produkcyjne stały się mieszkaniami artystów, a później jednymi z najdroższych adresów miasta.", look: "Wielkie okna, wysokie partery i kostka brukowa przypominająca o dostawach towaru.", related: [{ key: "systory-1", label: "Artyści kontra miasto" }] },
-      { time: "11:35", title: "Broadway i Spring Street", text: "Tu architektura miesza się z najbardziej komercyjnym SoHo. Od tego miejsca Matylda przejmuje wybór sklepów.", look: "Haughwout Building przy 488 Broadway i jego pionowy rytm fasady.", related: [{ key: "systory-2", label: "Pierwsza winda Otisa" }] },
-      { time: "14:15", title: "Nolita i Elizabeth Street", text: "Mniejsza skala, niezależne butiki i kawiarnie. To łagodne przejście od zakupów do lunchu.", look: "Niskie kamienice, ogród Elizabeth Street Garden i kontrast z zatłoczonym Broadwayem." }
+      { time: "09:30", title: "Greene Street", text: "Najlepszy początek opowieści o żeliwnych fasadach. Powtarzalne kolumny wyglądały jak kamień, ale można je było produkować w fabryce i szybko składać na miejscu.", look: "Numery 72–76 i 28–30 Greene Street; porównajcie rytm okien, kolumny i schody pożarowe.", related: [{ key: "systory-0", label: "Dlaczego cast iron?" }] },
+      { time: "09:55", title: "Mercer i Prince Street", text: "Dawne lofty produkcyjne stały się mieszkaniami artystów, a później jednymi z najdroższych adresów miasta.", look: "Wielkie okna, wysokie partery i kostka brukowa przypominająca o dostawach towaru.", related: [{ key: "systory-1", label: "Artyści kontra miasto" }] },
+      { time: "10:20", title: "Broadway i Spring Street", text: "Tu architektura miesza się z najbardziej komercyjnym SoHo. Od 10:30 Matylda przejmuje wybór sklepów.", look: "Haughwout Building przy 488 Broadway i jego pionowy rytm fasady.", related: [{ key: "systory-2", label: "Pierwsza winda Otisa" }] },
+      { time: "13:00", title: "Nolita → Chinatown/Lower East Side", text: "Po zamknięciu zakupów schodzicie przez mniejszą skalę Nolity na szybki lunch. To przejście ustawia Was już po właściwej stronie miasta przed Pier 35.", look: "Niskie kamienice, gwar Chinatown i wyraźna zmiana rytmu ulic." }
     ],
     stories: [
       { title: "Żeliwo — XIX-wieczny prefabrykat", text: "Elementy fasady odlewano seryjnie, transportowano na plac budowy i skręcano. Pozwalało to budować szybciej, tworzyć wielkie okna i naśladować kosztowny kamień. Dzisiejsza elegancja SoHo zaczęła się jako praktyczna architektura handlu i przemysłu." },
       { title: "Jak artyści uratowali SoHo", text: "Po upadku przemysłu wielkie lofty stały puste. W latach sześćdziesiątych artyści zajmowali je często nielegalnie, bo zapewniały światło i miejsce do pracy. Walka o legalizację mieszkania w budynkach przemysłowych pomogła ocalić dzielnicę przed wyburzeniem." },
       { title: "Haughwout Building i próba zaufania windzie", text: "W 1857 roku uruchomiono tu jedną z pierwszych komercyjnych wind pasażerskich Elishy Otisa. Jego hamulec bezpieczeństwa pomógł przekonać ludzi, że budowanie i korzystanie z wyższych pięter może być bezpieczne." },
       { title: "SoHo: od pracowni do globalnej marki", text: "Galerie i artyści stworzyli atrakcyjność dzielnicy, za którą przyszły marki, turyści i wysokie czynsze. To klasyczny nowojorski paradoks: kultura podnosi wartość miejsca, a następnie bywa przez tę wartość wypierana." },
-      { title: "Yankees–Red Sox: więcej niż jeden mecz", text: "Rywalizacja rosła przez ponad sto lat, a jej najsłynniejszym symbolem stało się przejście Babe’a Rutha z Bostonu do Yankees w 1919 roku. Dziś mecz ma sens nawet bez znajomości tabeli — publika reaguje mocniej na każdy pojedynek i każdą prowokację między klubami." }
+      { title: "Yankees–Red Sox: więcej niż jeden mecz", text: "Rywalizacja rosła przez ponad sto lat, a jej najsłynniejszym symbolem stało się przejście Babe’a Rutha z Bostonu do Yankees w 1919 roku. Dziś mecz ma sens nawet bez znajomości tabeli — publika reaguje mocniej na każdy pojedynek i każdą prowokację między klubami." },
+      { title: "Pier, który stał się nadwodnym salonem", text: "Pier 35 był elementem przemysłowego nabrzeża East River. W 2019 roku otwarto tu park zaprojektowany przez SHoP Architects i Ken Smith Workshop: z podwyższonym tarasem, czterema dużymi huśtawkami, zieloną ścianą oraz siedliskiem pływowym Mussel Beach." }
     ],
+    pier35: {
+      status: "Plan główny · 14:15–14:45 · bezpłatnie",
+      title: "Pier 35 · huśtawki i Manhattan Bridge",
+      address: "FDR Drive przy Jefferson Street · Lower East Side",
+      intro: "To krótki reset pomiędzy zakupami i stadionem, nie osobna wyprawa. Najważniejsze są cztery huśtawki, zielona ściana, rzeka i nietypowy kadr Manhattan Bridge.",
+      route: ["13:40–13:45 · wyjście po szybkim lunchu", "Dojście albo krótki przejazd do wejścia przy Jefferson Street", "14:15 · huśtawki i podwyższony taras", "14:30 · Mussel Beach, zielona ściana i zdjęcie mostu", "14:45 · bezwarunkowe wyjście w stronę East Broadway", "Metro F do 42 St–Bryant Park albo Uber; hotel około 15:30"],
+      photo: ["Na huśtawkach fotografujcie lekko z boku, aby w kadrze zostały rzeka i Manhattan Bridge", "Szerszy kadr pokaże skalę zielonej ściany; 2× lepiej oddzieli osobę od mostu", "Nie czekajcie na pustą huśtawkę dłużej niż 10 minut — widok z tarasu jest równie ważny"],
+      fallback: "Jeśli zakupy kończą się po 13:15 albo lunch przeciąga się po 14:00, Pier 35 wypada bez dyskusji. Bufor hotelowy i Monument Park są ważniejsze."
+    },
     shopping: [
       { category: "Sneakersy", name: "Kith", address: "337 Lafayette St", note: "Streetwear i sneakersy; dobry punkt główny, ale kolejka i limitowane kolekcje mogą zabrać czas.", url: "https://kith.com/pages/store-locator" },
       { category: "Moda", name: "Aritzia SoHo", address: "524 Broadway", note: "Duży sklep popularnej marki; traktować jako jeden z dwóch głównych wyborów.", url: "https://www.aritzia.com/us/en/store?StoreID=aritzia-soho" },
@@ -685,15 +730,17 @@ const DAY_GUIDES = {
       ]
     },
     variants: [
-      { title: "Plan pełny", text: "Architektura 60–75 minut → dwa główne sklepy → lunch → hotel → stadion przed otwarciem bram." },
-      { title: "Zakupy ważniejsze", text: "Skracamy architekturę do Greene i Haughwout Building, ale nadal kończymy sklepy o 14:15." },
-      { title: "Upał", text: "Krótsze przejścia między klimatyzowanymi sklepami, lunch pod dachem i dłuższy odpoczynek w hotelu. Nie przesuwamy wyjazdu na stadion." },
-      { title: "Deszcz", text: "SoHo pozostaje możliwe dzięki sklepom i restauracjom; rezygnujemy z Nolita. Mecz może być opóźniony — śledzimy komunikaty w MLB Ballpark." }
+      { title: "Plan pełny", text: "Architektura 45–60 minut → zakupy do 13:00 → szybki lunch → Pier 35 → hotel → stadion przed otwarciem bram." },
+      { title: "Zakupy ważniejsze", text: "Skracacie architekturę, ale nadal kończycie sklepy o 13:00. Jeśli ten limit pęka, rezygnujecie z Pier 35." },
+      { title: "Upał", text: "Krótsze przejścia między klimatyzowanymi sklepami, lunch pod dachem i tylko 15–20 minut na Pier 35. Nie przesuwacie wyjazdu na stadion." },
+      { title: "Deszcz", text: "SoHo pozostaje możliwe dzięki sklepom i restauracjom; Pier 35 wypada. Mecz może być opóźniony — śledzicie komunikaty w MLB Ballpark." }
     ],
     links: [
       { label: "Start · hotel → Greene Street", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=72+Greene+Street,+New+York&travelmode=transit" },
       { label: "Spacer · Greene → Mercer → Haughwout → Nolita", url: "https://www.google.com/maps/dir/?api=1&origin=72+Greene+Street,+New+York&destination=Elizabeth+Street+Garden,+New+York&waypoints=Prince+Street+and+Mercer+Street,+New+York%7CE.V.+Haughwout+Building,+488+Broadway,+New+York&travelmode=walking" },
-      { label: "Nolita/Chinatown → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=Elizabeth+Street+Garden,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
+      { label: "Nolita/Chinatown → Pier 35", url: "https://www.google.com/maps/dir/?api=1&origin=Elizabeth+Street+Garden,+New+York&destination=Pier+35,+FDR+Drive+and+Jefferson+Street,+New+York&travelmode=walking" },
+      { label: "Pier 35 → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=Pier+35,+FDR+Drive+and+Jefferson+Street,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
+      { label: "Pier 35 · informacje i warunki", url: "https://pier35nyc.com/en" },
       { label: "Hotel → Yankee Stadium", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Yankee+Stadium,+1+E+161st+St,+Bronx,+NY&travelmode=transit" },
       { label: "Powrót · Yankee Stadium → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=Yankee+Stadium,+1+E+161st+St,+Bronx,+NY&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
       { label: "Yankees · Gameday Guide 2026", url: "https://www.mlb.com/yankees/ballpark/information/know-before-you-go" },
@@ -703,13 +750,22 @@ const DAY_GUIDES = {
     ]
   },
   "2026-08-29": {
-    kind: "brooklynjazz", checked: "16.07.2026",
-    timelineTargets: ["brooklyn", "bargemusic", "bargemusic", "apollo", "festival"],
+    kind: "brooklynjazz", checked: "25.07.2026",
+    timelineTargets: ["helicopter", "helicopter", "helicopter", "helicopter", "brooklyn", "bargemusic", "bargemusic", "apollo", "festival"],
+    helicopter: {
+      status: "Kupione · Big Apple Tour · 29.08 · 10:00",
+      operator: "Charm Aviation / Fly Charm NYC",
+      address: "Downtown Manhattan Heliport · Pier 6 & South Street · 6 East River Piers",
+      schedule: ["08:30 · wyjście z hotelu", "Metro 1 do South Ferry + około 10 minut pieszo", "09:15–09:25 · planowane wejście do heliportu", "09:30 · najpóźniejsza odprawa i instruktaż bezpieczeństwa", "10:00 · start", "10:17–10:20 · planowane lądowanie", "około 10:35 · wyjście i spacer w stronę Pier 11"],
+      practical: ["Operator wymaga odprawy co najmniej 30 minut przed lotem", "Weźcie dokumenty zgodne z danymi rezerwacji i potwierdzenie zakupu", "17–20 minut lotu, 22 punkty orientacyjne i komentarz przez słuchawki BOSE", "Bagaż zostaje w hotelu; zabierzcie tylko małą, niezbędną rzecz zgodną z instrukcją operatora", "Rano sprawdźcie e-mail/SMS — lot zależy od pogody", "Spóźnienie może oznaczać opłatę 50 USD za osobę i brak gwarancji przesunięcia lotu"],
+      views: ["Po starcie: Brooklyn Bridge, port i Lower Manhattan", "Statua Wolności i Ellis Island", "One World Trade Center, Empire State, Chrysler Building i Times Square", "Central Park, Yankee Stadium oraz George Washington Bridge — zależnie od bieżącej trasy i ograniczeń lotniczych"],
+      after: "Plan główny: około 10 minut pieszo do Wall St/Pier 11 i najbliższy NYC Ferry do DUMBO/Fulton Ferry. Plan awaryjny: spacer do Broad St, pociąg J do High St i dojście do Washington Street."
+    },
     brooklyn: [
-      { time: "10:00", title: "Washington Street", text: "Klasyczny kadr z Manhattan Bridge prowadzi wzrok dokładnie do Empire State Building. To przemysłowy DUMBO, nie filmowa dekoracja: bruk, magazyny i stalowy most są częścią tej samej portowej historii.", look: "Stańcie na Washington między Water i Front Street. Użyjcie obiektywu 2×, aby most i Empire State nie zniknęły w szerokim kadrze.", related: [{ key: "bjstory-0", label: "Skąd nazwa DUMBO?" }] },
-      { time: "10:35", title: "Jane’s Carousel i Empire Stores", text: "Odrestaurowana karuzela z 1922 roku stoi w szklanym pawilonie Jeana Nouvela. Obok magazyny kawy Empire Stores przypominają, że nabrzeże obsługiwało światowy handel.", look: "Karuzela w ramie Brooklyn Bridge oraz masywne, czerwone ściany dawnych magazynów.", related: [{ key: "bjstory-1", label: "Port kawy i cukru" }] },
-      { time: "11:10", title: "Pebble Beach", text: "Najlepszy spokojny punkt panoramy Lower Manhattan i Brooklyn Bridge. Zostańcie chwilę bez robienia zdjęć — słychać wodę, promy i ruch mostu.", look: "Ustawcie most po prawej, skyline po lewej i kamienisty brzeg jako pierwszy plan." },
-      { time: "11:40", title: "Promenade → Pier 5", text: "Idźcie nabrzeżem na południe, mijając Pier 1 i tereny sportowe. Boathouse jest wbudowany w parkowe wzgórze, a nie zacumowany na wodzie.", look: "Floor-to-ceiling windows Boathouse i trawiasty nasyp osłaniający salę od Furman Street.", related: [{ key: "bjstory-2", label: "Dlaczego Bargemusic zeszło na ląd?" }] }
+      { time: "około 11:10", title: "Washington Street", text: "Klasyczny kadr z Manhattan Bridge prowadzi wzrok dokładnie do Empire State Building. To przemysłowy DUMBO, nie filmowa dekoracja: bruk, magazyny i stalowy most są częścią tej samej portowej historii.", look: "Stańcie na Washington między Water i Front Street. Użyjcie obiektywu 2×, aby most i Empire State nie zniknęły w szerokim kadrze.", related: [{ key: "bjstory-0", label: "Skąd nazwa DUMBO?" }] },
+      { time: "11:35", title: "Jane’s Carousel i Empire Stores", text: "Odrestaurowana karuzela z 1922 roku stoi w szklanym pawilonie Jeana Nouvela. Obok magazyny kawy Empire Stores przypominają, że nabrzeże obsługiwało światowy handel.", look: "Karuzela w ramie Brooklyn Bridge oraz masywne, czerwone ściany dawnych magazynów.", related: [{ key: "bjstory-1", label: "Port kawy i cukru" }] },
+      { time: "11:55", title: "Pebble Beach", text: "Najlepszy spokojny punkt panoramy Lower Manhattan i Brooklyn Bridge. Po locie zobaczycie ten sam skyline z przeciwnej, bardzo niskiej perspektywy.", look: "Ustawcie most po prawej, skyline po lewej i kamienisty brzeg jako pierwszy plan." },
+      { time: "12:40", title: "Promenade → Pier 5", text: "Po szybkim lunchu idźcie nabrzeżem na południe. Boathouse jest wbudowany w parkowe wzgórze, a nie zacumowany na wodzie; o 13:15 macie być już w kolejce.", look: "Floor-to-ceiling windows Boathouse i trawiasty nasyp osłaniający salę od Furman Street.", related: [{ key: "bjstory-2", label: "Dlaczego Bargemusic zeszło na ląd?" }] }
     ],
     stories: [
       { title: "DUMBO: nazwa, która miała odstraszać", text: "Down Under the Manhattan Bridge Overpass powstało jako żartobliwy skrót mieszkańców i artystów, którzy liczyli, że mało elegancka nazwa zniechęci deweloperów. Stało się odwrotnie — dziś DUMBO jest jedną z najbardziej rozpoznawalnych i kosztownych dzielnic Brooklynu." },
@@ -769,13 +825,16 @@ const DAY_GUIDES = {
       { category: "Kolacja · etiopska", name: "Abyssinia", price: "$$", address: "268 W 135th St", note: "Dania do dzielenia na injera; wybór bardziej lokalny, ale wymaga krótkiego przejazdu lub spaceru na północ.", url: "https://www.abyssiniarestaurantnyc.com/" }
     ],
     variants: [
-      { title: "Plan pełny", text: "DUMBO → lunch do 12:40 → Bargemusic → Apollo 20–30 minut → finał festiwalu → kolacja w Harlemie." },
-      { title: "Muzyka najważniejsza", text: "Skracamy DUMBO, jesteśmy wcześnie pod Boathouse, a po koncercie jedziemy bezpośrednio do Marcus Garvey Park. Apollo zostaje na zdjęcie z zewnątrz innym razem." },
+      { title: "Plan pełny", text: "Helikopter → prom do DUMBO → zwarty spacer i lunch do 12:40 → Bargemusic → Apollo 20–30 minut → finał festiwalu." },
+      { title: "Lot lub prom z opóźnieniem", text: "Washington Street → szybki lunch → bezpośrednio Pier 5. Jane’s Carousel i Pebble Beach oglądacie tylko po drodze; Apollo po koncercie wypada jako pierwsze." },
       { title: "Bargemusic pełne", text: "Jeśli nie wejdziecie, nie czekacie na drugi koncert: wcześniejszy przejazd do Harlemu daje więcej festiwalu oraz spokojną wizytę w galerii Apollo." },
       { title: "Deszcz", text: "Washington Street i panorama w skrócie → Time Out Market → Boathouse → Apollo Gallery → festiwal zgodnie z komunikatem pogodowym SummerStage." }
     ],
     links: [
-      { label: "Start · hotel → Washington Street", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Washington+Street+and+Water+Street,+Brooklyn,+NY&travelmode=transit" },
+      { label: "Hotel → Downtown Manhattan Heliport", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Downtown+Manhattan+Heliport,+6+East+River+Piers,+New+York&travelmode=transit" },
+      { label: "Heliport → Wall St/Pier 11", url: "https://www.google.com/maps/dir/?api=1&origin=Downtown+Manhattan+Heliport,+6+East+River+Piers,+New+York&destination=Wall+Street+Pier+11,+New+York&travelmode=walking" },
+      { label: "NYC Ferry · trasy i rozkład", url: "https://www.ferry.nyc/routes-and-schedules/" },
+      { label: "Plan B · heliport → DUMBO metrem", url: "https://www.google.com/maps/dir/?api=1&origin=Downtown+Manhattan+Heliport,+6+East+River+Piers,+New+York&destination=Washington+Street+and+Water+Street,+Brooklyn,+NY&travelmode=transit" },
       { label: "Spacer DUMBO · Washington → Pebble Beach → Pier 5", url: "https://www.google.com/maps/dir/?api=1&origin=Washington+Street+and+Water+Street,+Brooklyn,+NY&destination=Brooklyn+Bridge+Park+Boathouse,+10+Montague+St,+Brooklyn,+NY&waypoints=Jane's+Carousel,+Brooklyn,+NY%7CPebble+Beach,+Brooklyn,+NY&travelmode=walking" },
       { label: "Bargemusic → Apollo", url: "https://www.google.com/maps/dir/?api=1&origin=Brooklyn+Bridge+Park+Boathouse,+10+Montague+St,+Brooklyn,+NY&destination=Apollo+Theater,+253+W+125th+St,+New+York&travelmode=transit" },
       { label: "Apollo → Marcus Garvey Park", url: "https://www.google.com/maps/dir/?api=1&origin=Apollo+Theater,+253+W+125th+St,+New+York&destination=Marcus+Garvey+Park,+18+Mt+Morris+Park+W,+New+York&travelmode=walking" },
@@ -783,7 +842,9 @@ const DAY_GUIDES = {
       { label: "Bargemusic · kalendarz", url: "https://www.bargemusic.org/calendar-tickets/" },
       { label: "Bargemusic · dojazd i zasady", url: "https://www.bargemusic.org/info-directions/" },
       { label: "Apollo · aktualne informacje", url: "https://www.apollotheater.org/visit-the-apollo" },
-      { label: "Charlie Parker Jazz Festival · program", url: "https://cityparksfoundation.org/events/cpjf-joshua-redman/" }
+      { label: "Charlie Parker Jazz Festival · program", url: "https://cityparksfoundation.org/events/cpjf-joshua-redman/" },
+      { label: "Fly Charm · Big Apple Tour", url: "https://flycharmny.com/big-apple-tour/" }
+      ,{ label: "Fly Charm · FAQ", url: "https://flycharmny.com/faq/" }
     ]
   },
   "2026-08-30": {
@@ -899,7 +960,7 @@ const MUSIC = [
 
 const TRAVEL_APPS = [
   { title: "Connects: Arts + Culture", use: "Audioprzewodniki i trasy po MoMA, The Met i Whitney. W domu pobierzcie treści i sprawdźcie słuchawki.", meta: "Najważniejsza do muzeów · bezpłatna", priority: "Pobierz koniecznie", url: "https://apps.apple.com/us/app/connects-arts-culture/id1476456847" },
-  { title: "NYC Ferry", use: "Rozkład na żywo, zakup i aktywacja biletu na rejs Pier 79 → St. George 27 sierpnia.", meta: "Staten Island Ferry jest osobnym, bezpłatnym promem", priority: "Pobierz koniecznie", url: "https://apps.apple.com/us/app/nyc-ferry/id1225258864" },
+  { title: "NYC Ferry", use: "Rozkład na żywo i bilety: Pier 79 → St. George 27 sierpnia oraz Wall St/Pier 11 → DUMBO po locie 29 sierpnia.", meta: "Staten Island Ferry jest osobnym, bezpłatnym promem", priority: "Pobierz koniecznie", url: "https://apps.apple.com/us/app/nyc-ferry/id1225258864" },
   { title: "The Official MTA App", use: "Metro i autobusy: bieżące odjazdy, zmiany tras, windy oraz planowanie przejazdów po mieście.", meta: "Przydatna każdego dnia", priority: "Pobierz koniecznie", url: "https://apps.apple.com/us/app/the-official-mta-app/id1297605670" },
   { title: "US Open Tennis", use: "Bilety, program dnia, mapa kompleksu i informacje o kortach podczas wizyty 26 sierpnia.", meta: "Bilet powinien być dostępny przed wyjściem z hotelu", priority: "Pobierz koniecznie", url: "https://apps.apple.com/us/app/us-open-tennis/id327455869" },
   { title: "MLB Ballpark", use: "Mobilne bilety na Yankees–Red Sox, informacje o stadionie i wejściach.", meta: "Zalogować się wcześniej tym samym adresem e-mail co przy zakupie", priority: "Pobierz koniecznie", url: "https://apps.apple.com/us/app/mlb-ballpark/id513135722" },
@@ -907,7 +968,6 @@ const TRAVEL_APPS = [
 ];
 
 const TO_BUY = [
-  { title: "Hiromi · Blue Note", status: "Pilne", kind: "urgent", when: "23.08 · 20:00", text: "Potwierdzić udział Matyldy i kupić 2 albo 3 × Table Seating. Osoby korzystające z Table Seating powinny wejść razem; obowiązuje minimum konsumpcyjne.", action: "Kup bilety", url: "https://www.bluenotejazz.com/nyc/shows/?search=Hiromi" },
   { title: "MoMA", status: "Do kupienia", kind: "todo", when: "24.08 · 10:30", text: "Bilety na ustaloną godzinę. Przed zakupem potwierdzić aktualne wystawy i dostępność.", action: "Bilety MoMA", url: "https://visit.moma.org/select" },
   { title: "The Met", status: "Do zaplanowania", kind: "todo", when: "25.08 · 10:00", text: "Kupić bilety online, gdy plan Gosi będzie zaakceptowany. Bilet wstępu i nasza krótka trasa wystarczą.", action: "Wizyta i bilety", url: "https://www.metmuseum.org/plan-your-visit" },
   { title: "Whitney Museum", status: "Do rezerwacji", kind: "todo", when: "27.08 · 13:30", text: "Wybrać wejście czasowe po zatwierdzeniu dnia. Dla Matyldy również dodać właściwy bilet, nawet jeśli będzie bezpłatny.", action: "Bilety Whitney", url: "https://whitney.org/tickets" },
@@ -922,10 +982,11 @@ const PLACES = [
   { id:"bryant-park", title:"Bryant Park i NYPL", icon:"◆", category:"lokalnie", text:"Miejski salon za biblioteką: pierwszy spacer, film pod gwiazdami i finałowe pożegnanie z 42nd Street.", meta:"22, 24 i 30.08", dayId:"2026-08-24", panel:"movie", map:"https://www.google.com/maps/search/?api=1&query=Bryant+Park+New+York" },
   { id:"village", title:"Greenwich Village", icon:"♟", category:"historia", text:"Bohema, Stonewall, brownstones, muzyka i serialowy Nowy Jork.", meta:"23.08 · 13:00", dayId:"2026-08-23", panel:"route", map:"https://www.google.com/maps/search/?api=1&query=Washington+Square+Park+New+York", image:"assets/photos/127.jpg" },
   { id:"bluenote", title:"Blue Note", icon:"♪", category:"muzyka", text:"Kameralny klub jazzowy i koncert Hiromi przy stoliku.", meta:"23.08 · 20:00", dayId:"2026-08-23", panel:"bluenote", map:"https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+NYC", image:"assets/places/blue-note.jpg" },
+  { id:"m-social", title:"M Social Rooftop", icon:"☾", category:"nocny widok", text:"Opcjonalny drink Radka, Gosi i Ani po Hiromi na tarasie Beast & Butterflies nad Times Square.", meta:"23.08 · około 22:00 · tylko dorośli", dayId:"2026-08-23", panel:"rooftop", map:"https://www.google.com/maps/search/?api=1&query=M+Social+Hotel+Times+Square+226+West+52nd+Street+New+York" },
   { id:"moma", title:"MoMA", icon:"▣", category:"sztuka", text:"Modernizm, Frida i Diego, design, pop-art oraz wystawa o animacji.", meta:"24.08 · rano", dayId:"2026-08-24", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Museum+of+Modern+Art+New+York" },
   { id:"rockefeller-shopping", title:"Rockefeller Center i zakupy", icon:"☆", category:"dla Matyldy", text:"Nike House of Innovation, Uniqlo, Sephora, Nintendo NY lub LEGO — wybieramy dwa główne sklepy i jeden szybki.", meta:"24.08 · popołudnie", dayId:"2026-08-24", panel:"shopping", map:"https://www.google.com/maps/search/?api=1&query=Rockefeller+Center+New+York" },
   { id:"met", title:"Museum Mile", icon:"◉", category:"sztuka", text:"Guggenheim, The Met i Fifth Avenue przy Central Parku.", meta:"25.08", dayId:"2026-08-25", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Metropolitan+Museum+of+Art" },
-  { id:"central-park", title:"Central Park", icon:"♧", category:"lokalnie", text:"Olmsted i Vaux, Bethesda Terrace, Bow Bridge i Strawberry Fields — park jako demokratyczna przestrzeń miasta.", meta:"25.08 · popołudnie", dayId:"2026-08-25", panel:"park", map:"https://www.google.com/maps/search/?api=1&query=Bethesda+Terrace+Central+Park" },
+  { id:"central-park", title:"Central Park na rowerach", icon:"↻", category:"lokalnie", text:"Pełna jednokierunkowa pętla, Reservoir, spokojniejsza północ, Strawberry Fields i zasady rodzinnego wynajmu.", meta:"25.08 · 14:35", dayId:"2026-08-25", panel:"park", map:"https://www.google.com/maps/search/?api=1&query=Grand+Army+Plaza+Fifth+Avenue+60th+Street+New+York" },
   { id:"empire-state", title:"Empire State Building", icon:"▴", category:"architektura", text:"Ikona art déco oglądana o poranku z ulicy przed wejściem do SUMMIT.", meta:"26.08 · 07:40", dayId:"2026-08-26", panel:"morning", map:"https://www.google.com/maps/search/?api=1&query=Empire+State+Building+New+York" },
   { id:"st-patrick", title:"Katedra św. Patryka", icon:"†", category:"architektura", text:"Neogotycka katedra przy Fifth Avenue — kilkanaście minut wewnątrz przed przejazdem do Queens.", meta:"26.08 · 10:30", dayId:"2026-08-26", panel:"morning", map:"https://www.google.com/maps/search/?api=1&query=St.+Patrick%27s+Cathedral+New+York" },
   { id:"queens", title:"Queens", icon:"◎", category:"lokalnie", text:"Przemysłowe LIC, migracyjne Flushing, World’s Fair i US Open.", meta:"26.08", dayId:"2026-08-26", panel:"route", map:"https://www.google.com/maps/search/?api=1&query=Gantry+Plaza+State+Park" },
@@ -935,7 +996,9 @@ const PLACES = [
   { id:"westside", title:"Whitney i High Line", icon:"↗", category:"sztuka", text:"Sztuka amerykańska, Meatpacking, dawna kolej i Hudson Yards.", meta:"27.08 · popołudnie", dayId:"2026-08-27", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Whitney+Museum+New+York" },
   { id:"summit", title:"SUMMIT One Vanderbilt", icon:"△", category:"zdjęcia", status:"Plan główny · rezerwacja czasowa", text:"Poranna panorama Manhattanu i trzy poziomy lustrzanych instalacji przed wyjazdem do Queens.", meta:"26.08 · 08:30", dayId:"2026-08-26", panel:"morning", map:"https://www.google.com/maps/search/?api=1&query=SUMMIT+One+Vanderbilt+New+York" },
   { id:"soho", title:"SoHo i Nolita", icon:"◇", category:"dla Matyldy", text:"Żeliwne fasady, streetwear, kosmetyki i niezależne butiki.", meta:"28.08 · rano", dayId:"2026-08-28", panel:"route", map:"https://www.google.com/maps/search/?api=1&query=Greene+Street+SoHo+New+York" },
+  { id:"pier-35", title:"Pier 35", icon:"≈", category:"widok i odpoczynek", text:"Huśtawki nad East River, zielona ściana i Manhattan Bridge jako krótki finał zakupowej części dnia.", meta:"28.08 · 14:15", dayId:"2026-08-28", panel:"pier35", map:"https://www.google.com/maps/search/?api=1&query=Pier+35+FDR+Drive+Jefferson+Street+New+York" },
   { id:"yankees", title:"Yankee Stadium", icon:"⚾", category:"sport", text:"Monument Park, zasady baseballu i Yankees–Red Sox.", meta:"28.08 · 19:05", dayId:"2026-08-28", panel:"stadium", map:"https://www.google.com/maps/search/?api=1&query=Yankee+Stadium" },
+  { id:"heliport", title:"Big Apple Tour · helikopter", icon:"✦", category:"widoki", text:"17–20 minut nad ikonami Nowego Jorku ze startem przy East River i odprawą o 09:30.", meta:"29.08 · 10:00 · kupione", dayId:"2026-08-29", panel:"helicopter", map:"https://www.google.com/maps/search/?api=1&query=Downtown+Manhattan+Heliport+6+East+River+Piers+New+York" },
   { id:"dumbo", title:"DUMBO i Brooklyn Bridge Park", icon:"▱", category:"zdjęcia", text:"Manhattan Bridge, portowe magazyny, panorama i Bargemusic.", meta:"29.08 · rano", dayId:"2026-08-29", panel:"brooklyn", map:"https://www.google.com/maps/search/?api=1&query=Washington+Street+DUMBO" },
   { id:"bargemusic", title:"Bargemusic", icon:"♪", category:"muzyka", text:"Koncert kameralny na pływającej barce z panoramą Lower Manhattan za sceną.", meta:"29.08 · południe", dayId:"2026-08-29", panel:"bargemusic", map:"https://www.google.com/maps/search/?api=1&query=Bargemusic+Brooklyn" },
   { id:"harlem", title:"Harlem i Apollo", icon:"♫", category:"muzyka", text:"Great Migration, Harlem Renaissance, Apollo i Charlie Parker.", meta:"29.08 · popołudnie", dayId:"2026-08-29", panel:"apollo", map:"https://www.google.com/maps/search/?api=1&query=Apollo+Theater+New+York" },
@@ -991,9 +1054,10 @@ const MATYLDA_SHOPPING_ROUTES = {
 const WALLET_ITEMS = [
   { id:"hotel", type:"hotel", title:TRIP.hotel.name, date:"22–30.08 · 8 nocy", place:TRIP.hotel.address, status:"Potwierdzić numer rezerwacji", dayId:"2026-08-22", panel:"transport", map:"https://www.google.com/maps/search/?api=1&query=Holiday+Inn+New+York+City+Times+Square+585+8th+Avenue" },
   { id:"flightout", type:"flight", title:"Lot do Nowego Jorku", date:"22.08 · Berlin 11:20 → JFK 16:59", place:"przez Londyn", status:"Dodać numery lotów i terminale", dayId:"2026-08-22", panel:"arrival" },
-  { id:"blue", type:"music", title:"Hiromi · Blue Note", date:"23.08 · 20:00", place:"131 W 3rd St", status:"Do kupienia · 2 lub 3 × Table Seating", dayId:"2026-08-23", panel:"bluenote", map:"https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+NYC" },
+  { id:"blue", type:"music", title:"Hiromi · Blue Note", date:"23.08 · 20:00", place:"131 W 3rd St · Radek, Gosia i Ania", status:"Kupione · 3 × Table Seating", dayId:"2026-08-23", panel:"bluenote", map:"https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+NYC" },
   { id:"broadway", type:"ticket", title:"Stranger Things", date:"25.08 · 19:00", place:"Marquis Theatre", status:"Kupione", dayId:"2026-08-25", panel:"theatre", map:"https://www.google.com/maps/search/?api=1&query=Marquis+Theatre+New+York" },
   { id:"usopen", type:"ticket", title:"US Open Mixed Doubles", date:"26.08 · 19:00", place:"USTA Billie Jean King National Tennis Center", status:"Kupione · aplikacja US Open", dayId:"2026-08-26", panel:"tennis", map:"https://www.google.com/maps/search/?api=1&query=USTA+Billie+Jean+King+National+Tennis+Center" },
   { id:"yankees", type:"ticket", title:"Yankees–Red Sox", date:"28.08 · 19:05", place:"Yankee Stadium", status:"Kupione · MLB Ballpark", dayId:"2026-08-28", panel:"stadium", map:"https://www.google.com/maps/search/?api=1&query=Yankee+Stadium" },
+  { id:"helicopter", type:"ticket", title:"Fly Charm · Big Apple Tour", date:"29.08 · 10:00", place:"Downtown Manhattan Heliport · Pier 6", status:"Kupione · odprawa 09:30", dayId:"2026-08-29", panel:"helicopter", map:"https://www.google.com/maps/search/?api=1&query=Downtown+Manhattan+Heliport+6+East+River+Piers+New+York" },
   { id:"flightback", type:"flight", title:"Lot powrotny", date:"30.08 · JFK 19:29", place:"JFK · terminal do potwierdzenia", status:"Dodać numer lotu", dayId:"2026-08-30", panel:"airport", map:"https://www.google.com/maps/search/?api=1&query=John+F+Kennedy+International+Airport" }
 ];
