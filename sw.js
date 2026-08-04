@@ -1,4 +1,4 @@
-const CACHE = "nyc-2026-v81";
+const CACHE = "nyc-2026-v82";
 
 // Rdzeń jest mały i musi zostać zapisany w całości, aby aplikacja zawsze się uruchomiła.
 const CORE_ASSETS = [
@@ -28,7 +28,19 @@ const MEDIA_ASSETS = [
   "./assets/places/washington-square.jpg",
   ...Array.from({ length: 130 }, (_, index) =>
     `./assets/photos/${String(index + 1).padStart(3, "0")}.jpg`
-  )
+  ),
+  "./assets/photos/131.webp",
+  "./assets/photos/132.jpg",
+  "./assets/photos/133.jpg",
+  "./assets/photos/134.jpg",
+  "./assets/photos/135.webp",
+  "./assets/photos/136.jpg",
+  "./assets/photos/137.webp",
+  "./assets/photos/138.webp",
+  "./assets/photos/139.jpg",
+  "./assets/photos/140.jpg",
+  "./assets/photos/141.webp",
+  "./assets/photos/142.jpg"
 ];
 
 const assetUrl = asset => new URL(asset, self.location.href).href;

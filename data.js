@@ -36,11 +36,12 @@ const DAYS = [
       { time: "12:30", title: "Guggenheim → Greenwich Village", note: "Metro lub taxi/Uber zależnie od czasu i energii; zakładamy 35–45 minut.", type: "plan" },
       { time: "13:15", title: "Szybki lunch w Village", note: "Bez pełnego brunchu — falafel, tartine albo lekki posiłek bez długiej kolejki.", type: "plan" },
       { time: "13:45", title: "Skrócony spacer po Greenwich Village", note: "Washington Square, MacDougal, Jefferson/Commerce i Stonewall; seriale są opcjonalne.", type: "plan" },
+      { time: "16:15–16:55", title: "Caffè Reggio", note: "Kultowe cappuccino, zabytkowy ekspres z 1902 roku i spokojny reset przed Blue Note.", type: "plan" },
       { time: "17:30", title: "Kolejka do Blue Note", note: "Radek, Gosia i Ania przychodzą razem; miejsca przy stolikach nie są numerowane.", type: "fixed" },
       { time: "20:00", title: "Hiromi · The Piano Quintet", note: "3 bilety kupione · Radek, Gosia i Ania. Matylda zostaje w hotelu ze znajomymi.", type: "fixed" },
       { time: "około 22:00", title: "M Social Rooftop · drink dla dorosłych", note: "Opcjonalny nocny finał Radka, Gosi i Ani po koncercie; bar nie wpuszcza osób poniżej 18 lat.", type: "option" }
     ],
-    essentials: ["Bilet Guggenheim na 10:30 i twarde wyjście 12:30", "Blue Note: 3 bilety kupione dla Radka, Gosi i Ani", "M Social tylko dla dorosłych; przed wyjściem potwierdzić plan Matyldy i kontakt ze znajomymi w hotelu"]
+    essentials: ["Bilet Guggenheim na 10:30 i twarde wyjście 12:30", "Caffè Reggio 16:15–16:55; wyjście najpóźniej 17:00", "Blue Note: 3 bilety kupione dla Radka, Gosi i Ani", "M Social tylko dla dorosłych; przed wyjściem potwierdzić plan Matyldy i kontakt ze znajomymi w hotelu"]
   },
   {
     id: "2026-08-24", day: 3, date: "24.08", weekday: "poniedziałek",
@@ -116,21 +117,20 @@ const DAYS = [
   },
   {
     id: "2026-08-28", day: 7, date: "28.08", weekday: "piątek",
-    title: "SoHo, Pier 35 i Yankees–Red Sox",
-    subtitle: "Cast iron, zakupy, East River i baseball w Bronksie",
-    accent: "yankees", tags: ["zakupy", "Pier 35", "baseball"],
-    story: "Dawna dzielnica przemysłowa, współczesne zakupy, krótki reset na huśtawkach nad East River i jedna z największych rywalizacji amerykańskiego sportu.",
+    title: "SoHo, zakupy i Yankees–Red Sox",
+    subtitle: "Cast iron → pięć godzin Matyldy → baseball w Bronksie",
+    accent: "yankees", tags: ["SoHo", "zakupy", "baseball"],
+    story: "Przed otwarciem sklepów poznajecie przemysłową historię i żeliwne fasady SoHo. Potem Matylda dostaje długi, spokojny blok zakupów z lunchem po drodze, a wieczorem wszyscy zmieniają rytm na jedną z największych rywalizacji amerykańskiego sportu.",
     items: [
-      { time: "09:30", title: "Architektura SoHo", note: "Greene, Mercer, Spring i historia żeliwnych fasad.", type: "plan" },
-      { time: "10:30", title: "Zakupy Matyldy", note: "Lista priorytetów i bezwzględny koniec głównych zakupów o 13:00.", type: "plan" },
-      { time: "13:00", title: "Szybki lunch w Chinatown/LES", note: "Maksymalnie 40 minut i bez dokładania kolejnych sklepów.", type: "plan" },
-      { time: "14:15", title: "Pier 35 · huśtawki nad East River", note: "Około 30 minut na odpoczynek, zieloną ścianę i widok na Manhattan Bridge.", type: "plan" },
-      { time: "15:30", title: "Hotel i zmiana trybu", note: "Zakupy zostają w pokoju; odpoczynek, ładowanie telefonu i bilety do Apple Wallet.", type: "plan" },
+      { time: "09:00", title: "SoHo przed otwarciem sklepów", note: "Greene, Mercer, Prince i historia żeliwnych fasad w spokojniejszym porannym rytmie.", type: "plan" },
+      { time: "10:00–15:00", title: "Zakupy Matyldy", note: "Pięciogodzinne okno na sklepy w jednym ciągu Broadwayu; nie obowiązuje już zasada 2 + 1.", type: "plan" },
+      { time: "12:30–13:15", title: "Lunch między sklepami", note: "Krótka przerwa w SoHo lub Nolita, bez opuszczania trasy zakupowej.", type: "plan" },
+      { time: "15:00", title: "Powrót do hotelu i zmiana trybu", note: "Zakupy zostają w pokoju; odpoczynek, ładowanie telefonu i bilety do Apple Wallet.", type: "plan" },
       { time: "16:45", title: "Metro do Bronksu", note: "Linia D z 42 St–Bryant Park lub B/D zgodnie z bieżącymi komunikatami.", type: "fixed" },
       { time: "17:35", title: "Otwarcie Yankee Stadium", note: "Po wejściu od razu do Monument Park; kolejka może zamknąć się wcześniej.", type: "fixed" },
       { time: "19:05", title: "Yankees–Red Sox", note: "Godzina poprawiona według oficjalnego terminarza MLB.", type: "fixed" }
     ],
-    essentials: ["Bilety w MLB Ballpark", "Pier 35 wypada jako pierwszy przy opóźnieniu zakupów", "Zakupy zostają w hotelu; wyjazd na stadion o 16:45"]
+    essentials: ["Bilety w MLB Ballpark", "Zakupy 10:00–15:00 w obrębie SoHo; lunch odbywa się między sklepami", "O 15:00 koniec zakupów i powrót do hotelu", "Zakupy zostają w hotelu; wyjazd na stadion o 16:45"]
   },
   {
     id: "2026-08-29", day: 8, date: "29.08", weekday: "sobota",
@@ -153,21 +153,25 @@ const DAYS = [
   },
   {
     id: "2026-08-30", day: 9, date: "30.08", weekday: "niedziela",
-    title: "Ostatnie spojrzenie na miasto",
-    subtitle: "Diner → Grand Central → JFK",
-    accent: "terminal", tags: ["Midtown", "wylot"],
-    story: "Spokojny finał: klasyczne śniadanie, krótki spacer po 42nd Street, Grand Central i przewidywalny wyjazd na lotnisko.",
+    title: "Lower East Side i ostatni widok",
+    subtitle: "Russ & Daughters → Tenement Museum → Pier 35 → JFK",
+    accent: "terminal", tags: ["Lower East Side", "historia", "wylot"],
+    story: "Ostatni dzień ma własny temat: codzienne życie imigrantów na Lower East Side. Śniadanie na Orchard Street prowadzi do mieszkania dwóch rodzin w Tenement Museum, a krótki spacer przez historyczną dzielnicę kończy się nad East River.",
     items: [
-      { time: "08:30", title: "Śniadanie w dinerze", note: "Ostatni lokalny rytuał i krótka ściągawka z amerykańskiego śniadania.", type: "plan" },
-      { time: "09:50", title: "Wymeldowanie i bagaże", note: "Powrót do hotelu, check-out przed 11:00 i potwierdzenie przechowania walizek.", type: "fixed" },
-      { time: "10:30", title: "Bryant Park, NYPL i Grand Central", note: "Biblioteka tylko z zewnątrz; w sierpniowe niedziele pozostaje zamknięta.", type: "plan" },
-      { time: "12:30", title: "Ostatni lunch", note: "W okolicy Grand Central lub po drodze do hotelu; bez rezerwacji i długiego oczekiwania.", type: "plan" },
+      { time: "08:00", title: "Wymeldowanie i przechowanie bagaży", note: "Dokumenty i elektronika zostają w małej torbie; walizki odbieramy po powrocie z Lower East Side.", type: "fixed" },
+      { time: "08:30", title: "Hotel → Orchard Street", note: "Metro lub taxi/Uber; celujemy w wejście do kawiarni około 09:00.", type: "plan" },
+      { time: "09:00", title: "Russ & Daughters Cafe", note: "Śniadanie przy 127 Orchard Street; przy kolejce dłuższej niż 15 minut przechodzimy do Remedy Diner.", type: "plan" },
+      { time: "10:30", title: "Odprawa w Tenement Museum", note: "Visitor Center przy 103 Orchard Street; bilety i obecność minimum 10 minut wcześniej.", type: "fixed" },
+      { time: "10:45–12:00", title: "Rogarshevskys & Baldizzis", note: "75-minutowa trasa po mieszkaniu rodzin żydowskiej i włoskiej przy 97 Orchard Street.", type: "fixed" },
+      { time: "12:00–12:45", title: "Lower East Side krok po kroku", note: "Orchard Street, spojrzenie na Essex Market, Seward Park i fasada Museum at Eldridge Street.", type: "plan" },
+      { time: "12:45–13:10", title: "Pier 35", note: "Huśtawki, Manhattan Bridge i ostatni spokojny widok na East River.", type: "plan" },
+      { time: "13:10", title: "Pier 35 → hotel", note: "Taxi/Uber jako plan główny; nie przedłużamy pobytu nad rzeką.", type: "fixed" },
       { time: "13:45", title: "Odbiór walizek", note: "Toaleta, woda, kontrola dokumentów i ostateczna decyzja LIRR czy samochód.", type: "fixed" },
       { time: "14:30", title: "Wyjazd na JFK", note: "LIRR + AirTrain jako plan główny; taxi lub UberXL przy utrudnieniach kolei.", type: "fixed" },
       { time: "16:00–16:30", title: "JFK", note: "Odprawa, nadanie bagażu i kontrola bezpieczeństwa z trzygodzinnym buforem.", type: "fixed" },
       { time: "19:29", title: "Wylot", note: "Terminal i status lotu sprawdzamy dzień wcześniej.", type: "fixed" }
     ],
-    essentials: ["Wymeldowanie do 11:00", "Potwierdzić przechowanie bagażu", "Sprawdzić terminal i komunikaty JFK"]
+    essentials: ["Wymeldowanie przed wyjazdem na Lower East Side", "Tenement Museum: Rogarshevskys & Baldizzis · 10:45 · odprawa 10:30", "Pier 35 opuszczamy najpóźniej 13:10", "Odbiór bagaży 13:45 i wyjazd na JFK bez przesuwania"]
   }
 ];
 
@@ -247,13 +251,13 @@ const DAY_GUIDES = {
   "2026-08-23": {
     kind: "village",
     checked: "25.07.2026",
-    timelineTargets: ["guggenheim", "guggenheim", "route", "food", "route", "bluenote", "bluenote", "rooftop"],
+    timelineTargets: ["guggenheim", "guggenheim", "route", "food", "route", "route", "bluenote", "bluenote", "rooftop"],
     route: [
       { time: "13:45", title: "Washington Square, NYU i MacDougal", text: "Łuk, park, kampus wpisany w miasto oraz dawna scena folkowa i komediowa. To pierwsza warstwa Village: studenci, artyści i życie uliczne.", look: "Łuk, fontanna, One Fifth Avenue i schody klubów na MacDougal Street.", pause: "Usiądźcie na 10–15 minut i obserwujcie muzyków, szachistów, studentów NYU oraz życie wokół fontanny.", image: { src: "assets/photos/127.jpg", alt: "Washington Square Arch, fontanna i życie parku", credit: "zdjęcie orientacyjne" }, related: [{ panel: "stories", key: "story-0", label: "Historia placu" }, { panel: "stories", key: "story-1", label: "Moses i Jane Jacobs" }, { panel: "stories", key: "story-4", label: "Historia muzyczna" }] },
       { time: "14:35", title: "Jefferson Market i Commerce Street", text: "Dawny gmach sądu z charakterystyczną wieżą, niewielki ogród oraz kręte ulice zachodniej części Village.", look: "Czerwona cegła, wieża Jefferson Market Library, brownstones i nietypowy łuk Commerce Street.", image: { src: "assets/photos/128.jpg", alt: "Ceglana bryła i wieża zegarowa Jefferson Market Library", credit: "zdjęcie orientacyjne" }, related: [{ panel: "stories", key: "story-3", label: "Dlaczego ulice się plączą?" }] },
       { time: "15:05", title: "Perry, Magnolia i Friends · opcjonalnie", text: "Moduł popkulturowy wykonujemy tylko przy dobrej energii: schody Carrie, Magnolia Bakery i fasada budynku z Przyjaciół.", look: "66 Perry Street, 401 Bleecker Street oraz narożnik Bedford i Grove.", related: [{ panel: "screen", key: "screen-1", label: "Carrie" }, { panel: "screen", key: "screen-0", label: "Friends" }] },
       { time: "15:45", title: "Christopher Park i Stonewall", text: "Najważniejszy historyczny przystanek: park, rzeźby Gay Liberation, nadal działający Stonewall Inn oraz Visitor Center.", look: "Białe figury George’a Segala i mała skala miejsca w porównaniu z jego globalnym znaczeniem.", image: { src: "assets/photos/129.jpg", alt: "Białe rzeźby Gay Liberation w Christopher Park", credit: "zdjęcie orientacyjne" }, related: [{ panel: "stories", key: "story-2", label: "Historia Stonewall" }] },
-      { time: "16:20–17:20", title: "Kawa, deser i odpoczynek", text: "Rezerwa przed klubem. Przy zmęczeniu kończymy spacer wcześniej i siadamy blisko Blue Note.", look: "Sprawdźcie bilety, baterię telefonu i dodatkową warstwę ubrania.", related: [{ panel: "food", label: "Kawa i deser" }] }
+      { time: "16:15–16:55", title: "Caffè Reggio", text: "Stały, a nie awaryjny przystanek dnia: cappuccino w kawiarni działającej od 1927 roku. W środku znajduje się ozdobny ekspres z 1902 roku, renesansowe dzieła i ława związana z rodziną Medyceuszy.", look: "Zielona fasada, napis Original Cappuccino i zabytkowy ekspres wewnątrz. O 16:55 prosimy o rachunek; najpóźniej 17:00 wychodzimy.", image: { src: "assets/photos/131.webp", alt: "Zielona fasada Caffè Reggio przy MacDougal Street", credit: "zdjęcie orientacyjne" }, related: [{ panel: "food", label: "Caffè Reggio i menu" }] }
     ],
     stories: [
       { title: "Plac, który był cmentarzem", text: "Washington Square długo nie był eleganckim salonem. Pod częścią parku znajdowało się pole garncarskie, czyli publiczne miejsce pochówku osób ubogich i nieznanych. Później teren służył paradom wojskowym, a dopiero z czasem stał się sercem artystycznego Village." },
@@ -297,6 +301,7 @@ const DAY_GUIDES = {
       status: "Opcjonalnie po koncercie · tylko dorośli",
       title: "M Social Times Square · Beast & Butterflies",
       address: "226 W 52nd Street · taras na 7. piętrze",
+      image: { src: "assets/photos/132.jpg", alt: "Taras M Social z nocnym widokiem na Times Square", credit: "zdjęcie orientacyjne" },
       intro: "Jeden drink i nocny widok na światła Times Square dla Radka, Gosi i Ani. To finał tylko przy energii po koncercie — nie kolejna obowiązkowa rezerwacja.",
       schedule: ["około 21:30 · wyjście z Blue Note", "około 22:00 · dojazd taxi/Uberem albo metrem", "22:05–23:15 · drink i taras", "najpóźniej 23:30 · wyjście i krótki powrót do hotelu"],
       rules: ["Osoby poniżej 18 lat nie są wpuszczane do baru ani jego strefy", "Matylda pozostaje w hotelu ze znajomymi zgodnie z planem wieczoru", "Bar działa obecnie do północy; walk-in jest możliwy, ale stolik można zarezerwować", "Przy zmęczeniu po Hiromi jedziecie bezpośrednio do hotelu — rooftop jest dodatkiem"],
@@ -311,7 +316,7 @@ const DAY_GUIDES = {
       { category: "Lżej i bez rezerwacji", name: "Tartinery", price: "$$", address: "233 Thompson Street", note: "Tartines, jajka, tosty i kawa. W weekend działa od 9:00 i przyjmuje gości bez rezerwacji.", url: "https://www.tartinery.com/location/greenwich-village/" },
       { category: "Tanio i szybko", name: "Mamoun’s Falafel", price: "$", address: "119 MacDougal Street", note: "Falafel i shawarma w miejscu działającym od 1971 roku. Dobre jako szybki lunch zamiast pełnego brunchu.", url: "https://www.mamouns.com/location/mamouns-greenwich-village-nyc/" },
       { category: "Kultowy deser", name: "Magnolia Bakery", price: "$–$$", address: "401 Bleecker Street", note: "Oryginalny lokal z 1996 roku. Niedziela 9:30–22:00; można zamówić wcześniej i odebrać bez kolejki.", url: "https://www.magnoliabakery.com/blogs/stores/bleecker-street", image: { src: "assets/places/magnolia.jpg", alt: "Fasada Magnolia Bakery przy Bleecker Street", credit: "WestportWiki · Wikimedia Commons · CC BY-SA 3.0" } }
-      ,{ category: "Kawa i historia", name: "Caffè Reggio", price: "$–$$", address: "119 MacDougal Street", note: "Kawa w historycznym wnętrzu bez konieczności pełnego posiłku. Dobra rezerwa przy deszczu albo zmęczeniu.", url: "https://www.caffereggio.com/" }
+      ,{ category: "Kawa i historia", name: "Caffè Reggio", price: "$–$$", address: "119 MacDougal Street", note: "Stały przystanek 16:15–16:55: Original Cappuccino, ekspres z 1902 roku i wnętrze wpisane w historię Village.", url: "https://www.caffereggio.com/", image: { src: "assets/photos/131.webp", alt: "Zielona fasada Caffè Reggio przy MacDougal Street", credit: "zdjęcie orientacyjne" } }
     ],
     variants: [
       { title: "Wersja podstawowa", text: "Guggenheim → szybki lunch → Village → Blue Note → opcjonalnie M Social dla dorosłych." },
@@ -670,12 +675,11 @@ const DAY_GUIDES = {
   },
   "2026-08-28": {
     kind: "sohoyankees", checked: "25.07.2026",
-    timelineTargets: ["route", "shopping", "food", "pier35", "rest", "transport", "stadium", "baseball"],
+    timelineTargets: ["route", "shopping", "food", "rest", "transport", "stadium", "baseball"],
     route: [
-      { time: "09:30", title: "Greene Street", text: "Najlepszy początek opowieści o żeliwnych fasadach. Powtarzalne kolumny wyglądały jak kamień, ale można je było produkować w fabryce i szybko składać na miejscu.", look: "Numery 72–76 i 28–30 Greene Street; porównajcie rytm okien, kolumny i schody pożarowe.", related: [{ key: "systory-0", label: "Dlaczego cast iron?" }] },
-      { time: "09:55", title: "Mercer i Prince Street", text: "Dawne lofty produkcyjne stały się mieszkaniami artystów, a później jednymi z najdroższych adresów miasta.", look: "Wielkie okna, wysokie partery i kostka brukowa przypominająca o dostawach towaru.", related: [{ key: "systory-1", label: "Artyści kontra miasto" }] },
-      { time: "10:20", title: "Broadway i Spring Street", text: "Tu architektura miesza się z najbardziej komercyjnym SoHo. Od 10:30 Matylda przejmuje wybór sklepów.", look: "Haughwout Building przy 488 Broadway i jego pionowy rytm fasady.", related: [{ key: "systory-2", label: "Pierwsza winda Otisa" }] },
-      { time: "13:00", title: "Nolita → Chinatown/Lower East Side", text: "Po zamknięciu zakupów schodzicie przez mniejszą skalę Nolity na szybki lunch. To przejście ustawia Was już po właściwej stronie miasta przed Pier 35.", look: "Niskie kamienice, gwar Chinatown i wyraźna zmiana rytmu ulic." }
+      { time: "09:00", title: "Greene Street", text: "Najlepszy początek opowieści o żeliwnych fasadach. Powtarzalne kolumny wyglądały jak kamień, ale można je było produkować w fabryce i szybko składać na miejscu.", look: "Numery 72–76 i 28–30 Greene Street; porównajcie rytm okien, kolumny i schody pożarowe.", related: [{ key: "systory-0", label: "Dlaczego cast iron?" }] },
+      { time: "09:20", title: "Mercer i Prince Street", text: "Dawne lofty produkcyjne stały się mieszkaniami artystów, a później jednymi z najdroższych adresów miasta.", look: "Wielkie okna, wysokie partery i kostka brukowa przypominająca o dostawach towaru.", related: [{ key: "systory-1", label: "Artyści kontra miasto" }] },
+      { time: "09:40", title: "Broadway i Spring Street", text: "Tu architektura miesza się z najbardziej komercyjnym SoHo. O 10:00 kończy się część wspólna i zaczyna pięciogodzinny blok Matyldy.", look: "Haughwout Building przy 488 Broadway i jego pionowy rytm fasady.", related: [{ key: "systory-2", label: "Pierwsza winda Otisa" }] }
     ],
     stories: [
       { title: "Żeliwo — XIX-wieczny prefabrykat", text: "Elementy fasady odlewano seryjnie, transportowano na plac budowy i skręcano. Pozwalało to budować szybciej, tworzyć wielkie okna i naśladować kosztowny kamień. Dzisiejsza elegancja SoHo zaczęła się jako praktyczna architektura handlu i przemysłu." },
@@ -685,15 +689,6 @@ const DAY_GUIDES = {
       { title: "Yankees–Red Sox: więcej niż jeden mecz", text: "Rywalizacja rosła przez ponad sto lat, a jej najsłynniejszym symbolem stało się przejście Babe’a Rutha z Bostonu do Yankees w 1919 roku. Dziś mecz ma sens nawet bez znajomości tabeli — publika reaguje mocniej na każdy pojedynek i każdą prowokację między klubami." },
       { title: "Pier, który stał się nadwodnym salonem", text: "Pier 35 był elementem przemysłowego nabrzeża East River. W 2019 roku otwarto tu park zaprojektowany przez SHoP Architects i Ken Smith Workshop: z podwyższonym tarasem, czterema dużymi huśtawkami, zieloną ścianą oraz siedliskiem pływowym Mussel Beach." }
     ],
-    pier35: {
-      status: "Plan główny · 14:15–14:45 · bezpłatnie",
-      title: "Pier 35 · huśtawki i Manhattan Bridge",
-      address: "FDR Drive przy Jefferson Street · Lower East Side",
-      intro: "To krótki reset pomiędzy zakupami i stadionem, nie osobna wyprawa. Najważniejsze są cztery huśtawki, zielona ściana, rzeka i nietypowy kadr Manhattan Bridge.",
-      route: ["13:40–13:45 · wyjście po szybkim lunchu", "Dojście albo krótki przejazd do wejścia przy Jefferson Street", "14:15 · huśtawki i podwyższony taras", "14:30 · Mussel Beach, zielona ściana i zdjęcie mostu", "14:45 · bezwarunkowe wyjście w stronę East Broadway", "Metro F do 42 St–Bryant Park albo Uber; hotel około 15:30"],
-      photo: ["Na huśtawkach fotografujcie lekko z boku, aby w kadrze zostały rzeka i Manhattan Bridge", "Szerszy kadr pokaże skalę zielonej ściany; 2× lepiej oddzieli osobę od mostu", "Nie czekajcie na pustą huśtawkę dłużej niż 10 minut — widok z tarasu jest równie ważny"],
-      fallback: "Jeśli zakupy kończą się po 13:15 albo lunch przeciąga się po 14:00, Pier 35 wypada bez dyskusji. Bufor hotelowy i Monument Park są ważniejsze."
-    },
     shopping: [
       { category: "Sneakersy", name: "Kith", address: "337 Lafayette St", note: "Streetwear i sneakersy; dobry punkt główny, ale kolejka i limitowane kolekcje mogą zabrać czas.", url: "https://kith.com/pages/store-locator" },
       { category: "Moda", name: "Aritzia SoHo", address: "524 Broadway", note: "Duży sklep popularnej marki; traktować jako jeden z dwóch głównych wyborów.", url: "https://www.aritzia.com/us/en/store?StoreID=aritzia-soho" },
@@ -730,17 +725,15 @@ const DAY_GUIDES = {
       ]
     },
     variants: [
-      { title: "Plan pełny", text: "Architektura 45–60 minut → zakupy do 13:00 → szybki lunch → Pier 35 → hotel → stadion przed otwarciem bram." },
-      { title: "Zakupy ważniejsze", text: "Skracacie architekturę, ale nadal kończycie sklepy o 13:00. Jeśli ten limit pęka, rezygnujecie z Pier 35." },
-      { title: "Upał", text: "Krótsze przejścia między klimatyzowanymi sklepami, lunch pod dachem i tylko 15–20 minut na Pier 35. Nie przesuwacie wyjazdu na stadion." },
-      { title: "Deszcz", text: "SoHo pozostaje możliwe dzięki sklepom i restauracjom; Pier 35 wypada. Mecz może być opóźniony — śledzicie komunikaty w MLB Ballpark." }
+      { title: "Plan pełny", text: "SoHo 09:00–10:00 → zakupy 10:00–15:00 z lunchem po drodze → hotel → stadion przed otwarciem bram." },
+      { title: "Zakupy w pełnym wymiarze", text: "Lista jest uporządkowana geograficznie, ale Matylda sama wybiera tempo i sklepy. Twardy limit dotyczy dopiero godziny 15:00." },
+      { title: "Upał", text: "Poranny spacer skracacie do Greene i Haughwout Building. Zakupy prowadzą między klimatyzowanymi sklepami, a lunch jecie bez odchodzenia od Broadwayu." },
+      { title: "Deszcz", text: "Skrócona opowieść o fasadach pod arkadami i pięciogodzinny blok sklepów pozostają możliwe. Śledzicie jedynie komunikaty pogodowe MLB." }
     ],
     links: [
       { label: "Start · hotel → Greene Street", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=72+Greene+Street,+New+York&travelmode=transit" },
-      { label: "Spacer · Greene → Mercer → Haughwout → Nolita", url: "https://www.google.com/maps/dir/?api=1&origin=72+Greene+Street,+New+York&destination=Elizabeth+Street+Garden,+New+York&waypoints=Prince+Street+and+Mercer+Street,+New+York%7CE.V.+Haughwout+Building,+488+Broadway,+New+York&travelmode=walking" },
-      { label: "Nolita/Chinatown → Pier 35", url: "https://www.google.com/maps/dir/?api=1&origin=Elizabeth+Street+Garden,+New+York&destination=Pier+35,+FDR+Drive+and+Jefferson+Street,+New+York&travelmode=walking" },
-      { label: "Pier 35 → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=Pier+35,+FDR+Drive+and+Jefferson+Street,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
-      { label: "Pier 35 · informacje i warunki", url: "https://pier35nyc.com/en" },
+      { label: "Poranne SoHo · Greene → Mercer → Haughwout", url: "https://www.google.com/maps/dir/?api=1&origin=72+Greene+Street,+New+York&destination=E.V.+Haughwout+Building,+488+Broadway,+New+York&waypoints=Prince+Street+and+Mercer+Street,+New+York&travelmode=walking" },
+      { label: "SoHo → hotel po zakupach", url: "https://www.google.com/maps/dir/?api=1&origin=Glossier,+72+Spring+Street,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
       { label: "Hotel → Yankee Stadium", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Yankee+Stadium,+1+E+161st+St,+Bronx,+NY&travelmode=transit" },
       { label: "Powrót · Yankee Stadium → hotel", url: "https://www.google.com/maps/dir/?api=1&origin=Yankee+Stadium,+1+E+161st+St,+Bronx,+NY&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=transit" },
       { label: "Yankees · Gameday Guide 2026", url: "https://www.mlb.com/yankees/ballpark/information/know-before-you-go" },
@@ -848,8 +841,61 @@ const DAY_GUIDES = {
     ]
   },
   "2026-08-30": {
-    kind: "departure", checked: "16.07.2026",
-    timelineTargets: ["diner", "hotel", "walk", "food", "hotel", "transport", "airport", "airport"],
+    kind: "departure", checked: "04.08.2026",
+    timelineTargets: ["hotel", "breakfast", "breakfast", "museum", "museum", "walk", "pier35", "pier35", "hotel", "transport", "airport", "airport"],
+    breakfast: {
+      intro: "Śniadanie jest pierwszym rozdziałem historii Lower East Side. Russ & Daughters kontynuuje rodzinny biznes rozpoczęty przez żydowskiego imigranta Joela Russa; lokal przy Orchard Street otwarto w stulecie firmy.",
+      primary: { name: "Russ & Daughters Cafe", address: "127 Orchard Street", time: "09:00–10:00", note: "Plan główny. Lokal nie przyjmuje rezerwacji, dlatego przy kolejce dłuższej niż 15 minut uruchamiamy plan B.", image: { src: "assets/photos/137.webp", alt: "Wejście do Russ & Daughters Cafe przy Orchard Street", credit: "zdjęcie orientacyjne" }, url: "https://www.russanddaughterscafe.com/" },
+      fallback: { name: "Remedy Diner", address: "245 E Houston Street", note: "Całodobowy diner około kilkunastu minut pieszo. Jest bezpiecznym planem B, ale o 10:15 trzeba już wyjść w stronę Visitor Center.", image: { src: "assets/photos/138.webp", alt: "Narożna fasada Remedy Diner", credit: "zdjęcie orientacyjne" }, url: "https://remedydinerny.com/page/location--hours" }
+    },
+    museum: {
+      status: "Wybrana trasa · 30.08 · 10:45–12:00",
+      title: "Rogarshevskys & Baldizzis",
+      visitorCenter: "103 Orchard Street · odprawa najpóźniej 10:30",
+      historicBuilding: "97 Orchard Street",
+      cover: { src: "assets/photos/135.webp", alt: "Wejście do Tenement Museum przy Orchard Street", credit: "zdjęcie orientacyjne" },
+      interior: { src: "assets/photos/136.jpg", alt: "Odtworzona kuchnia rodziny Baldizzich przy 97 Orchard Street", credit: "Tenement Museum · wnętrze trasy" },
+      practical: ["Trasa trwa 75 minut i prowadzi przez historyczną kamienicę przy 97 Orchard Street", "Przy Visitor Center jesteście o 10:30 — nie kończycie wtedy śniadania", "Bilety i dokument potwierdzający zakup zapisujemy również offline", "Wnętrza są niewielkie; stosujcie się do instrukcji przewodnika dotyczących fotografowania", "Po zakończeniu nie wracacie do Visitor Center na długie zakupy — zaczynacie spacer w stronę Pier 35"],
+      stories: [
+        { title: "Dwie rodziny, dwa momenty migracji", text: "Rogarshevscy byli żydowską rodziną z Europy Wschodniej żyjącą tu na początku XX wieku. Baldizzich, imigrantów z Sycylii, pokazano w realiach Wielkiego Kryzysu. Te same trzy pokoje opowiadają więc dwie różne drogi budowania życia w Nowym Jorku." },
+        { title: "Jak mieściło się życie w 30 m²", text: "Mieszkania przy 97 Orchard miały około 325 stóp kwadratowych, czyli mniej więcej 30 m², i składały się z trzech pomieszczeń. Kuchnia mogła nocą stawać się sypialnią, a meble i przechowywanie podporządkowywano każdemu wolnemu fragmentowi przestrzeni." },
+        { title: "Baldizzi i Wielki Kryzys", text: "Adolfo Baldizzi był wykwalifikowanym stolarzem, lecz w czasie Wielkiego Kryzysu miał trudności ze stałą pracą. Rodzina korzystała z publicznej pomocy, a jednocześnie tworzyła dom własnymi rękami — część mebli Adolfo wykonał sam." }
+      ]
+    },
+    lesRoute: [
+      { time: "12:00", title: "Orchard Street", text: "Po wyjściu z muzeum nie zmieniacie od razu dzielnicy. Idziecie wzdłuż ulicy, której kamienice, sklepy i rodzinne biznesy pokazują kolejne warstwy migracyjnej historii Lower East Side.", look: "Wąskie działki, schody pożarowe, partery handlowe i różnice między odrestaurowanymi a zwykłymi kamienicami.", image: { src: "assets/photos/139.jpg", alt: "Kamienice i ulica Orchard Street", credit: "zdjęcie orientacyjne" } },
+      { time: "12:10", title: "Essex Market · rzut oka", text: "Nie robicie pełnego zwiedzania hali. Spoglądacie na współczesny publiczny targ, który kontynuuje historię handlu ulicznego i małych biznesów dzielnicy.", look: "Neon Essex Market, wejście od Delancey i kontrast nowego budynku z dawną zabudową.", image: { src: "assets/photos/141.webp", alt: "Wejście do Essex Market", credit: "zdjęcie orientacyjne" } },
+      { time: "12:18", title: "Seward Park", text: "Krótki oddech w jednym z najstarszych miejskich placów zabaw w Stanach Zjednoczonych. Park powstał jako odpowiedź na zatłoczenie kamienic i brak bezpiecznej przestrzeni dla dzieci.", look: "Place zabaw, alejki i zabudowa Lower East Side otaczająca niewielki park.", image: { src: "assets/photos/140.jpg", alt: "Plac zabaw i alejki Seward Park", credit: "zdjęcie orientacyjne" } },
+      { time: "12:27", title: "Museum at Eldridge Street · z zewnątrz", text: "Dawna synagoga z 1887 roku była monumentalnym znakiem, że żydowska społeczność buduje w mieście trwałe instytucje. Tego dnia oglądacie wyłącznie fasadę.", look: "Wielka rozeta, mauretańskie detale, smukłe wieżyczki i gwiazdy Dawida ponad wejściem.", image: { src: "assets/photos/142.jpg", alt: "Fasada Museum at Eldridge Street", credit: "zdjęcie orientacyjne" } }
+    ],
+    pier35: {
+      status: "Plan główny · około 12:45–13:10 · bezpłatnie",
+      title: "Pier 35 · ostatni widok nad East River",
+      image: { src: "assets/photos/133.jpg", alt: "Huśtawki na Pier 35 z Manhattan Bridge w tle", credit: "zdjęcie orientacyjne" },
+      intro: "Krótki finał po historycznym Lower East Side. Nie czekacie na idealnie pustą huśtawkę — ważniejsze jest wyjście najpóźniej o 13:10.",
+      photo: ["Usiądźcie na skrajnej huśtawce i fotografujcie lekko z boku, aby Manhattan Bridge został za osobą", "Szeroki kadr pokaże jednocześnie huśtawki, rzekę i oba mosty", "Zróbcie jedno wspólne zdjęcie, a potem odłóżcie telefon na kilka minut — to pożegnanie z miastem"],
+      exit: "13:10 · taxi/Uber bezpośrednio do hotelu. Metro zostaje planem awaryjnym, nie sposobem na oszczędzenie kilku dolarów kosztem bufora lotniskowego."
+    },
+    departureVariants: [
+      { title: "Plan pełny · rekomendowany", text: "Check-out → Russ & Daughters → Tenement 10:45 → cztery krótkie punkty Lower East Side → Pier 35 → taxi/Uber do hotelu → JFK." },
+      { title: "Kolejka na śniadanie", text: "Po 15 minutach przechodzicie do Remedy Diner. Nie przesuwacie odprawy w muzeum ani nie skracacie jej kosztem spóźnienia." },
+      { title: "Opóźnienie po muzeum", text: "Pomijacie wnętrze Essex Market i skracacie Pier 35 do 10 minut. O 13:10 ruszacie do hotelu niezależnie od miejsca na trasie." },
+      { title: "Deszcz", text: "Tenement Museum zostaje. Orchard, Seward i Eldridge oglądacie w skrócie; Pier 35 wypada, a do hotelu wracacie wcześniej." }
+    ],
+    departureLinks: [
+      { label: "Hotel → Russ & Daughters Cafe", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Russ+%26+Daughters+Cafe,+127+Orchard+Street,+New+York&travelmode=transit" },
+      { label: "Plan B · Russ & Daughters → Remedy Diner", url: "https://www.google.com/maps/dir/?api=1&origin=Russ+%26+Daughters+Cafe,+127+Orchard+Street,+New+York&destination=Remedy+Diner,+245+E+Houston+Street,+New+York&travelmode=walking" },
+      { label: "Russ & Daughters → Tenement Visitor Center", url: "https://www.google.com/maps/dir/?api=1&origin=Russ+%26+Daughters+Cafe,+127+Orchard+Street,+New+York&destination=Tenement+Museum,+103+Orchard+Street,+New+York&travelmode=walking" },
+      { label: "Spacer · Tenement → Essex → Seward → Eldridge → Pier 35", url: "https://www.google.com/maps/dir/?api=1&origin=Tenement+Museum,+103+Orchard+Street,+New+York&destination=Pier+35,+FDR+Drive+and+Jefferson+Street,+New+York&waypoints=Essex+Market,+88+Essex+Street,+New+York%7CSeward+Park,+New+York%7CMuseum+at+Eldridge+Street,+12+Eldridge+Street,+New+York&travelmode=walking" },
+      { label: "Pier 35 → hotel · samochód", url: "https://www.google.com/maps/dir/?api=1&origin=Pier+35,+FDR+Drive+and+Jefferson+Street,+New+York&destination=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&travelmode=driving" },
+      { label: "Tenement Museum · wybrana trasa", url: "https://www.tenement.org/tour/7a-rogarshevskys-baldizzis/" },
+      { label: "Tenement Museum · informacje praktyczne", url: "https://www.tenement.org/plan-a-visit/" },
+      { label: "Pier 35 · informacje", url: "https://pier35nyc.com/en" },
+      { label: "Hotel → Moynihan Train Hall", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=Moynihan+Train+Hall,+New+York&travelmode=walking" },
+      { label: "Hotel → JFK · transport publiczny", url: "https://www.google.com/maps/dir/?api=1&origin=Holiday+Inn+New+York+City+Times+Square,+585+8th+Ave,+New+York&destination=John+F.+Kennedy+International+Airport,+Queens,+NY&travelmode=transit" },
+      { label: "MTA TrainTime", url: "https://new.mta.info/traintime" },
+      { label: "JFK · status lotów i terminale", url: "https://www.jfkairport.com/flight-tracker" }
+    ],
     diner: {
       intro: "Diner to nie tylko restauracja z retro szyldem. To codzienny nowojorski rytuał: długie menu, dolewana kawa, śniadanie przez większą część dnia i stolik, przy którym można siedzieć bez ceremonii.",
       basics: [
@@ -860,7 +906,7 @@ const DAY_GUIDES = {
       ]
     },
     hotel: {
-      steps: ["09:50 · wrócić do hotelu po śniadaniu", "Wymeldować się przed 11:00 i poprosić o kwit lub numer do przechowalni", "W jednej małej torbie zostawić paszporty, elektronikę, leki i rzeczy potrzebne w samolocie", "Nie zostawiać paszportów ani wartościowej elektroniki w przechowywanym bagażu", "13:45 · być ponownie w hotelu", "Przed wyjazdem: toaleta, napełnienie butelek, dokumenty, terminal i status lotu"]
+      steps: ["08:00 · wymeldować się i poprosić o kwit lub numer do przechowalni", "W jednej małej torbie zostawić paszporty, elektronikę, leki i rzeczy potrzebne w samolocie", "Nie zostawiać paszportów ani wartościowej elektroniki w przechowywanym bagażu", "Przed wyjściem potwierdzić, że przechowalnia będzie dostępna około 13:45", "13:45 · być ponownie w hotelu niezależnie od przebiegu spaceru", "Przed wyjazdem: toaleta, napełnienie butelek, dokumenty, terminal i status lotu"]
     },
     walk: [
       { time: "10:30", title: "Bryant Park", text: "Ostatni powrót do parku po filmowym wieczorze. W niedzielny poranek jest spokojniejszy niż Times Square i dobrze pokazuje, jak prywatnie zarządzana przestrzeń publiczna zmieniła Midtown.", look: "Trawnik, stoliki, otaczające wieżowce i tylna fasada biblioteki.", related: [{ key: "depstory-0", label: "Jak uratowano Bryant Park?" }] },
@@ -943,9 +989,10 @@ const FILMS = [
   { id:"friends", title:"Friends · wybrane odcinki", year:"1994–2004", audience:"Gosia + Matylda", dayId:"2026-08-23", panel:"screen", place:"90 Bedford Street", why:"Pozwala od razu rozpoznać fasadę z czołówki i odróżnić serialowe studio od prawdziwego Village.", note:"Wystarczy jeden ulubiony odcinek — nie potrzebujecie powtórki całego serialu.", url:"https://www.youtube.com/results?search_query=Friends+official+trailer" },
   { id:"satc", title:"Sex and the City · wybrane odcinki", year:"1998–2004", audience:"Gosia + Matylda", dayId:"2026-08-23", panel:"screen", place:"66 Perry Street", why:"Schody Carrie i Magnolia Bakery stają się czytelne jako część popkulturowej geografii West Village.", note:"W aplikacji przypominamy, że bohaterka miała mieszkać na Upper East Side.", url:"https://www.youtube.com/results?search_query=Sex+and+the+City+series+trailer" },
   { id:"firstmonday", title:"The First Monday in May", year:"2016", audience:"Gosia + Matylda", dayId:"2026-08-25", panel:"museum", place:"The Met", why:"Dokument pokazuje powstawanie wystawy Costume Institute i mechanizm stojący za Met Gala.", note:"Dobry pomost między sztuką Gosi a modą interesującą Matyldę.", url:"https://www.youtube.com/results?search_query=The+First+Monday+in+May+official+trailer" },
-  { id:"ghostbusters", title:"Ghostbusters", year:"1984", audience:"Wszyscy", dayId:"2026-08-30", panel:"walk", place:"New York Public Library", why:"Jedna z najbardziej rozpoznawalnych filmowych scen w NYPL oraz lekki finał przed podróżą.", note:"Budynek oglądacie z zewnątrz, ale kamienne lwy i fasada będą natychmiast rozpoznawalne.", url:"https://www.youtube.com/results?search_query=Ghostbusters+1984+official+trailer" },
+  { id:"ghostbusters", title:"Ghostbusters", year:"1984", audience:"Wszyscy", dayId:"2026-08-24", panel:"movie", place:"New York Public Library", why:"Jedna z najbardziej rozpoznawalnych filmowych scen w NYPL, oglądanym przy okazji wieczoru w Bryant Park.", note:"Kamienne lwy i fasada będą natychmiast rozpoznawalne przed seansem pod gwiazdami.", url:"https://www.youtube.com/results?search_query=Ghostbusters+1984+official+trailer" },
   { id:"kingcreole", title:"King Creole", year:"1958", audience:"Wszyscy", dayId:"2026-08-24", panel:"movie", place:"Bryant Park Movie Night", why:"To dokładnie film zaplanowany na bezpłatny pokaz pod wieżowcami.", note:"Warto znać tylko podstawowy kontekst Elvisa jako aktora — sam film oglądacie na miejscu.", url:"https://www.youtube.com/results?search_query=King+Creole+official+trailer" },
-  { id:"onthetown", title:"On the Town", year:"1949", audience:"Wszyscy", dayId:"2026-08-30", panel:"walk", place:"Klasyczny Manhattan", why:"Musical o intensywnym poznawaniu Nowego Jorku w ograniczonym czasie — idealny motyw pożegnania z miastem.", note:"Lekki, stary Hollywood i wiele rozpoznawalnych miejskich symboli.", url:"https://www.youtube.com/results?search_query=On+the+Town+1949+trailer" }
+  { id:"onthetown", title:"On the Town", year:"1949", audience:"Wszyscy", dayId:"2026-08-22", panel:"evening", place:"Klasyczny Manhattan", why:"Musical o intensywnym poznawaniu Nowego Jorku w ograniczonym czasie — dobry motyw otwarcia wyprawy.", note:"Lekki, stary Hollywood i wiele rozpoznawalnych miejskich symboli.", url:"https://www.youtube.com/results?search_query=On+the+Town+1949+trailer" },
+  { id:"hesterstreet", title:"Hester Street", year:"1975", audience:"Gosia + Radek", dayId:"2026-08-30", panel:"museum", place:"Lower East Side", why:"Intymna opowieść o żydowskich imigrantach na Lower East Side dobrze przygotowuje do mieszkań Rogarshevskych.", note:"Najbardziej bezpośredni filmowy kontekst dla ostatniego dnia i wybranej trasy Tenement Museum.", url:"https://www.youtube.com/results?search_query=Hester+Street+1975+trailer" }
 ];
 
 const MUSIC = [
@@ -975,14 +1022,16 @@ const TO_BUY = [
   { title: "Bargemusic", status: "Po publikacji programu", kind: "later", when: "29.08", text: "Sprawdzić dokładny koncert i zasady rezerwacji, gdy organizator opublikuje pełny kalendarz na sierpień.", action: "Sprawdź program", url: "https://www.bargemusic.org/" },
   { title: "SUMMIT One Vanderbilt", status: "Do rezerwacji", kind: "todo", when: "26.08 · pierwszy poranny slot", text: "Kupić bilet czasowy na około 8:30. Rano przeznaczamy około 90 minut, a następnie jedziemy przez katedrę św. Patryka do Gantry Plaza.", action: "Oficjalna strona", url: "https://summitov.com/" }
   ,{ title: "Guggenheim", status: "Do kupienia", kind: "todo", when: "23.08 · 10:30", text: "Plan główny dla Radka i Gosi. Rezerwacja na pierwsze wejście i twarde wyjście o 12:30.", action: "Godziny i bilety", url: "https://www.guggenheim.org/buy-tickets" }
+  ,{ title: "Tenement Museum", status: "Wybrana trasa · kupić", kind: "todo", when: "30.08 · 10:45", text: "7A: Rogarshevskys & Baldizzis. Po zakupie zapisać potwierdzenie offline; w Visitor Center jesteście o 10:30.", action: "Kup bilety", url: "https://www.tenement.org/tour/7a-rogarshevskys-baldizzis/" }
 ];
 
 const PLACES = [
   { id:"times-square", title:"Times Square", icon:"●", category:"ikona miasta", text:"Pierwsze światła, dawne Longacre Square i najlepszy punkt wejścia w energię Midtown.", meta:"22.08 · wieczór", dayId:"2026-08-22", panel:"evening", map:"https://www.google.com/maps/search/?api=1&query=Times+Square+New+York" },
-  { id:"bryant-park", title:"Bryant Park i NYPL", icon:"◆", category:"lokalnie", text:"Miejski salon za biblioteką: pierwszy spacer, film pod gwiazdami i finałowe pożegnanie z 42nd Street.", meta:"22, 24 i 30.08", dayId:"2026-08-24", panel:"movie", map:"https://www.google.com/maps/search/?api=1&query=Bryant+Park+New+York" },
+  { id:"bryant-park", title:"Bryant Park i NYPL", icon:"◆", category:"lokalnie", text:"Miejski salon za biblioteką: pierwszy spacer i film pod gwiazdami.", meta:"22 i 24.08", dayId:"2026-08-24", panel:"movie", map:"https://www.google.com/maps/search/?api=1&query=Bryant+Park+New+York" },
   { id:"village", title:"Greenwich Village", icon:"♟", category:"historia", text:"Bohema, Stonewall, brownstones, muzyka i serialowy Nowy Jork.", meta:"23.08 · 13:00", dayId:"2026-08-23", panel:"route", map:"https://www.google.com/maps/search/?api=1&query=Washington+Square+Park+New+York", image:"assets/photos/127.jpg" },
   { id:"bluenote", title:"Blue Note", icon:"♪", category:"muzyka", text:"Kameralny klub jazzowy i koncert Hiromi przy stoliku.", meta:"23.08 · 20:00", dayId:"2026-08-23", panel:"bluenote", map:"https://www.google.com/maps/search/?api=1&query=Blue+Note+Jazz+Club+NYC", image:"assets/places/blue-note.jpg" },
-  { id:"m-social", title:"M Social Rooftop", icon:"☾", category:"nocny widok", text:"Opcjonalny drink Radka, Gosi i Ani po Hiromi na tarasie Beast & Butterflies nad Times Square.", meta:"23.08 · około 22:00 · tylko dorośli", dayId:"2026-08-23", panel:"rooftop", map:"https://www.google.com/maps/search/?api=1&query=M+Social+Hotel+Times+Square+226+West+52nd+Street+New+York" },
+  { id:"caffe-reggio", title:"Caffè Reggio", icon:"☕", category:"historia i kawa", text:"Original Cappuccino, ekspres z 1902 roku i artystyczne wnętrze Greenwich Village.", meta:"23.08 · 16:15", dayId:"2026-08-23", panel:"route", map:"https://www.google.com/maps/search/?api=1&query=Caffe+Reggio+119+MacDougal+Street+New+York", image:"assets/photos/131.webp" },
+  { id:"m-social", title:"M Social Rooftop", icon:"☾", category:"nocny widok", text:"Opcjonalny drink Radka, Gosi i Ani po Hiromi na tarasie Beast & Butterflies nad Times Square.", meta:"23.08 · około 22:00 · tylko dorośli", dayId:"2026-08-23", panel:"rooftop", map:"https://www.google.com/maps/search/?api=1&query=M+Social+Hotel+Times+Square+226+West+52nd+Street+New+York", image:"assets/photos/132.jpg" },
   { id:"moma", title:"MoMA", icon:"▣", category:"sztuka", text:"Modernizm, Frida i Diego, design, pop-art oraz wystawa o animacji.", meta:"24.08 · rano", dayId:"2026-08-24", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Museum+of+Modern+Art+New+York" },
   { id:"rockefeller-shopping", title:"Rockefeller Center i zakupy", icon:"☆", category:"dla Matyldy", text:"Nike House of Innovation, Uniqlo, Sephora, Nintendo NY lub LEGO — wybieramy dwa główne sklepy i jeden szybki.", meta:"24.08 · popołudnie", dayId:"2026-08-24", panel:"shopping", map:"https://www.google.com/maps/search/?api=1&query=Rockefeller+Center+New+York" },
   { id:"met", title:"Museum Mile", icon:"◉", category:"sztuka", text:"Guggenheim, The Met i Fifth Avenue przy Central Parku.", meta:"25.08", dayId:"2026-08-25", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Metropolitan+Museum+of+Art" },
@@ -996,14 +1045,16 @@ const PLACES = [
   { id:"westside", title:"Whitney i High Line", icon:"↗", category:"sztuka", text:"Sztuka amerykańska, Meatpacking, dawna kolej i Hudson Yards.", meta:"27.08 · popołudnie", dayId:"2026-08-27", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Whitney+Museum+New+York" },
   { id:"summit", title:"SUMMIT One Vanderbilt", icon:"△", category:"zdjęcia", status:"Plan główny · rezerwacja czasowa", text:"Poranna panorama Manhattanu i trzy poziomy lustrzanych instalacji przed wyjazdem do Queens.", meta:"26.08 · 08:30", dayId:"2026-08-26", panel:"morning", map:"https://www.google.com/maps/search/?api=1&query=SUMMIT+One+Vanderbilt+New+York" },
   { id:"soho", title:"SoHo i Nolita", icon:"◇", category:"dla Matyldy", text:"Żeliwne fasady, streetwear, kosmetyki i niezależne butiki.", meta:"28.08 · rano", dayId:"2026-08-28", panel:"route", map:"https://www.google.com/maps/search/?api=1&query=Greene+Street+SoHo+New+York" },
-  { id:"pier-35", title:"Pier 35", icon:"≈", category:"widok i odpoczynek", text:"Huśtawki nad East River, zielona ściana i Manhattan Bridge jako krótki finał zakupowej części dnia.", meta:"28.08 · 14:15", dayId:"2026-08-28", panel:"pier35", map:"https://www.google.com/maps/search/?api=1&query=Pier+35+FDR+Drive+Jefferson+Street+New+York" },
+  { id:"pier-35", title:"Pier 35", icon:"≈", category:"widok i odpoczynek", text:"Huśtawki nad East River, Manhattan Bridge i ostatni spokojny widok przed powrotem po bagaże.", meta:"30.08 · około 12:45", dayId:"2026-08-30", panel:"pier35", map:"https://www.google.com/maps/search/?api=1&query=Pier+35+FDR+Drive+Jefferson+Street+New+York", image:"assets/photos/133.jpg" },
   { id:"yankees", title:"Yankee Stadium", icon:"⚾", category:"sport", text:"Monument Park, zasady baseballu i Yankees–Red Sox.", meta:"28.08 · 19:05", dayId:"2026-08-28", panel:"stadium", map:"https://www.google.com/maps/search/?api=1&query=Yankee+Stadium" },
-  { id:"heliport", title:"Big Apple Tour · helikopter", icon:"✦", category:"widoki", text:"17–20 minut nad ikonami Nowego Jorku ze startem przy East River i odprawą o 09:30.", meta:"29.08 · 10:00 · kupione", dayId:"2026-08-29", panel:"helicopter", map:"https://www.google.com/maps/search/?api=1&query=Downtown+Manhattan+Heliport+6+East+River+Piers+New+York" },
+  { id:"heliport", title:"Big Apple Tour · helikopter", icon:"✦", category:"widoki", text:"17–20 minut nad ikonami Nowego Jorku ze startem przy East River i odprawą o 09:30.", meta:"29.08 · 10:00 · kupione", dayId:"2026-08-29", panel:"helicopter", map:"https://www.google.com/maps/search/?api=1&query=Downtown+Manhattan+Heliport+6+East+River+Piers+New+York", image:"assets/photos/134.jpg" },
   { id:"dumbo", title:"DUMBO i Brooklyn Bridge Park", icon:"▱", category:"zdjęcia", text:"Manhattan Bridge, portowe magazyny, panorama i Bargemusic.", meta:"29.08 · rano", dayId:"2026-08-29", panel:"brooklyn", map:"https://www.google.com/maps/search/?api=1&query=Washington+Street+DUMBO" },
   { id:"bargemusic", title:"Bargemusic", icon:"♪", category:"muzyka", text:"Koncert kameralny na pływającej barce z panoramą Lower Manhattan za sceną.", meta:"29.08 · południe", dayId:"2026-08-29", panel:"bargemusic", map:"https://www.google.com/maps/search/?api=1&query=Bargemusic+Brooklyn" },
   { id:"harlem", title:"Harlem i Apollo", icon:"♫", category:"muzyka", text:"Great Migration, Harlem Renaissance, Apollo i Charlie Parker.", meta:"29.08 · popołudnie", dayId:"2026-08-29", panel:"apollo", map:"https://www.google.com/maps/search/?api=1&query=Apollo+Theater+New+York" },
   { id:"charlie-parker", title:"Charlie Parker Jazz Festival", icon:"♫", category:"muzyka", text:"Bebop w Marcus Garvey Park — kulturowy finał dnia po Apollo Theater.", meta:"29.08 · wieczór", dayId:"2026-08-29", panel:"festival", map:"https://www.google.com/maps/search/?api=1&query=Marcus+Garvey+Park+New+York" },
-  { id:"grandcentral", title:"Grand Central i NYPL", icon:"⌘", category:"historia", text:"Patience i Fortitude, odwrócone niebo oraz Whispering Gallery.", meta:"26 i 30.08", dayId:"2026-08-26", panel:"morning", map:"https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal" },
+  { id:"grandcentral", title:"Grand Central", icon:"⌘", category:"historia", text:"Odwrócone niebo, zegar w Main Concourse i Whispering Gallery.", meta:"26.08", dayId:"2026-08-26", panel:"morning", map:"https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal" },
+  { id:"tenement", title:"Tenement Museum", icon:"▣", category:"historia", text:"Mieszkania Rogarshevskych i Baldizzich oraz codzienność żydowskich i włoskich imigrantów przy 97 Orchard Street.", meta:"30.08 · 10:45", dayId:"2026-08-30", panel:"museum", map:"https://www.google.com/maps/search/?api=1&query=Tenement+Museum+103+Orchard+Street+New+York", image:"assets/photos/135.webp" },
+  { id:"lower-east-side", title:"Orchard Street i Lower East Side", icon:"◇", category:"lokalnie", text:"Essex Market, Seward Park, fasada synagogi przy Eldridge Street i droga do East River.", meta:"30.08 · po muzeum", dayId:"2026-08-30", panel:"walk", map:"https://www.google.com/maps/search/?api=1&query=Orchard+Street+Lower+East+Side+New+York", image:"assets/photos/139.jpg" },
   { id:"guggenheim", title:"Guggenheim od środka", icon:"◌", category:"sztuka", text:"Rotunda Wrighta i dwugodzinna trasa Radka i Gosi przed Village.", meta:"23.08 · 10:30", dayId:"2026-08-23", panel:"guggenheim", map:"https://www.google.com/maps/search/?api=1&query=Solomon+R+Guggenheim+Museum" }
 ];
 
@@ -1043,9 +1094,9 @@ const MATYLDA_SHOPPING_ROUTES = {
   },
   soho: {
     title:"28.08 · jeden ciąg po Broadwayu",
-    note:"Mercer/Prince → Urban Outfitters → AE/Aerie → Hollister → Princess Polly. To pierwsza, w pełni prowadzona część zakupów; Brandy, Garage, PacSun i Glossier są dalej na tej samej osi.",
+    note:"Mercer/Prince → Urban Outfitters → AE/Aerie → Hollister → Princess Polly. To prowadzony początek pięciogodzinnego bloku; Brandy, Garage, PacSun i Glossier są dalej na tej samej osi.",
     fromTo:"Mercer/Prince → Princess Polly",
-    hint:"Cztery przystanki zakupowe w mapie: Urban Outfitters, AE/Aerie, Hollister i Princess Polly. Dalsze sklepy mają osobne pinezki poniżej; Crumbl pozostaje opcjonalnym finałem.",
+    hint:"Mapa prowadzi przez pierwsze cztery sklepy. Dalsze punkty mają osobne pinezki poniżej; lunch robicie po drodze, a Crumbl pozostaje opcjonalnym finałem przed powrotem o 15:00.",
     map:"https://www.google.com/maps/dir/?api=1&origin=Mercer+Street+and+Prince+Street,+New+York&destination=Princess+Polly,+514+Broadway,+New+York&waypoints=Urban+Outfitters,+628+Broadway,+New+York%7CAmerican+Eagle+Aerie,+599+Broadway,+New+York%7CHollister,+547+Broadway,+New+York&travelmode=walking",
     extra:"https://www.google.com/maps/dir/?api=1&origin=Glossier,+72+Spring+Street,+New+York&destination=Crumbl,+195+Bleecker+Street,+New+York&travelmode=walking"
   }
