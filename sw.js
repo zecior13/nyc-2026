@@ -1,4 +1,4 @@
-const CACHE = "nyc-2026-v82";
+const CACHE = "nyc-2026-v83";
 
 // Rdzeń jest mały i musi zostać zapisany w całości, aby aplikacja zawsze się uruchomiła.
 const CORE_ASSETS = [

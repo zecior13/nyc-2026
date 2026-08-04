@@ -1335,7 +1335,7 @@ function showMediaPanel(panel) {
   document.querySelectorAll("[data-media-content]").forEach(x=>x.hidden=x.dataset.mediaContent!==panel);
 }
 
-function updateOfflineUI({ done = 0, total = 138, failed = 0, type = "OFFLINE_STATUS" } = {}) {
+function updateOfflineUI({ done = 0, total = 150, failed = 0, type = "OFFLINE_STATUS" } = {}) {
   const bar = document.getElementById("offlineProgressBar");
   const status = document.getElementById("offlineProgressText");
   const button = document.getElementById("offlineDownloadButton");
@@ -1432,7 +1432,7 @@ function renderPrepare() {
         <span class="offline-icon" aria-hidden="true">↓</span>
         <span class="mini-kicker">Pakiet podróżny</span>
         <h3>Zdjęcia i przewodnik bez internetu</h3>
-        <p>Pobierz całą paczkę przy dobrym Wi‑Fi. Zostaw aplikację otwartą i ekran włączony aż pojawi się potwierdzenie zapisania wszystkich 138 plików.</p>
+        <p>Pobierz całą paczkę przy dobrym Wi‑Fi. Zostaw aplikację otwartą i ekran włączony aż pojawi się potwierdzenie zapisania wszystkich 150 plików.</p>
         <div class="offline-progress" aria-hidden="true"><span id="offlineProgressBar"></span></div>
         <strong id="offlineProgressText" class="offline-status">Sprawdzam zawartość telefonu…</strong>
         <button id="offlineDownloadButton" class="offline-download-button" type="button">Pobierz wszystkie zdjęcia offline</button>
