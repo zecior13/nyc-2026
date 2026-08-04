@@ -438,6 +438,38 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .prepare-tab { flex: 1 0 auto; min-height: 38px; padding: 8px 13px; border: 1px solid #cbd4da; border-radius: 999px; color: var(--navy-2); background: white; font-size: 11px; font-weight: 850; }
 .prepare-tab.active { border-color: var(--navy); color: white; background: var(--navy); }
 .prepare-panel { animation: panel-in .18s ease-out; }
+.metro-fare-hero { position:relative; overflow:hidden; padding:20px; border-radius:22px; color:white; background:linear-gradient(145deg,#0b1f33,#154b69); box-shadow:0 16px 35px rgba(5,35,54,.16); }
+.metro-fare-hero::after { content:"OMNY"; position:absolute; right:-8px; bottom:-20px; color:rgba(245,197,24,.09); font-family:Georgia,serif; font-size:78px; font-weight:900; pointer-events:none; }
+.metro-fare-hero .mini-kicker { color:var(--taxi); }
+.metro-fare-hero h3 { position:relative; z-index:1; max-width:410px; margin:5px 0 8px; font-family:Georgia,serif; font-size:23px; line-height:1.12; }
+.metro-fare-hero > p { position:relative; z-index:1; margin:0; color:#dce8ef; font-size:12px; line-height:1.52; }
+.metro-fare-stats { position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-top:17px; }
+.metro-fare-stats div { display:grid; align-content:start; min-height:70px; padding:10px; border:1px solid rgba(255,255,255,.13); border-radius:13px; background:rgba(255,255,255,.08); }
+.metro-fare-stats strong { color:var(--taxi); font-family:Georgia,serif; font-size:21px; }
+.metro-fare-stats span { color:#dce8ef; font-size:8px; font-weight:750; line-height:1.25; }
+.metro-rule-grid { display:grid; gap:8px; margin:11px 0; }
+.metro-rule-grid article { display:grid; grid-template-columns:35px 1fr; gap:10px; padding:13px; border:1px solid var(--line); border-radius:15px; background:var(--card); }
+.metro-rule-grid article > b { display:grid; place-items:center; width:35px; height:35px; border-radius:11px; color:var(--navy); background:var(--taxi); font-size:14px; }
+.metro-rule-grid h3 { margin:1px 0 4px; font-size:13px; }
+.metro-rule-grid p { margin:0; color:var(--muted); font-size:10.5px; line-height:1.45; }
+.metro-map-board { position:relative; width:100%; height:min(64vh,620px); overflow:hidden; border:1px solid #b7c6cf; border-radius:20px; background:#fff; box-shadow:0 10px 28px rgba(11,31,51,.12); touch-action:none; cursor:grab; }
+.metro-map-board .day-map-canvas { display:grid; place-items:center; background:#fff; }
+.metro-map-board img { display:block; width:100%; height:100%; object-fit:contain; pointer-events:none; user-select:none; }
+.metro-attribution { margin:8px 3px 12px; color:var(--muted); font-size:8px; line-height:1.45; }
+.metro-attribution a { color:var(--brick); font-weight:800; }
+.metro-howto { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+.metro-howto article { padding:12px; border-radius:14px; color:white; background:var(--navy); }
+.metro-howto strong { color:var(--taxi); font-size:10px; }
+.metro-howto p { margin:5px 0 0; color:#dce8ef; font-size:8.5px; line-height:1.42; }
+.metro-leg-list { display:grid; gap:7px; }
+.metro-leg-list details { overflow:hidden; border:1px solid var(--line); border-radius:13px; background:var(--card); }
+.metro-leg-list summary { display:grid; grid-template-columns:27px 1fr 18px; align-items:center; gap:9px; padding:11px 12px; color:var(--navy); font-size:10.5px; font-weight:900; cursor:pointer; list-style:none; }
+.metro-leg-list summary::-webkit-details-marker { display:none; }
+.metro-leg-list summary em { font-style:normal; line-height:1.3; }
+.metro-leg-list .subway-line { display:grid; place-items:center; width:27px; height:27px; border-radius:50%; color:white; background:var(--line); font-size:13px; }
+.metro-leg-list summary span { color:var(--brick); font-size:16px; }
+.metro-leg-list details[open] summary span { transform:rotate(45deg); }
+.metro-leg-list p { margin:0; padding:0 13px 13px; color:var(--muted); font-size:10.5px; line-height:1.5; }
 .offline-download-card { position: relative; overflow: hidden; padding: 22px; border-radius: 22px; color: white; background: linear-gradient(145deg,var(--navy),#173e57); box-shadow: 0 16px 35px rgba(5,35,54,.18); }
 .offline-download-card h3 { max-width: 260px; margin: 3px 0 9px; font-family: Georgia,serif; font-size: 24px; line-height: 1.08; }
 .offline-download-card p { margin: 0 0 18px; color: #dce8ef; font-size: 12.5px; line-height: 1.55; }
@@ -591,7 +623,7 @@ main { max-width: 760px; margin: 0 auto; padding: 0 16px 28px; }
 .artist-index span { color:var(--muted); font-size:10px; }
 
 @media (min-width:700px) { .museum-hub-grid,.museum-start-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .museum-start-grid article:last-child { grid-column:1/-1; } }
-@media (max-width:620px) { .museum-filter-bar { grid-template-columns:1fr 1fr; } .museum-search { grid-column:1/-1; } .work-detail { padding-left:14px; } .nav-item { font-size:8.5px; } .museum-departments { grid-template-columns:1fr; } }
+@media (max-width:620px) { .museum-filter-bar { grid-template-columns:1fr 1fr; } .museum-search { grid-column:1/-1; } .work-detail { padding-left:14px; } .nav-item { font-size:8.5px; } .museum-departments { grid-template-columns:1fr; } .metro-howto { grid-template-columns:1fr; } .metro-howto p { font-size:10px; } }
 
 .sheet-backdrop { position: fixed; z-index: 40; inset: 0; background: rgba(3,13,22,.58); backdrop-filter: blur(3px); }
 .sheet {

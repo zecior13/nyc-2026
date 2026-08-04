@@ -14,6 +14,7 @@ let currentDayPanel = "overview";
 let dayPanelHistory = [];
 let daySwipeController = null;
 const savedDayStates = new Map();
+let detailReturnContext = null;
 
 // Tekst widoczny w aplikacji pozostaje oryginalny. Ten słownik służy wyłącznie
 // polskiemu lektorowi i będzie rozwijany wraz z kolejnymi dniami podróży.
@@ -331,6 +332,7 @@ function renderMomaGuide(day, guide) {
       <div class="section-heading-row"><h3>MoMA bez muzealnego maratonu</h3><span>sprawdzono ${guide.checked}</span></div>
       <p class="panel-intro">${guide.museum.address}</p>
       <article class="event-card"><h4>Przed wejściem</h4><ul>${guide.museum.practical.map(item => `<li>${item}</li>`).join("")}</ul></article>
+      <button class="museum-day-link" type="button" data-open-museum-direct="moma">Otwórz pełny przewodnik: piętra, artyści i dzieła <span>›</span></button>
       <h3 class="subsection-title">Wybierz tempo</h3>
       <div class="guide-grid">${guide.museum.routes.map(item => guideCard(item)).join("")}</div>
       <h3 class="subsection-title">Piętro po piętrze</h3>
@@ -990,9 +992,12 @@ function bindTripMap() {
 
 function bindGestureMap(map) {
   if (!map) return;
+  if (map.dataset.gestureBound === "true") return;
+  map.dataset.gestureBound = "true";
   const canvas = map.querySelector(".illustrated-map-canvas, .day-map-canvas");
   if (!canvas) return;
   const pointers = new Map();
+  const maxScale = Number(map.dataset.maxScale) || 3.5;
   const state = { scale: 1, x: 0, y: 0, startScale: 1, startX: 0, startY: 0, startDistance: 0, startCenter: null };
 
   const clampState = () => {
@@ -1017,7 +1022,7 @@ function bindGestureMap(map) {
     event.preventDefault();
     const rect = map.getBoundingClientRect();
     const oldScale = state.scale;
-    const nextScale = Math.max(1, Math.min(3.5, oldScale * Math.exp(-event.deltaY * .002)));
+    const nextScale = Math.max(1, Math.min(maxScale, oldScale * Math.exp(-event.deltaY * .002)));
     const px = event.clientX - rect.left - rect.width / 2;
     const py = event.clientY - rect.top - rect.height / 2;
     state.x = px - (px - state.x) * (nextScale / oldScale);
@@ -1046,7 +1051,7 @@ function bindGestureMap(map) {
     if (pointers.size >= 2) {
       const points = pair();
       const currentCenter = center(points);
-      state.scale = Math.max(1, Math.min(3.5, state.startScale * distance(points) / Math.max(1, state.startDistance)));
+      state.scale = Math.max(1, Math.min(maxScale, state.startScale * distance(points) / Math.max(1, state.startDistance)));
       state.x = state.startX + currentCenter.x - state.startCenter.x;
       state.y = state.startY + currentCenter.y - state.startCenter.y;
     } else if (state.scale > 1) {
@@ -1082,7 +1087,7 @@ function renderHome() {
       <button type="button" data-view-jump="plan"><span class="home-module-icon">09</span><strong>Dni</strong><small>plansze i kolejność wypraw</small></button>
       <button type="button" data-view-jump="places"><span class="home-module-icon">◇</span><strong>Miejsca</strong><small>dzielnice, historie i zdjęcia</small></button>
       <button type="button" data-view-jump="museums"><span class="home-module-icon">▤</span><strong>Muzea</strong><small>piętra, artyści i dzieła</small></button>
-      <button type="button" data-view-jump="prepare"><span class="home-module-icon">▶</span><strong>Przed wyjazdem</strong><small>filmy, muzyka, aplikacje i bilety</small></button>
+      <button type="button" data-view-jump="prepare"><span class="home-module-icon">▶</span><strong>Przed wyjazdem</strong><small>metro, aplikacje, filmy i bilety</small></button>
     </section></div>`;
   bindDynamicActions();
   bindTripMap();
@@ -1228,6 +1233,34 @@ function renderPlaceRegion(regionId) {
   bindPlaceCards();
 }
 
+function rememberDayDetailReturn() {
+  if (!activeDayId || sheet.hidden) return null;
+  saveCurrentDayState();
+  const day = DAYS.find(item => item.id === activeDayId);
+  return {
+    type: "day",
+    dayId: activeDayId,
+    label: `Wróć do dnia ${day?.day || ""}`.trim()
+  };
+}
+
+function detailBackLabel(fallback) {
+  return detailReturnContext?.type === "day"
+    ? `← ${detailReturnContext.label}`
+    : `← ${fallback}`;
+}
+
+function returnFromDetail(fallback) {
+  const context = detailReturnContext;
+  if (context?.type === "day" && context.dayId) {
+    detailReturnContext = null;
+    setView("plan");
+    openDay(context.dayId, { restore: true });
+    return;
+  }
+  fallback();
+}
+
 function renderPlaceDetail(id) {
   const place=PLACES.find(item=>item.id===id);
   if(!place) return renderPlaces();
@@ -1235,8 +1268,8 @@ function renderPlaceDetail(id) {
   const region=TRIP_REGIONS.find(item=>item.id===placeRegion(place));
   const nearby=(extra.nearby||[]).map(nearId=>PLACES.find(item=>item.id===nearId)).filter(Boolean);
   const appearances=placeDayAppearances(place);
-  app.innerHTML=`<button class="view-back" type="button" id="placeRegionBack">← ${region?.name||"Miejsca"}</button><article class="place-detail-hero" style="--region:${region?.color||"#f5c518"}">${place.image?`<img src="${place.image}" alt="${place.title}">`:`<div class="place-detail-symbol">${place.icon}</div>`}<div><span>${extra.status||"w planie"} · ${place.category}</span><h2>${place.title}</h2><p>${place.meta}</p></div></article><section class="place-detail-grid"><article><small>DLACZEGO TU JESTEŚMY</small><p>${extra.why||place.text}</p></article><article><small>HISTORIA / CIEKAWOSTKA</small><p>${extra.curiosity||place.text}</p></article><article class="photo-advice"><small>JAK ZROBIĆ DOBRE ZDJĘCIE</small><p>${extra.photoTip||"Zatrzymajcie się na chwilę, znajdźcie czytelne tło i pokażcie miejsce wraz z jego miejskim otoczeniem."}</p></article></section><div class="place-detail-actions">${appearances.map(appearance=>{const day=DAYS.find(item=>item.id===appearance.dayId);return `<button data-linked-day="${appearance.dayId}" data-linked-panel="${appearance.panel}">Otwórz w dniu ${day?.day||""}</button>`}).join("")}<a href="${place.map}" target="_blank" rel="noopener">Prowadź w Mapach ↗</a></div><label class="place-visited checkable-card"><input type="checkbox" data-save-check="place-visited-${place.id}"><span><strong>Byliśmy tutaj</strong><small>Zapisz jako odwiedzone w „Naszym NY”</small></span></label>${nearby.length?`<div class="section-title"><h3>W pobliżu</h3><span>warto połączyć</span></div><div class="atlas-place-list compact">${nearby.map(placeCard).join("")}</div>`:""}`;
-  document.getElementById("placeRegionBack")?.addEventListener("click",()=>renderPlaceRegion(placeRegion(place)));
+  app.innerHTML=`<button class="view-back" type="button" id="placeRegionBack">${detailBackLabel(region?.name||"Miejsca")}</button><article class="place-detail-hero" style="--region:${region?.color||"#f5c518"}">${place.image?`<img src="${place.image}" alt="${place.title}">`:`<div class="place-detail-symbol">${place.icon}</div>`}<div><span>${extra.status||"w planie"} · ${place.category}</span><h2>${place.title}</h2><p>${place.meta}</p></div></article><section class="place-detail-grid"><article><small>DLACZEGO TU JESTEŚMY</small><p>${extra.why||place.text}</p></article><article><small>HISTORIA / CIEKAWOSTKA</small><p>${extra.curiosity||place.text}</p></article><article class="photo-advice"><small>JAK ZROBIĆ DOBRE ZDJĘCIE</small><p>${extra.photoTip||"Zatrzymajcie się na chwilę, znajdźcie czytelne tło i pokażcie miejsce wraz z jego miejskim otoczeniem."}</p></article></section><div class="place-detail-actions">${appearances.map(appearance=>{const day=DAYS.find(item=>item.id===appearance.dayId);return `<button data-linked-day="${appearance.dayId}" data-linked-panel="${appearance.panel}">Otwórz w dniu ${day?.day||""}</button>`}).join("")}<a href="${place.map}" target="_blank" rel="noopener">Prowadź w Mapach ↗</a></div><label class="place-visited checkable-card"><input type="checkbox" data-save-check="place-visited-${place.id}"><span><strong>Byliśmy tutaj</strong><small>Zapisz jako odwiedzone w „Naszym NY”</small></span></label>${nearby.length?`<div class="section-title"><h3>W pobliżu</h3><span>warto połączyć</span></div><div class="atlas-place-list compact">${nearby.map(placeCard).join("")}</div>`:""}`;
+  document.getElementById("placeRegionBack")?.addEventListener("click",()=>returnFromDetail(()=>renderPlaceRegion(placeRegion(place))));
   bindPlaceCards(); bindLinkedDayActions(); bindSavedChecks();
 }
 
@@ -1300,14 +1333,14 @@ function renderMuseumDetail(id) {
   if (!museum) return;
   const artists = [...new Set(museum.works.map(work => work.artist))].sort((a,b)=>a.localeCompare(b,"pl"));
   const sections = [...new Set(museum.works.map(work => work.section))].sort((a,b)=>a.localeCompare(b,"pl"));
-  app.innerHTML = `<button class="view-back" type="button" id="museumHubBack">← Wszystkie muzea</button>
+  app.innerHTML = `<button class="view-back" type="button" id="museumHubBack">${detailBackLabel("Wszystkie muzea")}</button>
     <section class="museum-hero" style="--museum:${museum.accent}"><img src="${museum.coverImage}" alt="${museum.fullName}"><div><span class="mini-kicker">${museum.time} · ${museum.works.length} dzieł do wyboru</span><h2>${museum.fullName}</h2><p>${museum.intro}</p><div class="hero-actions"><button class="button" data-linked-day="${museum.dayId}" data-linked-panel="${museum.dayPanel}">Otwórz w planie dnia</button><span data-progress-for="museum-seen-"></span></div></div></section>
     <nav class="museum-tabs" aria-label="Sekcje muzeum"><button class="active" data-museum-panel="overview">Start</button><button data-museum-panel="floors">Piętra</button><button data-museum-panel="works">Dzieła</button><button data-museum-panel="artists">Artyści</button></nav>
     <section data-museum-content="overview"><div class="notice">${museum.statusNote}</div><div class="museum-start-grid"><article class="simple-card"><h3>60 minut</h3><p>Tylko zaznaczone Must see. Po pięciu dziełach oceńcie energię i nie próbujcie nadrabiać biegiem.</p></article><article class="simple-card"><h3>90–120 minut</h3><p>Must see oraz wybrani wcześniej artyści. To podstawowy wariant dla Whitney i Guggenheimu.</p></article><article class="simple-card"><h3>Pełny czas</h3><p>Własna lista Gosi, przerwa w połowie i najwyżej jedno spontaniczne odejście od trasy na piętro.</p></article></div><button class="button museum-primary-action" data-museum-jump="works">Wybierz dzieła przed wyjazdem</button></section>
     <section data-museum-content="floors" hidden><div class="view-heading compact"><h2>Jak duże jest muzeum?</h2><p>Uproszczony schemat pokazuje względną skalę i podział funkcjonalny. Nie zastępuje oficjalnego planu sal.</p></div>${museumFloorPlan(museum)}</section>
     <section data-museum-content="works" hidden><div class="museum-filter-bar"><label class="museum-search">Szukaj<input id="museumSearch" type="search" placeholder="artysta, dzieło lub dział"></label><label>Priorytet<select id="museumPriority"><option value="all">Wszystkie</option><option value="must">Must see</option><option value="good">Warto zobaczyć</option></select></label><label>Status<select id="museumStatus"><option value="all">Każdy status</option><option value="on">Na ekspozycji</option><option value="check">Do sprawdzenia</option><option value="off">Niewystawiane</option></select></label><label>Dział<select id="museumSection"><option value="all">Wszystkie działy</option>${sections.map(section=>`<option value="${section}">${section}</option>`).join("")}</select></label><label>Artysta<select id="museumArtist"><option value="all">Wszyscy artyści</option>${artists.map(artist=>`<option value="${artist}">${artist}</option>`).join("")}</select></label></div><div class="section-title"><h3>Katalog do własnego wyboru</h3><span id="museumFilterCount">${museum.works.length} dzieł</span></div><div class="museum-work-list">${museum.works.map(work=>museumWorkCard(work,museum)).join("")}</div></section>
     <section data-museum-content="artists" hidden><div class="view-heading compact"><h2>Artyści i ich dzieła</h2><p>Każdy profil wyjaśnia styl, okres twórczości i najważniejszy przełom. Naciśnięcie dzieła otwiera jego pełną kartę.</p></div><div class="museum-artist-groups">${artists.map(artist=>{const works=museum.works.filter(work=>work.artist===artist);const profile=ARTIST_PROFILES[artist]||{years:"",style:"",breakthrough:""};return `<details class="museum-artist-group"><summary><div><strong>${artist}</strong><small>${profile.years} · ${profile.style}</small></div><span>${worksCountLabel(works.length)}</span></summary><div class="artist-profile"><b>Dlaczego jest ważny?</b><p>${profile.breakthrough}</p></div><div class="artist-work-links">${works.map(work=>`<button type="button" data-work-jump="${work.id}" data-work-artist-jump="${artist}"><img src="${work.image}" alt=""><span>${work.title}</span><small>${work.year} · ${work.priority==="must"?"Must see":"Warto zobaczyć"}</small></button>`).join("")}</div></details>`}).join("")}</div></section>`;
-  document.getElementById("museumHubBack")?.addEventListener("click", renderMuseumHub);
+  document.getElementById("museumHubBack")?.addEventListener("click", () => returnFromDetail(renderMuseumHub));
   document.querySelectorAll("[data-museum-panel]").forEach(button=>button.addEventListener("click",()=>showMuseumPanel(button.dataset.museumPanel)));
   document.querySelectorAll("[data-museum-jump]").forEach(button=>button.addEventListener("click",()=>showMuseumPanel(button.dataset.museumJump)));
   ["museumSearch","museumPriority","museumStatus","museumSection","museumArtist"].forEach(control=>document.getElementById(control)?.addEventListener(control === "museumSearch" ? "input" : "change",filterMuseumWorks));
@@ -1328,6 +1361,7 @@ function showPreparePanel(panel) {
   document.querySelectorAll("[data-prepare-content]").forEach(section => {
     section.hidden = section.dataset.prepareContent !== panel;
   });
+  if (panel === "metro") bindGestureMap(document.querySelector('[data-prepare-content="metro"] [data-gesture-map]'));
 }
 
 function showMediaPanel(panel) {
@@ -1335,7 +1369,7 @@ function showMediaPanel(panel) {
   document.querySelectorAll("[data-media-content]").forEach(x=>x.hidden=x.dataset.mediaContent!==panel);
 }
 
-function updateOfflineUI({ done = 0, total = 150, failed = 0, type = "OFFLINE_STATUS" } = {}) {
+function updateOfflineUI({ done = 0, total = 0, failed = 0, type = "OFFLINE_STATUS" } = {}) {
   const bar = document.getElementById("offlineProgressBar");
   const status = document.getElementById("offlineProgressText");
   const button = document.getElementById("offlineDownloadButton");
@@ -1350,8 +1384,8 @@ function updateOfflineUI({ done = 0, total = 150, failed = 0, type = "OFFLINE_ST
       : `${done} z ${total} plików jest już w telefonie`;
   button.disabled = downloading || complete;
   button.textContent = complete
-    ? "Wszystkie zdjęcia są dostępne offline ✓"
-    : done > 0 ? "Pobierz brakujące zdjęcia" : "Pobierz wszystkie zdjęcia offline";
+    ? "Cały pakiet jest dostępny offline ✓"
+    : done > 0 ? "Pobierz brakujące pliki" : "Pobierz pakiet offline";
   button.classList.toggle("offline-complete", complete);
 }
 
@@ -1364,6 +1398,45 @@ async function offlineWorker() {
 async function checkOfflineMedia() {
   const worker = await offlineWorker();
   worker?.postMessage({ type: "CHECK_OFFLINE_MEDIA" });
+}
+
+function renderMetroPreparePanel() {
+  const legs = [
+    {line:"Q",color:"#fccc0a",title:"23.08 · hotel → Guggenheim",text:"Q z Times Sq–42 St w kierunku 96 St → wysiąść 86 St; dalej spacer przez Upper East Side."},
+    {line:"6",color:"#00933c",title:"23.08 · Guggenheim → Village",text:"6 local z 86 St/Lexington Av w kierunku Brooklyn Bridge–City Hall → Astor Pl; dalej spacer do Washington Square."},
+    {line:"7",color:"#b933ad",title:"26.08 · Grand Central → Gantry",text:"7 w kierunku Flushing–Main St → Vernon Blvd–Jackson Av."},
+    {line:"7",color:"#b933ad",title:"26.08 · Gantry → Flushing",text:"Po dojściu do Vernon Blvd–Jackson Av: 7 w kierunku Flushing–Main St → stacja końcowa."},
+    {line:"7",color:"#b933ad",title:"26.08 · Flushing → US Open",text:"7 w kierunku 34 St–Hudson Yards → jedna stacja do Mets–Willets Point. Powrót tą samą linią do Times Sq–42 St."},
+    {line:"1",color:"#ee352e",title:"27.08 · hotel → South Ferry",text:"1 z Times Sq–42 St w kierunku South Ferry → stacja końcowa."},
+    {line:"D",color:"#ff6319",title:"28.08 · SoHo → Yankee Stadium",text:"D z Broadway–Lafayette St w kierunku Norwood–205 St → 161 St–Yankee Stadium."},
+    {line:"A",color:"#0039a6",title:"29.08 · DUMBO → Harlem",text:"A z High St w kierunku Inwood–207 St → 125 St; sprawdźcie, czy wsiadacie do A express, nie C local."},
+    {line:"F",color:"#ff6319",title:"30.08 · hotel → Lower East Side",text:"F z 42 St–Bryant Park w kierunku Coney Island–Stillwell Av → Delancey St–Essex St."}
+  ];
+  return `<section class="prepare-panel" data-prepare-content="metro" hidden>
+    <article class="metro-fare-hero">
+      <span class="mini-kicker">NAJPROSTSZA STRATEGIA DLA WASZEJ TRÓJKI</span>
+      <h3>OMNY · każdy płaci osobno i zawsze tym samym sposobem</h3>
+      <p>Nie kupujecie biletu dziennego ani tygodniowego. Przy każdej bramce przykładacie kartę zbliżeniową, iPhone’a lub zegarek. System sam nalicza przejazdy i zatrzymuje opłaty po osiągnięciu limitu.</p>
+      <div class="metro-fare-stats"><div><strong>$3</strong><span>metro / local bus</span></div><div><strong>$35</strong><span>maks. w kolejnych 7 dniach</span></div><div><strong>2 h</strong><span>okno bezpłatnej przesiadki metro–bus</span></div></div>
+    </article>
+    <div class="metro-rule-grid">
+      <article><b>1</b><div><h3>Trzy osoby = trzy środki płatnicze</h3><p>Radek, Gosia i Matylda powinni używać własnej karty albo własnego urządzenia. Dodatkowe osoby przepuszczone jedną kartą nie budują własnego limitu.</p></div></article>
+      <article><b>2</b><div><h3>Nie zmieniaj formy tej samej karty</h3><p>Fizyczna karta i jej wersja w Apple Pay są dla OMNY dwoma różnymi środkami. Od pierwszego przejazdu każdy wybiera jeden i trzyma się go przez cały pobyt.</p></div></article>
+      <article><b>3</b><div><h3>Matylda: normalna taryfa</h3><p>Wiek 13 lat nie daje zniżki turystycznej. Jeśli nie ma własnej karty zbliżeniowej lub Apple Pay, kupcie dla niej kartę OMNY w automacie na stacji.</p></div></article>
+      <article><b>4</b><div><h3>Promy i lotnisko są osobno</h3><p>NYC Ferry nie wchodzi do limitu OMNY. Staten Island Ferry jest bezpłatny. AirTrain JFK i LIRR mają oddzielne opłaty.</p></div></article>
+    </div>
+    <div class="notice">Wasz pobyt trwa dłużej niż jedno siedmiodniowe okno. OMNY nadal jest najlepszy: w pierwszym oknie zapłacicie najwyżej po $35, a po jego automatycznym resecie tylko za faktyczne przejazdy ostatnich dni.</div>
+    <div class="section-title"><h3>Mapa metra · działa offline</h3><span>rozsuń dwoma palcami</span></div>
+    <div class="metro-map-board" data-gesture-map data-max-scale="9" aria-label="Powiększalna mapa metra Nowego Jorku">
+      <div class="day-map-canvas"><img src="assets/maps/nyc-subway-map-2025.svg" alt="Mapa linii i stacji metra Nowego Jorku, aktualna na grudzień 2025"></div>
+    </div>
+    <p class="metro-attribution">Mapa sieci: <a href="https://commons.wikimedia.org/wiki/File:NYC_subway-5.svg" target="_blank" rel="noopener">CountZ / Wikimedia Commons</a>, aktualizacja grudzień 2025, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Służy do orientacji offline; czasowe zmiany weekendowe sprawdzamy w MTA lub Google Maps przed wyjściem.</p>
+    <div class="link-grid compact-links"><a href="https://www.mta.info/maps/subway-line-maps" target="_blank" rel="noopener">Aktualne mapy MTA <span>↗</span></a><a href="https://omny.info/fares" target="_blank" rel="noopener">Oficjalne taryfy OMNY <span>↗</span></a></div>
+    <div class="section-title"><h3>Jak wybrać właściwy peron?</h3><span>trzy kroki</span></div>
+    <div class="metro-howto"><article><strong>1 · Symbol</strong><p>Najpierw numer lub litera pociągu, dopiero potem kolor. Kilka linii może mieć ten sam kolor, ale różne przystanki.</p></article><article><strong>2 · Kierunek</strong><p>Na tablicy szukajcie nazwy stacji końcowej podanej poniżej albo określenia Uptown / Downtown. To ważniejsze niż geograficzne „jadę na wschód”.</p></article><article><strong>3 · Local czy express</strong><p>Express omija część stacji. Przed wejściem porównajcie numer lub literę oraz kolejne przystanki na tablicy; w razie wątpliwości local jest wolniejszy, ale zatrzymuje się częściej.</p></article></div>
+    <div class="section-title"><h3>Nasze główne przejazdy</h3><span>ściąga bez internetu</span></div>
+    <div class="metro-leg-list">${legs.map(item=>`<details><summary><b class="subway-line" style="--line:${item.color};${item.line==="Q"?"color:#151515":""}">${item.line}</b><em>${item.title}</em><span>＋</span></summary><p>${item.text}</p></details>`).join("")}</div>
+  </section>`;
 }
 
 async function downloadOfflineMedia() {
@@ -1394,11 +1467,12 @@ if ("serviceWorker" in navigator) {
 
 function renderPrepare() {
   app.innerHTML = `
-    <div class="view-heading"><h2>Przed wyjazdem</h2><p>Materiały, aplikacje oraz zakupy i rezerwacje w jednym miejscu — bez mieszania ich z planem bieżącego dnia.</p></div>
+    <div class="view-heading"><h2>Przed wyjazdem</h2><p>Materiały, transport, aplikacje oraz zakupy i rezerwacje w jednym miejscu — bez mieszania ich z planem bieżącego dnia.</p></div>
     <div class="prepare-tabs" role="tablist" aria-label="Przygotowania do podróży">
       <button class="prepare-tab active" type="button" role="tab" aria-selected="true" data-prepare-panel="materials">Filmy i muzyka</button>
       <button class="prepare-tab" type="button" role="tab" aria-selected="false" data-prepare-panel="apps">Aplikacje</button>
       <button class="prepare-tab" type="button" role="tab" aria-selected="false" data-prepare-panel="buy">Kupić</button>
+      <button class="prepare-tab" type="button" role="tab" aria-selected="false" data-prepare-panel="metro">Metro</button>
       <button class="prepare-tab" type="button" role="tab" aria-selected="false" data-prepare-panel="offline">Offline</button>
     </div>
     <section class="prepare-panel" data-prepare-content="materials">
@@ -1427,15 +1501,16 @@ function renderPrepare() {
       <div class="section-title"><h3>Już kupione</h3></div>
       <article class="simple-card"><p><strong>Hiromi · Blue Note</strong> · 23.08 · 3 osoby<br><strong>Stranger Things</strong> · 25.08<br><strong>US Open Mixed Doubles</strong> · 26.08<br><strong>Yankees–Red Sox</strong> · 28.08<br><strong>Fly Charm · Big Apple Tour</strong> · 29.08 · 10:00</p><div class="card-meta">Bilety zabezpieczone</div></article>
     </section>
+    ${renderMetroPreparePanel()}
     <section class="prepare-panel" data-prepare-content="offline" hidden>
       <article class="offline-download-card">
         <span class="offline-icon" aria-hidden="true">↓</span>
         <span class="mini-kicker">Pakiet podróżny</span>
         <h3>Zdjęcia i przewodnik bez internetu</h3>
-        <p>Pobierz całą paczkę przy dobrym Wi‑Fi. Zostaw aplikację otwartą i ekran włączony aż pojawi się potwierdzenie zapisania wszystkich 150 plików.</p>
+        <p>Pobierz całą paczkę przy dobrym Wi‑Fi. Zostaw aplikację otwartą i ekran włączony aż pojawi się potwierdzenie zapisania całego pakietu — razem z mapą metra.</p>
         <div class="offline-progress" aria-hidden="true"><span id="offlineProgressBar"></span></div>
         <strong id="offlineProgressText" class="offline-status">Sprawdzam zawartość telefonu…</strong>
-        <button id="offlineDownloadButton" class="offline-download-button" type="button">Pobierz wszystkie zdjęcia offline</button>
+        <button id="offlineDownloadButton" class="offline-download-button" type="button">Pobierz pakiet offline</button>
         <small>Po zakończeniu włącz tryb samolotowy, zamknij aplikację i uruchom ją ponownie. Nie usuwaj danych witryn Safari — usunęłoby to także zapisane zdjęcia.</small>
       </article>
     </section>`;
@@ -1526,12 +1601,14 @@ function openDay(id, options = {}) {
   sheetContent.querySelectorAll(".day-map-board[data-gesture-map]").forEach(bindGestureMap);
   sheetContent.querySelectorAll("[data-open-museum-direct]").forEach(button=>button.addEventListener("click",()=>{
     const museumId=button.dataset.openMuseumDirect;
+    detailReturnContext = rememberDayDetailReturn();
     closeSheet();
     setView("museums");
     renderMuseumDetail(museumId);
   }));
   sheetContent.querySelectorAll("[data-open-place-sheet]").forEach(button=>button.addEventListener("click",()=>{
     const placeId=button.dataset.openPlaceSheet;
+    detailReturnContext = rememberDayDetailReturn();
     closeSheet();
     setView("places");
     renderPlaceDetail(placeId);
@@ -1640,7 +1717,10 @@ function bindDynamicActions() {
     });
   });
   document.querySelectorAll("[data-view-jump]").forEach(element => {
-    element.addEventListener("click", () => setView(element.dataset.viewJump));
+    element.addEventListener("click", () => {
+      detailReturnContext = null;
+      setView(element.dataset.viewJump);
+    });
   });
 }
 
@@ -1658,8 +1738,14 @@ function setView(view) {
   app.focus({ preventScroll: true });
 }
 
-navItems.forEach(item => item.addEventListener("click", () => setView(item.dataset.view)));
-document.getElementById("homeButton").addEventListener("click", () => setView("home"));
+navItems.forEach(item => item.addEventListener("click", () => {
+  detailReturnContext = null;
+  setView(item.dataset.view);
+}));
+document.getElementById("homeButton").addEventListener("click", () => {
+  detailReturnContext = null;
+  setView("home");
+});
 document.getElementById("closeSheetButton").addEventListener("click", closeSheet);
 sheetBackdrop.addEventListener("click", closeSheet);
 document.addEventListener("keydown", event => { if (event.key === "Escape" && !sheet.hidden) closeSheet(); });

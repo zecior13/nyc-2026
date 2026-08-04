@@ -1,4 +1,4 @@
-const CACHE = "nyc-2026-v83";
+const CACHE = "nyc-2026-v85";
 
 // Rdzeń jest mały i musi zostać zapisany w całości, aby aplikacja zawsze się uruchomiła.
 const CORE_ASSETS = [
@@ -19,6 +19,7 @@ const CORE_ASSETS = [
 // nie może już zablokować instalacji całej aplikacji.
 const MEDIA_ASSETS = [
   "./assets/maps/nyc-illustrated-master-v1.png",
+  "./assets/maps/nyc-subway-map-2025.svg",
   "./assets/places/blue-note.jpg",
   "./assets/places/carrie-house.jpg",
   "./assets/places/friends-house.jpg",
@@ -37,10 +38,10 @@ const MEDIA_ASSETS = [
   "./assets/photos/136.jpg",
   "./assets/photos/137.webp",
   "./assets/photos/138.webp",
-  "./assets/photos/139.jpg",
   "./assets/photos/140.jpg",
   "./assets/photos/141.webp",
-  "./assets/photos/142.jpg"
+  "./assets/photos/142.jpg",
+  "./assets/photos/143.jpg"
 ];
 
 const assetUrl = asset => new URL(asset, self.location.href).href;

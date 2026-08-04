@@ -143,3 +143,8 @@ Paczka może zawierać pliki JPG, JPEG, PNG lub WEBP. Nazwij je wyłącznie nume
 
 Greenwich Village / Washington Square, Blue Note, Jefferson Market, Stonewall, dom z „Friends”, schody Carrie Bradshaw i Magnolia Bakery są już w aplikacji.
 
+## Uzupełnione po przeglądzie
+
+| Numer | Miejsce | Co powinno przedstawiać | Preferowany kadr |
+|---:|---|---|---|
+| 143 | Orchard Street i Lower East Side | Pierzeja Orchard Street z charakterystycznymi kamienicami, schodami pożarowymi i witrynami | dodane · 1200 × 900 px |
