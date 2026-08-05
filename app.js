@@ -1066,6 +1066,139 @@ function bindGestureMap(map) {
   paint();
 }
 
+async function bindVectorMap(map) {
+  if (!map || map.dataset.vectorBound) return;
+  map.dataset.vectorBound = "loading";
+  const stage = map.querySelector(".metro-map-stage");
+  const loading = map.querySelector(".metro-map-loading");
+  if (!stage) return;
+  try {
+    const response = await fetch(map.dataset.src);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const source = await response.text();
+    const parsed = new DOMParser().parseFromString(source, "image/svg+xml");
+    if (parsed.querySelector("parsererror")) throw new Error("Nieprawidłowy SVG");
+    const sourceSvg = parsed.documentElement;
+    sourceSvg.querySelectorAll("script,foreignObject").forEach(element => element.remove());
+    const baseValues = (sourceSvg.getAttribute("viewBox") || "0 0 2500 2700").split(/\s+/).map(Number);
+    const base = { x:baseValues[0], y:baseValues[1], w:baseValues[2], h:baseValues[3] };
+    const maxScale = Number(map.dataset.maxScale) || 14;
+    const state = { ...base };
+    const shadow = stage.attachShadow({ mode:"open" });
+    const style = document.createElement("style");
+    style.textContent = ":host{display:block;width:100%;height:100%}svg{display:block;width:100%;height:100%;background:white;user-select:none;-webkit-user-select:none}";
+    const svg = document.importNode(sourceSvg, true);
+    svg.removeAttribute("width");
+    svg.removeAttribute("height");
+    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+    shadow.append(style, svg);
+    loading?.remove();
+
+    const clamp = () => {
+      const minW = base.w / maxScale;
+      const minH = base.h / maxScale;
+      state.w = Math.max(minW, Math.min(base.w, state.w));
+      state.h = Math.max(minH, Math.min(base.h, state.h));
+      state.x = Math.max(base.x, Math.min(base.x + base.w - state.w, state.x));
+      state.y = Math.max(base.y, Math.min(base.y + base.h - state.h, state.y));
+    };
+    const paint = () => {
+      clamp();
+      svg.setAttribute("viewBox", `${state.x.toFixed(2)} ${state.y.toFixed(2)} ${state.w.toFixed(2)} ${state.h.toFixed(2)}`);
+    };
+    const reset = () => {
+      Object.assign(state, base);
+      paint();
+    };
+    const zoomAt = (factor, clientX, clientY) => {
+      const rect = stage.getBoundingClientRect();
+      const rx = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const ry = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+      const anchorX = state.x + rx * state.w;
+      const anchorY = state.y + ry * state.h;
+      const nextW = state.w / factor;
+      const nextH = state.h / factor;
+      state.x = anchorX - rx * nextW;
+      state.y = anchorY - ry * nextH;
+      state.w = nextW;
+      state.h = nextH;
+      paint();
+    };
+
+    const pointers = new Map();
+    let gesture = null;
+    const points = () => [...pointers.values()];
+    const distance = pair => Math.hypot(pair[1].x - pair[0].x, pair[1].y - pair[0].y);
+    const center = pair => ({ x:(pair[0].x + pair[1].x) / 2, y:(pair[0].y + pair[1].y) / 2 });
+    const beginGesture = () => {
+      const active = points();
+      const view = { ...state };
+      if (active.length >= 2) {
+        const pair = active.slice(0, 2);
+        gesture = { count:2, view, distance:Math.max(1, distance(pair)), center:center(pair) };
+      } else if (active.length === 1) {
+        gesture = { count:1, view, point:{ ...active[0] } };
+      } else {
+        gesture = null;
+      }
+    };
+
+    stage.addEventListener("pointerdown", event => {
+      pointers.set(event.pointerId, { x:event.clientX, y:event.clientY });
+      stage.setPointerCapture(event.pointerId);
+      beginGesture();
+    });
+    stage.addEventListener("pointermove", event => {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.set(event.pointerId, { x:event.clientX, y:event.clientY });
+      const active = points();
+      const rect = stage.getBoundingClientRect();
+      if (active.length >= 2) {
+        if (gesture?.count !== 2) beginGesture();
+        const pair = active.slice(0, 2);
+        const currentCenter = center(pair);
+        const factor = distance(pair) / gesture.distance;
+        const nextW = gesture.view.w / factor;
+        const nextH = gesture.view.h / factor;
+        const anchorX = gesture.view.x + ((gesture.center.x - rect.left) / rect.width) * gesture.view.w;
+        const anchorY = gesture.view.y + ((gesture.center.y - rect.top) / rect.height) * gesture.view.h;
+        state.w = nextW;
+        state.h = nextH;
+        state.x = anchorX - ((currentCenter.x - rect.left) / rect.width) * nextW;
+        state.y = anchorY - ((currentCenter.y - rect.top) / rect.height) * nextH;
+        paint();
+      } else if (active.length === 1 && state.w < base.w) {
+        if (gesture?.count !== 1) beginGesture();
+        state.x = gesture.view.x - (active[0].x - gesture.point.x) * gesture.view.w / rect.width;
+        state.y = gesture.view.y - (active[0].y - gesture.point.y) * gesture.view.h / rect.height;
+        paint();
+      }
+    });
+    const endPointer = event => {
+      pointers.delete(event.pointerId);
+      beginGesture();
+    };
+    stage.addEventListener("pointerup", endPointer);
+    stage.addEventListener("pointercancel", endPointer);
+    stage.addEventListener("wheel", event => {
+      event.preventDefault();
+      zoomAt(Math.exp(-event.deltaY * .002), event.clientX, event.clientY);
+    }, { passive:false });
+    stage.addEventListener("dblclick", reset);
+    map.querySelectorAll("[data-vector-zoom]").forEach(button => button.addEventListener("click", () => {
+      const action = button.dataset.vectorZoom;
+      if (action === "reset") return reset();
+      const rect = stage.getBoundingClientRect();
+      zoomAt(action === "in" ? 1.7 : 1 / 1.7, rect.left + rect.width / 2, rect.top + rect.height / 2);
+    }));
+    paint();
+    map.dataset.vectorBound = "true";
+  } catch (error) {
+    map.dataset.vectorBound = "error";
+    if (loading) loading.textContent = "Nie udało się wczytać mapy. Otwórz pakiet online i pobierz go ponownie w zakładce Offline.";
+  }
+}
+
 function renderPlan() {
   app.innerHTML = `
     <div class="journeys-heading"><span>22–30 sierpnia 2026</span><h2>Dziewięć miejskich wypraw</h2><p>Każdy dzień ma własny rejon, rytm i główny nowojorski moment.</p></div>
@@ -1361,7 +1494,7 @@ function showPreparePanel(panel) {
   document.querySelectorAll("[data-prepare-content]").forEach(section => {
     section.hidden = section.dataset.prepareContent !== panel;
   });
-  if (panel === "metro") bindGestureMap(document.querySelector('[data-prepare-content="metro"] [data-gesture-map]'));
+  if (panel === "metro") bindVectorMap(document.querySelector('[data-prepare-content="metro"] [data-vector-map]'));
 }
 
 function showMediaPanel(panel) {
@@ -1427,8 +1560,9 @@ function renderMetroPreparePanel() {
     </div>
     <div class="notice">Wasz pobyt trwa dłużej niż jedno siedmiodniowe okno. OMNY nadal jest najlepszy: w pierwszym oknie zapłacicie najwyżej po $35, a po jego automatycznym resecie tylko za faktyczne przejazdy ostatnich dni.</div>
     <div class="section-title"><h3>Mapa metra · działa offline</h3><span>rozsuń dwoma palcami</span></div>
-    <div class="metro-map-board" data-gesture-map data-max-scale="9" aria-label="Powiększalna mapa metra Nowego Jorku">
-      <div class="day-map-canvas"><img src="assets/maps/nyc-subway-map-2025.svg" alt="Mapa linii i stacji metra Nowego Jorku, aktualna na grudzień 2025"></div>
+    <div class="metro-map-board" data-vector-map data-max-scale="16" data-src="assets/maps/nyc-subway-map-2025.svg" aria-label="Powiększalna mapa metra Nowego Jorku">
+      <div class="metro-map-stage"><span class="metro-map-loading">Wczytuję mapę wektorową…</span></div>
+      <div class="metro-map-controls" aria-label="Sterowanie mapą"><button type="button" data-vector-zoom="out" aria-label="Oddal mapę">−</button><button type="button" data-vector-zoom="reset">Całość</button><button type="button" data-vector-zoom="in" aria-label="Powiększ mapę">＋</button></div>
     </div>
     <p class="metro-attribution">Mapa sieci: <a href="https://commons.wikimedia.org/wiki/File:NYC_subway-5.svg" target="_blank" rel="noopener">CountZ / Wikimedia Commons</a>, aktualizacja grudzień 2025, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Służy do orientacji offline; czasowe zmiany weekendowe sprawdzamy w MTA lub Google Maps przed wyjściem.</p>
     <div class="link-grid compact-links"><a href="https://www.mta.info/maps/subway-line-maps" target="_blank" rel="noopener">Aktualne mapy MTA <span>↗</span></a><a href="https://omny.info/fares" target="_blank" rel="noopener">Oficjalne taryfy OMNY <span>↗</span></a></div>
